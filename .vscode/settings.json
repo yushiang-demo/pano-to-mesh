@@ -1,0 +1,8 @@
+{
+    "editor.defaultFormatter": "esbenp.prettier-vscode", // 依專案中的 .prettierrc 設定檔格式化
+    "editor.codeActionsOnSave": {
+    "source.fixAll": true
+    },
+    "editor.formatOnSave": true, // 存檔時自動排版
+    "editor.formatOnPaste": true // 貼上時自動排版
+}

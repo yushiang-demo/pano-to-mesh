@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"],
+      "@/react-three-panorama/*": ["./react-three-panorama/src/*"]
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "PanoToMesh",
+  "version": "0.1.0",
+  "scripts": {
+    "open-browser-mac": "open http://localhost:3000/editor/layout?image=http://localhost:3000/images/panoramas/1.jpeg",
+    "open-browser-windows": "start http://localhost:3000/editor/layout?image=http://localhost:3000/images/panoramas/1.jpeg",
+    "open-browser": "yarn open-browser-mac || yarn open-browser-windows",
+    "dev": "yarn open-browser && next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "eslint": "8.36.0",
+    "eslint-config-next": "13.2.4",
+    "next": "13.2.4",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-scripts": "5.0.1",
+    "three": "^0.149.0",
+    "uuid": "^9.0.0"
+  }
+}

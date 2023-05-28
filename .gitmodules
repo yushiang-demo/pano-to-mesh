@@ -1,0 +1,3 @@
+[submodule "react-three-panorama"]
+	path = react-three-panorama
+	url = https://github.com/tsengyushiang/react-three-panorama.git
