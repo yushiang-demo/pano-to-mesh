@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import * as THREE from "three";
 
-import RoomGeometry from "../core/RoomGeometry";
-import Shaders from "../shaders";
+import RoomGeometry from "../../core/RoomGeometry";
+import Shaders from "../../shaders";
 
 const PanoramaRoom = ({
   three,

@@ -3,7 +3,7 @@ import * as THREE from "three";
 import Shaders from "../shaders";
 
 const CaptureCubemap = () => {
-  const cubeRenderTarget = new THREE.WebGLCubeRenderTarget(128);
+  const cubeRenderTarget = new THREE.WebGLCubeRenderTarget(1024);
 
   const cubeCamera = new THREE.CubeCamera(0.01, 100000, cubeRenderTarget);
 

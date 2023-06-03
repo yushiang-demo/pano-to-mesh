@@ -19,7 +19,7 @@ float isEdge(sampler2D tex, vec2 uv, float kernel){
 }
 
 void main()  {
-    float color = isEdge(texture0, vUv, 1.);
+    float color = isEdge(texture0, vUv, 3.);
     
 	gl_FragColor = vec4(color,color,color,1.0);
 }

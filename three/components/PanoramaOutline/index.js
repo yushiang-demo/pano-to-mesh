@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import * as THREE from "three";
 
-import CapturePanorama from "../core/CapturePanorama";
-import RoomGeometry from "../core/RoomGeometry";
-import TexturePostEffect from "../core/TexturePostEffect";
-import Shaders from "../shaders";
+import CapturePanorama from "../../core/CapturePanorama";
+import RoomGeometry from "../../core/RoomGeometry";
+import TexturePostEffect from "../../core/TexturePostEffect";
+import Shaders from "../../shaders";
 
 const ROOM_TEXTURE_WIDTH = 1920;
 const ROOM_TEXTURE_HEIGHT = 1080;

@@ -1,7 +1,7 @@
 import Hooks from "./Hooks";
-import THREEPanoramaOutline from "./PanoramaOutline";
-import THREEPanoramaRoom from "./PanoramaRoom";
-import Canvas from "./ThreeCanvas";
+import THREEPanoramaOutline from "./components/PanoramaOutline";
+import THREEPanoramaRoom from "./components/PanoramaRoom";
+import Canvas from "./components/ThreeCanvas";
 import Math from "./core/helpers/Math";
 import { findIntersectionOfXZPlane } from "./core/helpers/Raycaster";
 

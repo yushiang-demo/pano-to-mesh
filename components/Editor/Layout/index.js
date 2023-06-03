@@ -6,7 +6,7 @@ import {
   PanoramaOutline,
   PanoramaRoom,
   ThreeCanvas,
-} from "@/react-three-panorama/index";
+} from "../../../three";
 
 const pointSelector = (x, y, unitParser, threshold) => {
   return ([candidateX, candidateY]) => {

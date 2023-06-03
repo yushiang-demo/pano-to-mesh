@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 
-import InitThree from "../core";
+import InitThree from "../../core";
 
 const ThreeCanvas = ({
   children,

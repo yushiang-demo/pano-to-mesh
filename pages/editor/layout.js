@@ -1,6 +1,6 @@
 import React from "react";
 import { useRouter } from "next/router";
-import Editor from "@/components/Editor";
+import Editor from "../../components/Editor";
 
 function ImagePreviewPage() {
   const router = useRouter();
