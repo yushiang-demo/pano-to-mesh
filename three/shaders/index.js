@@ -2,6 +2,7 @@ import cubemapToEquirectangular, {
   setUniforms as cubemapToEquirectangularUniforms,
 } from "./fragmentShaders/cubemapToEquirectangular";
 import edgeDetection from "./fragmentShaders/edgeDetection";
+import vertexColor from "./fragmentShaders/vertexColor";
 import equirectangularProjection, {
   setUniforms as equirectangularProjectionUniforms,
 } from "./fragmentShaders/equirectangularProjection";
@@ -15,6 +16,7 @@ import worldPosition from "./vertexShaders/worldPosition";
 export default {
   vertexShaders: { worldPosition, screenPosition },
   fragmentShaders: {
+    vertexColor,
     edgeDetection,
     faceNormal,
     textureBlending,

@@ -25,7 +25,7 @@ const PanoramaOutline = ({
 
       const material = new THREE.ShaderMaterial({
         vertexShader: Shaders.vertexShaders.worldPosition,
-        fragmentShader: Shaders.fragmentShaders.faceNormal,
+        fragmentShader: Shaders.fragmentShaders.vertexColor,
       });
       const room = new THREE.Mesh(new THREE.BufferGeometry(), material);
       setMesh(room);
