@@ -2,6 +2,16 @@ import React, { useEffect, useRef, useState } from "react";
 
 import InitThree from "../../core";
 
+const WrapperStyle = {
+  width: "100%",
+  height: "100%",
+  position: "relative",
+};
+
+const CanvasStyle = {
+  position: "absolute",
+};
+
 const ThreeCanvas = ({
   children,
   onMouseDown,
@@ -13,23 +23,21 @@ const ThreeCanvas = ({
   const [three, setThree] = useState(null);
   const WrapperRef = useRef(null);
   const canvasRef = useRef(null);
-
   useEffect(() => {
-    const { destroy, setCanvasSize, scene, addRenderFunction } = InitThree({
-      canvas: canvasRef.current,
+    const { destroy, setCanvasSize, scene, addBeforeRenderFunction } =
+      InitThree({
+        canvas: canvasRef.current,
+      });
+
+    setThree({ scene, addBeforeRenderFunction });
+
+    const cancelResizeListener = addBeforeRenderFunction(() => {
+      const { clientWidth: width, clientHeight: height } = WrapperRef.current;
+      setCanvasSize(width, height);
     });
 
-    const onWindowResize = () => {
-      const { clientWidth: width } = WrapperRef.current;
-      setCanvasSize(width, width * aspectRatio);
-    };
-    onWindowResize();
-    window.addEventListener("resize", onWindowResize, false);
-
-    setThree({ scene, addRenderFunction });
-
     return () => {
-      window.removeEventListener("resize", onWindowResize, false);
+      cancelResizeListener();
       destroy();
     };
   }, []);
@@ -59,13 +67,15 @@ const ThreeCanvas = ({
   };
 
   return (
-    <div ref={WrapperRef}>
+    <div ref={WrapperRef} style={WrapperStyle}>
       <canvas
+        tabIndex={1}
         ref={canvasRef}
         onMouseDown={handleMouseEvents(onMouseDown)}
         onMouseMove={handleMouseEvents(onMouseMove)}
         onMouseUp={handleMouseEvents(onMouseUp)}
         {...props}
+        style={CanvasStyle}
       />
       {three && childrenWithProps}
     </div>

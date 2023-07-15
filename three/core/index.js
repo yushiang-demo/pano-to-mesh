@@ -19,10 +19,11 @@ const InitThree = ({ canvas, alpha = true }) => {
   const customRender = {};
   const animate = () => {
     const animeFrame = requestAnimationFrame(animate);
-    renderer.render(scene, camera);
     Object.keys(customRender)
       .map((key) => customRender[key])
       .forEach((func) => func(renderer));
+    renderer.render(scene, camera);
+
     return animeFrame;
   };
 
@@ -38,7 +39,7 @@ const InitThree = ({ canvas, alpha = true }) => {
     renderer.setSize(width, height);
   };
 
-  const addRenderFunction = (func) => {
+  const addBeforeRenderFunction = (func) => {
     let id = uuidv4();
 
     while (customRender[id] !== undefined) {
@@ -51,7 +52,7 @@ const InitThree = ({ canvas, alpha = true }) => {
     };
   };
 
-  return { destroy, setCanvasSize, scene, addRenderFunction };
+  return { destroy, setCanvasSize, scene, addBeforeRenderFunction };
 };
 
 export default InitThree;

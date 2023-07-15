@@ -18,7 +18,7 @@ const PanoramaOutline = ({
 }) => {
   const [mesh, setMesh] = useState(null);
   useEffect(() => {
-    const { scene, addRenderFunction } = three;
+    const { scene, addBeforeRenderFunction } = three;
 
     const setupScene = () => {
       const panoramaScene = new THREE.Scene();
@@ -41,7 +41,7 @@ const PanoramaOutline = ({
     panoramaCapturer.setCameraPosition(
       new THREE.Vector3().fromArray(panoramaOrigin)
     );
-    const stopCapturePanorama = addRenderFunction((renderer) => {
+    const stopCapturePanorama = addBeforeRenderFunction((renderer) => {
       panoramaCapturer.render(renderer);
     });
 
@@ -50,7 +50,7 @@ const PanoramaOutline = ({
         panoramaCapturer.texture,
         Shaders.fragmentShaders.edgeDetection
       );
-    const stopTexturePostEffect = addRenderFunction(renderOutline);
+    const stopTexturePostEffect = addBeforeRenderFunction(renderOutline);
 
     const geometry1 = new THREE.PlaneGeometry(1, 1);
     const material1 = new THREE.ShaderMaterial({
