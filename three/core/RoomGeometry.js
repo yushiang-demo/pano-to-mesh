@@ -80,6 +80,29 @@ const points3DToUvs = (verticesXYZ, baseScale, baseOffsetX, baseOffsetZ) => {
   };
 };
 
+const getCumulativeDistanceOfWalls = (points2D) => {
+  const getCircularVectorsDistances = (vectors) => {
+    return vectors.map((vector, index) => {
+      const nextVector = vectors[(index + 1) % vectors.length];
+      const distance = vector.distanceTo(nextVector);
+      return distance;
+    });
+  };
+
+  const distances = getCircularVectorsDistances(points2D);
+  const sum = (array) =>
+    array.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+  const totalDistance = sum(distances);
+  const normalizedDistances = distances.map(
+    (distance) => distance / totalDistance
+  );
+  const cumulativeDistance = normalizedDistances.reduce(
+    (prev, currentValue) => [...prev, prev[prev.length - 1] + currentValue],
+    [0]
+  );
+  return cumulativeDistance;
+};
+
 const pointsIndexToWallUvs = (steps) => {
   return (_, index) => {
     const toWallIndex = (index) => Math.trunc(index / 12);
@@ -143,7 +166,7 @@ const create = (points, ceilingY, floorY) => {
   const ceilingVertices = flattenTriangleVertices(verticesOrigin, indexesRaw);
   const floorVertices = flattenTriangleVertices(verticesOrigin, floorIndexes);
   const wallVertices = flattenTriangleVertices(verticesOrigin, wallIndexes);
-  const wallCount = wallVertices.length / 18;
+  const wallCount = points.length;
 
   const vertices = [...ceilingVertices, ...floorVertices, ...wallVertices];
   const colors = [
@@ -160,10 +183,9 @@ const create = (points, ceilingY, floorY) => {
   const notYCoord = (_, idx) => idx % 3 !== 1;
   const normalizedCeiling = points3DToUvs(ceilingVertices, 0.5, 0.0, 0.5);
   const normalizedFloor = points3DToUvs(floorVertices, 0.5, 0.5, 0.5);
-  const normalizeWall = pointsIndexToWallUvs([
-    0,
-    ...Array.from({ length: wallCount }, (_, i) => ((i + 1) * 1) / wallCount),
-  ]);
+  const normalizeWall = pointsIndexToWallUvs(
+    getCumulativeDistanceOfWalls(points)
+  );
   const uvs = [
     ...ceilingVertices.filter(notYCoord).map(normalizedCeiling),
     ...floorVertices.filter(notYCoord).map(normalizedFloor),

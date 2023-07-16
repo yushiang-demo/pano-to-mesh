@@ -70,6 +70,7 @@ const useClick2AddWalls = ({
     if (dragging) {
       if (parseMousePointTo3D([normalizedX, normalizedY]))
         setWall2DCoord([...wall2DCoord, [normalizedX, normalizedY]]);
+      setPreviewWall2D(null);
       setDragging(false);
     }
   };
