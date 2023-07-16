@@ -3,7 +3,8 @@ import THREEPanoramaOutline from "./components/PanoramaOutline";
 import THREEPanoramaRoom from "./components/PanoramaRoom";
 import Canvas from "./components/ThreeCanvas";
 import Math from "./core/helpers/Math";
-import { findIntersectionOfXZPlane } from "./core/helpers/Raycaster";
+import { raycastGeometry } from "./core/helpers/Raycaster";
+import { getEmptyRoomGeometry } from "./core/RoomGeometry";
 
 // React components
 export const ThreeCanvas = Canvas;
@@ -14,4 +15,4 @@ export const PanoramaRoom = THREEPanoramaRoom;
 export const Loaders = hooks;
 
 // THREE Algorithm
-export const Core = { Math, findIntersectionOfXZPlane };
+export const Core = { Math, raycastGeometry, getEmptyRoomGeometry };

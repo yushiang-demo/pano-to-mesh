@@ -1,14 +1,35 @@
 import * as THREE from "three";
 
-const floorGeometry = (floorY) => {
-  const geometry = new THREE.PlaneGeometry(100, 100);
-  geometry.applyMatrix4(
-    new THREE.Matrix4().makeRotationAxis(
-      new THREE.Vector3(-1, 0, 0),
-      Math.PI / 2
-    )
+export const getEmptyRoomGeometry = ({ floorY, ceilingY }) => {
+  const geometry = new THREE.BufferGeometry();
+  const planeSize = 1e5;
+  const vertices = new Float32Array(
+    [
+      [-planeSize, floorY, planeSize],
+      [-planeSize, floorY, -planeSize],
+      [planeSize, floorY, -planeSize],
+      [planeSize, floorY, planeSize],
+      [-planeSize, ceilingY, planeSize],
+      [-planeSize, ceilingY, -planeSize],
+      [planeSize, ceilingY, -planeSize],
+      [planeSize, ceilingY, planeSize],
+    ].flatMap((data) => data)
   );
-  geometry.applyMatrix4(new THREE.Matrix4().makeTranslation(0, floorY, 0));
+  const indices = new Uint16Array(
+    [
+      [0, 2, 1],
+      [0, 3, 2],
+      [4, 5, 6],
+      [4, 6, 7],
+    ].flatMap((data) => data)
+  );
+  geometry.setAttribute(
+    "color",
+    new THREE.BufferAttribute(new Float32Array(vertices.map(() => 0)), 3)
+  );
+  geometry.setAttribute("position", new THREE.BufferAttribute(vertices, 3));
+  geometry.setIndex(new THREE.BufferAttribute(indices, 1));
+
   return geometry;
 };
 
@@ -26,7 +47,7 @@ const flattenTriangleVertices = (vertices, indexes) => {
 };
 
 const create = (points, ceilingY, floorY) => {
-  if (points.length < 2) return floorGeometry(floorY);
+  if (points.length < 2) return getEmptyRoomGeometry({ ceilingY, floorY });
 
   const shape = new THREE.Shape(points);
   const geometry2D = new THREE.ShapeGeometry(shape);
@@ -101,4 +122,4 @@ const create = (points, ceilingY, floorY) => {
   return geometry;
 };
 
-export default { create, floorGeometry };
+export default { create };
