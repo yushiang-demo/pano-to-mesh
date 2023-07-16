@@ -1,6 +1,7 @@
 import hooks from "./hooks";
 import THREEPanoramaOutline from "./components/PanoramaOutline";
 import THREEPanoramaRoom from "./components/PanoramaRoom";
+import THREEPanoramaTexture from "./components/PanoramaTexture";
 import Canvas from "./components/ThreeCanvas";
 import Math from "./core/helpers/Math";
 import { raycastGeometry } from "./core/helpers/Raycaster";
@@ -10,6 +11,7 @@ import { getEmptyRoomGeometry } from "./core/RoomGeometry";
 export const ThreeCanvas = Canvas;
 export const PanoramaOutline = THREEPanoramaOutline;
 export const PanoramaRoom = THREEPanoramaRoom;
+export const PanoramaTexture = THREEPanoramaTexture;
 
 // React Hooks
 export const Loaders = hooks;

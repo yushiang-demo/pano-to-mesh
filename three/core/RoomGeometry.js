@@ -15,6 +15,18 @@ export const getEmptyRoomGeometry = ({ floorY, ceilingY }) => {
       [planeSize, ceilingY, planeSize],
     ].flatMap((data) => data)
   );
+  const uvs = new Float32Array(
+    [
+      [0, 1],
+      [0, 0],
+      [1, 0],
+      [1, 1],
+      [0, 1],
+      [0, 0],
+      [1, 0],
+      [1, 1],
+    ].flatMap((data) => data)
+  );
   const indices = new Uint16Array(
     [
       [0, 2, 1],
@@ -22,6 +34,11 @@ export const getEmptyRoomGeometry = ({ floorY, ceilingY }) => {
       [4, 5, 6],
       [4, 6, 7],
     ].flatMap((data) => data)
+  );
+
+  geometry.setAttribute(
+    "textureUV",
+    new THREE.BufferAttribute(new Float32Array(uvs), 2)
   );
   geometry.setAttribute(
     "color",
@@ -44,6 +61,43 @@ const flattenTriangleVertices = (vertices, indexes) => {
   });
 
   return flattenVertices;
+};
+
+const points3DToUvs = (verticesXYZ, baseScale, baseOffsetX, baseOffsetZ) => {
+  const xCoords = verticesXYZ.filter((_, index) => index % 3 === 0);
+  const zCoords = verticesXYZ.filter((_, index) => index % 3 === 2);
+  const getScale = (coords) => 1 / (Math.max(...coords) - Math.min(...coords));
+  const scale = Math.min(getScale(xCoords), getScale(zCoords));
+  const offsetX = Math.min(...xCoords);
+  const offsetZ = Math.min(...zCoords);
+
+  return (data, idx) => {
+    if (idx % 2 == 0) {
+      return (data - offsetX) * scale * baseScale + baseOffsetX;
+    } else {
+      return (data - offsetZ) * scale * baseScale + baseOffsetZ;
+    }
+  };
+};
+
+const pointsIndexToWallUvs = (steps) => {
+  return (_, index) => {
+    const toWallIndex = (index) => Math.trunc(index / 12);
+    const getUv1X = (index) => steps[toWallIndex(index)];
+    const getUv2X = (index) => steps[toWallIndex(index) + 1];
+    const getUvFloorY = () => 0;
+    const getUv2CeilingY = () => 0.5;
+    // Order : [ceiling1, ceiling2, floor1, floor1, ceiling2, floor2];
+    const parser = [
+      [getUv1X, getUv2CeilingY],
+      [getUv2X, getUv2CeilingY],
+      [getUv1X, getUvFloorY],
+      [getUv1X, getUvFloorY],
+      [getUv2X, getUv2CeilingY],
+      [getUv2X, getUvFloorY],
+    ].flatMap((data) => data);
+    return parser[index % 12](index);
+  };
 };
 
 const create = (points, ceilingY, floorY) => {
@@ -103,6 +157,19 @@ const create = (points, ceilingY, floorY) => {
     }),
   ];
 
+  const notYCoord = (_, idx) => idx % 3 !== 1;
+  const normalizedCeiling = points3DToUvs(ceilingVertices, 0.5, 0.0, 0.5);
+  const normalizedFloor = points3DToUvs(floorVertices, 0.5, 0.5, 0.5);
+  const normalizeWall = pointsIndexToWallUvs([
+    0,
+    ...Array.from({ length: wallCount }, (_, i) => ((i + 1) * 1) / wallCount),
+  ]);
+  const uvs = [
+    ...ceilingVertices.filter(notYCoord).map(normalizedCeiling),
+    ...floorVertices.filter(notYCoord).map(normalizedFloor),
+    ...wallVertices.filter(notYCoord).map(normalizeWall),
+  ];
+
   const indexes = Array.from(
     { length: vertices.length / 3 },
     (_, index) => index
@@ -112,6 +179,10 @@ const create = (points, ceilingY, floorY) => {
   geometry.setAttribute(
     "color",
     new THREE.BufferAttribute(new Float32Array(colors), 3)
+  );
+  geometry.setAttribute(
+    "textureUV",
+    new THREE.BufferAttribute(new Float32Array(uvs), 2)
   );
   geometry.setAttribute(
     "position",

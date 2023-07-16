@@ -1,6 +1,12 @@
 import React, { useState } from "react";
 
-import { Loaders, PanoramaOutline, PanoramaRoom, ThreeCanvas } from "../three";
+import {
+  Loaders,
+  PanoramaOutline,
+  PanoramaRoom,
+  ThreeCanvas,
+  PanoramaTexture,
+} from "../three";
 import useClick2AddWalls from "../hooks/useClick2AddWalls";
 import CanvasSwitch from "../components/CanvasSwitch";
 
@@ -15,25 +21,24 @@ const Editor = ({ src }) => {
     selectThresholdPixel: 5,
   });
 
+  const props = {
+    floorY,
+    ceilingY,
+    wallVertices: wall3DCoord,
+    panorama,
+    panoramaOrigin,
+  };
+
   return (
     <CanvasSwitch>
       <ThreeCanvas {...eventHandlers}>
-        <PanoramaOutline
-          floorY={floorY}
-          ceilingY={ceilingY}
-          wallVertices={wall3DCoord}
-          panorama={panorama}
-          panoramaOrigin={panoramaOrigin}
-        />
+        <PanoramaOutline {...props} />
       </ThreeCanvas>
       <ThreeCanvas>
-        <PanoramaRoom
-          floorY={floorY}
-          ceilingY={ceilingY}
-          wallVertices={wall3DCoord}
-          panorama={panorama}
-          panoramaOrigin={panoramaOrigin}
-        />
+        <PanoramaRoom {...props} />
+      </ThreeCanvas>
+      <ThreeCanvas>
+        <PanoramaTexture {...props} />
       </ThreeCanvas>
     </CanvasSwitch>
   );

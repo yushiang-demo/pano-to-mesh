@@ -12,9 +12,10 @@ import textureBlending, {
 } from "./fragmentShaders/textureBlending";
 import screenPosition from "./vertexShaders/screenPosition";
 import worldPosition from "./vertexShaders/worldPosition";
+import uvPosition from "./vertexShaders/uvPosition";
 
 export default {
-  vertexShaders: { worldPosition, screenPosition },
+  vertexShaders: { worldPosition, screenPosition, uvPosition },
   fragmentShaders: {
     vertexColor,
     edgeDetection,
