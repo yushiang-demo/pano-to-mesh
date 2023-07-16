@@ -1,6 +1,22 @@
 import styled from "styled-components";
 
+const PageContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 const Wrapper = styled.div`
+  position: relative;
+  width: 80%;
+  height: 80%;
+  border: 1px solid black;
+  border-radius: 10px;
+`;
+
+const CanvasWrapper = styled.div`
   position: absolute;
   left: calc(
     ${(props) => (props.index / props.length) * 100}% +
@@ -39,23 +55,28 @@ const Wrapper = styled.div`
     * {
       outline: none;
       border: none;
-      border-radius: 0px;
       pointer-events: auto;
     }
   }
 `;
 
 const CanvasSwitch = ({ children }) => {
-  return children.map((child, index) => (
-    <Wrapper
-      tabIndex={index}
-      key={index}
-      length={children.length}
-      index={index}
-    >
-      {child}
-    </Wrapper>
-  ));
+  return (
+    <PageContainer>
+      <Wrapper>
+        {children.map((child, index) => (
+          <CanvasWrapper
+            tabIndex={index}
+            key={index}
+            length={children.length}
+            index={index}
+          >
+            {child}
+          </CanvasWrapper>
+        ))}
+      </Wrapper>
+    </PageContainer>
+  );
 };
 
 export default CanvasSwitch;
