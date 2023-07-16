@@ -1,12 +1,8 @@
-import React, {  useState } from "react";
+import React, { useState } from "react";
 
-import {
-  Loaders,
-  PanoramaOutline,
-  PanoramaRoom,
-  ThreeCanvas,
-} from "../three";
-import useClick2AddWalls from "../hooks/useClick2AddWalls"
+import { Loaders, PanoramaOutline, PanoramaRoom, ThreeCanvas } from "../three";
+import useClick2AddWalls from "../hooks/useClick2AddWalls";
+import CanvasSwitch from "../components/CanvasSwitch";
 
 const Editor = ({ src }) => {
   const panorama = Loaders.useTexture({ src });
@@ -20,7 +16,7 @@ const Editor = ({ src }) => {
   });
 
   return (
-    <>
+    <CanvasSwitch>
       <ThreeCanvas {...eventHandlers}>
         <PanoramaOutline
           floorY={floorY}
@@ -39,7 +35,7 @@ const Editor = ({ src }) => {
           panoramaOrigin={panoramaOrigin}
         />
       </ThreeCanvas>
-    </>
+    </CanvasSwitch>
   );
 };
 
