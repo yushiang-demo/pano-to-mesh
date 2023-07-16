@@ -88,6 +88,7 @@ const useClick2AddWalls = ({
         )([x, y])
     );
     if (points.length) setWall2DCoord(points);
+    else setWall2DCoord([[normalizedX, normalizedY]]);
     setDragging(true);
     setPreviewWall2D([normalizedX, normalizedY]);
   };
