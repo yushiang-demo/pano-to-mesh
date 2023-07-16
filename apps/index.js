@@ -11,7 +11,7 @@ const Editor = ({ src }) => {
   const [ceilingY, setCeilingY] = useState(2.0);
   const { wall3DCoord, eventHandlers } = useClick2AddWalls({
     panoramaOrigin,
-    floorY,
+    geometryInfo: { floorY, ceilingY },
     selectThresholdPixel: 5,
   });
 
