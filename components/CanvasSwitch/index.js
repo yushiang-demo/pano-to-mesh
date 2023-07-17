@@ -1,13 +1,5 @@
 import styled from "styled-components";
 
-const PageContainer = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
 const Wrapper = styled.div`
   position: relative;
   width: 80%;
@@ -62,20 +54,18 @@ const CanvasWrapper = styled.div`
 
 const CanvasSwitch = ({ children }) => {
   return (
-    <PageContainer>
-      <Wrapper>
-        {children.map((child, index) => (
-          <CanvasWrapper
-            tabIndex={index}
-            key={index}
-            length={children.length}
-            index={index}
-          >
-            {child}
-          </CanvasWrapper>
-        ))}
-      </Wrapper>
-    </PageContainer>
+    <Wrapper>
+      {children.map((child, index) => (
+        <CanvasWrapper
+          tabIndex={index}
+          key={index}
+          length={children.length}
+          index={index}
+        >
+          {child}
+        </CanvasWrapper>
+      ))}
+    </Wrapper>
   );
 };
 
