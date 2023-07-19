@@ -10,9 +10,13 @@ import {
 import useClick2AddWalls from "../hooks/useClick2AddWalls";
 import CanvasSwitch from "../components/CanvasSwitch";
 import PageContainer from "../components/PageContainer";
+import Input from "../components/Input";
+import Icons from "../components/Icon";
+import Toolbar from "../components/Toolbar";
 
 const Editor = ({ src }) => {
-  const panorama = Loaders.useTexture({ src });
+  const [imageSrc, setImageSrc] = useState(src);
+  const panorama = Loaders.useTexture({ src: imageSrc });
   const [panoramaOrigin, setPanoramaOrigin] = useState([0, 1.0, 0]);
   const [floorY] = useState(0.0);
   const [ceilingY, setCeilingY] = useState(2.0);
@@ -30,8 +34,17 @@ const Editor = ({ src }) => {
     panoramaOrigin,
   };
 
+  const onChange = (value) => {
+    setImageSrc(value);
+  };
+
   return (
     <PageContainer>
+      <Toolbar>
+        <Icons.panorama />
+        <Input onChange={onChange} value={imageSrc} />
+        <Icons.download />
+      </Toolbar>
       <CanvasSwitch>
         <ThreeCanvas {...eventHandlers}>
           <PanoramaOutline {...props} />
