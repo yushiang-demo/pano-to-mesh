@@ -123,7 +123,11 @@ const pointsIndexToWallUvs = (steps) => {
   };
 };
 
-const create = (points, ceilingY, floorY) => {
+export const create3DRoom = (layout2DPointsArray, ceilingY, floorY) => {
+  const points = layout2DPointsArray.map(
+    (point) => new THREE.Vector2(point[0], point[1])
+  );
+
   if (points.length < 2) return getEmptyRoomGeometry({ ceilingY, floorY });
 
   const shape = new THREE.Shape(points);
@@ -215,4 +219,66 @@ const create = (points, ceilingY, floorY) => {
   return geometry;
 };
 
-export default { create };
+export const downloadMesh = (() => {
+  const downloadFile = (filename, content) => {
+    const blob = new Blob([content], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const reshape1DArrayToTuple = (array, tupleSize) => {
+    return new Array(array.length / tupleSize)
+      .fill()
+      .map((_, tupleIndex) =>
+        new Array(tupleSize)
+          .fill()
+          .map((_, elementIdx) => array[tupleIndex * tupleSize + elementIdx])
+      );
+  };
+
+  const arrayToText = (prefix, array, textFormatter) => {
+    return array
+      .map((elements) => `${prefix} ${textFormatter(elements)}`)
+      .join("\n");
+  };
+
+  return (filename, layout2D, ceilingY, floorY) => {
+    const geometry = create3DRoom(layout2D, ceilingY, floorY);
+
+    const vertices = reshape1DArrayToTuple(
+      geometry.attributes.position.array,
+      3
+    );
+    const uvs = reshape1DArrayToTuple(geometry.attributes.textureUV.array, 2);
+    const indices = reshape1DArrayToTuple(geometry.index.array, 3);
+
+    const vertexText = arrayToText("v", vertices, (arr) => arr.join(" "));
+    const uvText = arrayToText("vt", uvs, (arr) => arr.join(" "));
+    const indexText = arrayToText("f", indices, (arr) =>
+      arr.map((value) => `${value + 1}/${value + 1}`).join(" ")
+    );
+
+    const objFile = [
+      `
+      mtllib ${filename}.mtl
+      usemtl PanormaTexture
+      `,
+      vertexText,
+      uvText,
+      indexText,
+    ].join("\n");
+
+    const mtlFile = `
+    newmtl PanormaTexture
+    map_Kd ${filename}.png
+    `;
+
+    downloadFile(`${filename}.obj`, objFile);
+    downloadFile(`${filename}.mtl`, mtlFile);
+  };
+})();

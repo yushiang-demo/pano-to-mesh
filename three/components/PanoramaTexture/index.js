@@ -1,25 +1,21 @@
 import { useEffect } from "react";
 import * as THREE from "three";
 
-import RoomGeometry from "../../core/RoomGeometry";
+import { create3DRoom } from "../../core/RoomGeometry";
 import Shaders from "../../shaders";
 
 const PanoramaTexture = ({
   three,
   floorY,
   ceilingY,
-  wallVertices,
+  layout2D,
   panorama,
   panoramaOrigin,
 }) => {
   useEffect(() => {
     const { scene } = three;
 
-    const geometry = RoomGeometry.create(
-      wallVertices.map((vertex) => new THREE.Vector2(vertex[0], vertex[1])),
-      ceilingY,
-      floorY
-    );
+    const geometry = create3DRoom(layout2D, ceilingY, floorY);
 
     const material = new THREE.ShaderMaterial({
       vertexShader: Shaders.vertexShaders.uvPosition,
@@ -36,7 +32,7 @@ const PanoramaTexture = ({
     return () => {
       scene.remove(room);
     };
-  }, [three, floorY, ceilingY, wallVertices, panorama, panoramaOrigin]);
+  }, [three, floorY, ceilingY, layout2D, panorama, panoramaOrigin]);
 
   return null;
 };

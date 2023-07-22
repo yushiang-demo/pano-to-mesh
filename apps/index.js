@@ -6,6 +6,7 @@ import {
   PanoramaRoom,
   ThreeCanvas,
   PanoramaTexture,
+  Core,
 } from "../three";
 import useClick2AddWalls from "../hooks/useClick2AddWalls";
 import CanvasSwitch from "../components/CanvasSwitch";
@@ -20,7 +21,7 @@ const Editor = ({ src }) => {
   const [panoramaOrigin, setPanoramaOrigin] = useState([0, 1.0, 0]);
   const [floorY] = useState(0.0);
   const [ceilingY, setCeilingY] = useState(2.0);
-  const { wall3DCoord, eventHandlers } = useClick2AddWalls({
+  const { layout2D, eventHandlers } = useClick2AddWalls({
     panoramaOrigin,
     geometryInfo: { floorY, ceilingY },
     selectThresholdPixel: 5,
@@ -29,7 +30,7 @@ const Editor = ({ src }) => {
   const props = {
     floorY,
     ceilingY,
-    wallVertices: wall3DCoord,
+    layout2D,
     panorama,
     panoramaOrigin,
   };
@@ -38,12 +39,16 @@ const Editor = ({ src }) => {
     setImageSrc(value);
   };
 
+  const onDownload = () => {
+    Core.downloadMesh("test", layout2D, ceilingY, floorY);
+  };
+
   return (
     <PageContainer>
       <Toolbar>
         <Icons.panorama />
         <Input onChange={onChange} value={imageSrc} />
-        <Icons.download />
+        {!!layout2D.length && <Icons.download onClick={onDownload} />}
       </Toolbar>
       <CanvasSwitch>
         <ThreeCanvas {...eventHandlers}>

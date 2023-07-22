@@ -20,9 +20,9 @@ const useClick2AddWalls = ({
   selectThresholdPixel,
 }) => {
   const [dragging, setDragging] = useState(false);
-  const [previewWall2D, setPreviewWall2D] = useState(null);
-  const [wall2DCoord, setWall2DCoord] = useState([]);
-  const [wall3DCoord, setWall3DCoord] = useState([]);
+  const [previewImageCoord, setPreviewImageCoord] = useState(null);
+  const [imageCoord, setImageCoord] = useState([]);
+  const [layout2D, setLayout2D] = useState([]);
 
   const parseMousePointTo3D = ([normalizedX, normalizedY]) => {
     const { longitude, latitude } =
@@ -43,14 +43,14 @@ const useClick2AddWalls = ({
   }, [dragging]);
 
   const onMouseLeave = () => {
-    setPreviewWall2D(null);
+    setPreviewImageCoord(null);
     setDragging(false);
   };
   const onMouseMove = ({ normalizedX, normalizedY, width, height }) => {
     if (dragging && parseMousePointTo3D([normalizedX, normalizedY]))
-      setPreviewWall2D([normalizedX, normalizedY]);
+      setPreviewImageCoord([normalizedX, normalizedY]);
     else {
-      const point = wall2DCoord.find(
+      const point = imageCoord.find(
         pointSelector(
           normalizedX,
           normalizedY,
@@ -69,14 +69,14 @@ const useClick2AddWalls = ({
   const onMouseUp = ({ normalizedX, normalizedY }) => {
     if (dragging) {
       if (parseMousePointTo3D([normalizedX, normalizedY]))
-        setWall2DCoord([...wall2DCoord, [normalizedX, normalizedY]]);
-      setPreviewWall2D(null);
+        setImageCoord([...imageCoord, [normalizedX, normalizedY]]);
+      setPreviewImageCoord(null);
       setDragging(false);
     }
   };
 
   const onMouseDown = ({ width, height, normalizedX, normalizedY }) => {
-    const points = wall2DCoord.filter(
+    const points = imageCoord.filter(
       ([x, y]) =>
         !pointSelector(
           normalizedX,
@@ -88,28 +88,28 @@ const useClick2AddWalls = ({
           selectThresholdPixel
         )([x, y])
     );
-    if (points.length) setWall2DCoord(points);
-    else setWall2DCoord([[normalizedX, normalizedY]]);
+    if (points.length) setImageCoord(points);
+    else setImageCoord([[normalizedX, normalizedY]]);
     setDragging(true);
-    setPreviewWall2D([normalizedX, normalizedY]);
+    setPreviewImageCoord([normalizedX, normalizedY]);
   };
 
   useEffect(() => {
-    const coord2d = [...wall2DCoord];
-    if (previewWall2D) coord2d.push(previewWall2D);
+    const coord2d = [...imageCoord];
+    if (previewImageCoord) coord2d.push(previewImageCoord);
     coord2d.sort(([x1], [x2]) => x1 - x2);
 
-    const points3D = coord2d
+    const pointsXZ = coord2d
       .map((coord) => {
         const point = parseMousePointTo3D(coord);
         if (point) return point;
       })
       .filter((value) => value);
-    setWall3DCoord(points3D);
-  }, [wall2DCoord, previewWall2D]);
+    setLayout2D(pointsXZ);
+  }, [imageCoord, previewImageCoord]);
 
   return {
-    wall3DCoord,
+    layout2D,
     eventHandlers: {
       onMouseDown,
       onMouseUp,

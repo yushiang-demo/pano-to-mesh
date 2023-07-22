@@ -5,7 +5,7 @@ import THREEPanoramaTexture from "./components/PanoramaTexture";
 import Canvas from "./components/ThreeCanvas";
 import Math from "./core/helpers/Math";
 import { raycastGeometry } from "./core/helpers/Raycaster";
-import { getEmptyRoomGeometry } from "./core/RoomGeometry";
+import { getEmptyRoomGeometry, downloadMesh } from "./core/RoomGeometry";
 
 // React components
 export const ThreeCanvas = Canvas;
@@ -17,4 +17,9 @@ export const PanoramaTexture = THREEPanoramaTexture;
 export const Loaders = hooks;
 
 // THREE Algorithm
-export const Core = { Math, raycastGeometry, getEmptyRoomGeometry };
+export const Core = {
+  Math,
+  raycastGeometry,
+  getEmptyRoomGeometry,
+  downloadMesh,
+};
