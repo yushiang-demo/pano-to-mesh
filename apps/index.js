@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 
 import {
   Loaders,
@@ -16,6 +16,7 @@ import Icons from "../components/Icon";
 import Toolbar from "../components/Toolbar";
 
 const Editor = ({ src }) => {
+  const textureCanvasRef = useRef(null);
   const [imageSrc, setImageSrc] = useState(src);
   const panorama = Loaders.useTexture({ src: imageSrc });
   const [panoramaOrigin, setPanoramaOrigin] = useState([0, 1.0, 0]);
@@ -40,7 +41,15 @@ const Editor = ({ src }) => {
   };
 
   const onDownload = () => {
+    const downloadImage = (filename, url) => {
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(url);
+    };
     Core.downloadMesh("test", layout2D, ceilingY, floorY);
+    downloadImage("test.png", textureCanvasRef.current.getTexture());
   };
 
   return (
@@ -57,7 +66,7 @@ const Editor = ({ src }) => {
         <ThreeCanvas>
           <PanoramaRoom {...props} />
         </ThreeCanvas>
-        <ThreeCanvas>
+        <ThreeCanvas ref={textureCanvasRef}>
           <PanoramaTexture {...props} />
         </ThreeCanvas>
       </CanvasSwitch>

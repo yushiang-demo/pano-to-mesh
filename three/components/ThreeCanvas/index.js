@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { forwardRef, useEffect, useRef, useState } from "react";
 
 import InitThree from "../../core";
 
@@ -12,14 +12,17 @@ const CanvasStyle = {
   position: "absolute",
 };
 
-const ThreeCanvas = ({
-  children,
-  onMouseDown,
-  onMouseMove,
-  onMouseUp,
-  aspectRatio = 9 / 16,
-  ...props
-}) => {
+const ThreeCanvas = (
+  {
+    children,
+    onMouseDown,
+    onMouseMove,
+    onMouseUp,
+    aspectRatio = 9 / 16,
+    ...props
+  },
+  ref
+) => {
   const [three, setThree] = useState(null);
   const WrapperRef = useRef(null);
   const canvasRef = useRef(null);
@@ -35,6 +38,15 @@ const ThreeCanvas = ({
       const { clientWidth: width, clientHeight: height } = WrapperRef.current;
       setCanvasSize(width, height);
     });
+
+    if (ref) {
+      ref.current = {
+        getTexture: () => {
+          const dataURL = canvasRef.current.toDataURL();
+          return dataURL;
+        },
+      };
+    }
 
     return () => {
       cancelResizeListener();
@@ -82,4 +94,4 @@ const ThreeCanvas = ({
   );
 };
 
-export default ThreeCanvas;
+export default forwardRef(ThreeCanvas);

@@ -7,7 +7,11 @@ const InitThree = ({ canvas, alpha = true }) => {
   const { width, height } = canvas.getBoundingClientRect();
   const scene = new THREE.Scene();
 
-  const renderer = new THREE.WebGLRenderer({ canvas, alpha });
+  const renderer = new THREE.WebGLRenderer({
+    canvas,
+    alpha,
+    preserveDrawingBuffer: true,
+  });
   renderer.setSize(width, height);
 
   const camera = new THREE.PerspectiveCamera(75, width / height, 0.01, 1000);
