@@ -3,9 +3,8 @@ import React, { useRef, useState } from "react";
 import {
   Loaders,
   PanoramaOutline,
-  PanoramaRoom,
   ThreeCanvas,
-  PanoramaTexture,
+  PanoramaTextureMesh,
   Core,
 } from "../three";
 import useClick2AddWalls from "../hooks/useClick2AddWalls";
@@ -64,10 +63,7 @@ const Editor = ({ src }) => {
           <PanoramaOutline {...props} />
         </ThreeCanvas>
         <ThreeCanvas>
-          <PanoramaRoom {...props} />
-        </ThreeCanvas>
-        <ThreeCanvas ref={textureCanvasRef}>
-          <PanoramaTexture {...props} />
+          <PanoramaTextureMesh {...props} />
         </ThreeCanvas>
       </CanvasSwitch>
     </PageContainer>

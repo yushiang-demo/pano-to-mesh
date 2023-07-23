@@ -10,6 +10,9 @@ import faceNormal from "./fragmentShaders/faceNormal";
 import textureBlending, {
   setUniforms as textureBlendingUniforms,
 } from "./fragmentShaders/textureBlending";
+import texture, {
+  setUniforms as textureUniforms,
+} from "./fragmentShaders/texture";
 import screenPosition from "./vertexShaders/screenPosition";
 import worldPosition from "./vertexShaders/worldPosition";
 import uvPosition from "./vertexShaders/uvPosition";
@@ -20,6 +23,7 @@ export default {
     vertexColor,
     edgeDetection,
     faceNormal,
+    texture,
     textureBlending,
     equirectangularProjection,
     cubemapToEquirectangular,
@@ -27,6 +31,7 @@ export default {
   setUniforms: {
     equirectangularProjection: equirectangularProjectionUniforms,
     cubemapToEquirectangular: cubemapToEquirectangularUniforms,
+    texture: textureUniforms,
     textureBlending: textureBlendingUniforms,
   },
 };

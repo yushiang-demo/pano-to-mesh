@@ -4,7 +4,7 @@ import * as THREE from "three";
 import { create3DRoom } from "../../core/RoomGeometry";
 import Shaders from "../../shaders";
 
-const PanoramaTexture = ({
+const PanoramaProjectionMesh = ({
   three,
   floorY,
   ceilingY,
@@ -18,9 +18,8 @@ const PanoramaTexture = ({
     const geometry = create3DRoom(layout2D, ceilingY, floorY);
 
     const material = new THREE.ShaderMaterial({
-      vertexShader: Shaders.vertexShaders.uvPosition,
+      vertexShader: Shaders.vertexShaders.worldPosition,
       fragmentShader: Shaders.fragmentShaders.equirectangularProjection,
-      side: THREE.DoubleSide,
     });
     Shaders.setUniforms.equirectangularProjection(material, {
       texture: panorama,
@@ -37,4 +36,4 @@ const PanoramaTexture = ({
   return null;
 };
 
-export default PanoramaTexture;
+export default PanoramaProjectionMesh;
