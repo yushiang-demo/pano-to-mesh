@@ -1,7 +1,7 @@
 # Quick start
 
 ```
-yarn setup
+yarn
 yarn dev
 ```
 
