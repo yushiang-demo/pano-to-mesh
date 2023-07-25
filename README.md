@@ -12,6 +12,8 @@ Following flowchart describes how to get geometry layout and texture.
 ```mermaid
 flowchart LR
 
+    dilatedTexture["dilatedTexture(Anti aliasing)"]
+
     Panorama --> AnnotatedImage
     Panorama --> Texture
 
@@ -19,10 +21,11 @@ flowchart LR
     AnnotatedImage --> Geometry
 
     Geometry --> download
-    Texture --> download
 
     Geometry --> Texture
-    Texture --> 3DMesh
+    Texture --> dilatedTexture
+    dilatedTexture --> download
+    dilatedTexture --> 3DMesh
     Geometry --> 3DMesh
 
     Geometry --> WallIndexColorMesh
