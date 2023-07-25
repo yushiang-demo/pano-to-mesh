@@ -3,6 +3,7 @@ import * as THREE from "three";
 
 import { create3DRoom } from "../../core/RoomGeometry";
 import Shaders from "../../shaders";
+import TexturePostEffect from "../../core/TexturePostEffect";
 
 const TEXTURE_SIZE = 4096;
 const PanoramaTextureMesh = ({
@@ -52,20 +53,26 @@ const PanoramaTextureMesh = ({
       };
     })(geometry);
 
+    const { texture: dilatedTexture, render: renderDilatedTexture } =
+      TexturePostEffect(texture, Shaders.fragmentShaders.dilation);
+    const stopTexturePostEffect = addBeforeRenderFunction(renderDilatedTexture);
+
     const material = new THREE.ShaderMaterial({
       vertexShader: Shaders.vertexShaders.worldPosition,
       fragmentShader: Shaders.fragmentShaders.texture,
     });
     Shaders.setUniforms.texture(material, {
-      map: texture,
+      map: dilatedTexture,
     });
     const mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
 
     return () => {
       stopRenderTexture();
+      stopTexturePostEffect();
       scene.remove(mesh);
       texture.dispose();
+      dilatedTexture.dispose();
     };
   }, [three, floorY, ceilingY, layout2D, panorama, panoramaOrigin]);
 

@@ -2,6 +2,7 @@ import cubemapToEquirectangular, {
   setUniforms as cubemapToEquirectangularUniforms,
 } from "./fragmentShaders/cubemapToEquirectangular";
 import edgeDetection from "./fragmentShaders/edgeDetection";
+import dilation from "./fragmentShaders/dilation";
 import vertexColor from "./fragmentShaders/vertexColor";
 import equirectangularProjection, {
   setUniforms as equirectangularProjectionUniforms,
@@ -22,6 +23,7 @@ export default {
   fragmentShaders: {
     vertexColor,
     edgeDetection,
+    dilation,
     faceNormal,
     texture,
     textureBlending,
