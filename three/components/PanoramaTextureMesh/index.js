@@ -23,7 +23,7 @@ const PanoramaTextureMesh = ({
 
     const geometry = create3DRoom(layout2D, ceilingY, floorY);
 
-    const { stopRenderTexture, texture } = ((geometry) => {
+    const { dispose: disposeRenderTexture, texture } = ((geometry) => {
       const material = new THREE.ShaderMaterial({
         vertexShader: Shaders.vertexShaders.uvPosition,
         fragmentShader: Shaders.fragmentShaders.equirectangularProjection,
@@ -34,10 +34,10 @@ const PanoramaTextureMesh = ({
         cameraPosition: new THREE.Vector3().fromArray(panoramaOrigin),
       });
 
-      const room = new THREE.Mesh(geometry, material);
+      const mesh = new THREE.Mesh(geometry, material);
 
       const scene = new THREE.Scene();
-      scene.add(room);
+      scene.add(mesh);
 
       const render = (renderer) => {
         renderer.setRenderTarget(frameBuffer);
@@ -47,14 +47,21 @@ const PanoramaTextureMesh = ({
 
       const stopRenderTexture = addBeforeRenderFunction(render);
 
+      const dispose = () => {
+        stopRenderTexture();
+        scene.remove(mesh);
+      };
       return {
-        stopRenderTexture,
+        dispose,
         texture: frameBuffer.texture,
       };
     })(geometry);
 
-    const { texture: dilatedTexture, render: renderDilatedTexture } =
-      TexturePostEffect(texture, Shaders.fragmentShaders.dilation);
+    const {
+      texture: dilatedTexture,
+      render: renderDilatedTexture,
+      dispose: disposeTexturePostEffect,
+    } = TexturePostEffect(texture, Shaders.fragmentShaders.dilation);
     const stopTexturePostEffect = addBeforeRenderFunction(renderDilatedTexture);
 
     const material = new THREE.ShaderMaterial({
@@ -68,11 +75,12 @@ const PanoramaTextureMesh = ({
     scene.add(mesh);
 
     return () => {
-      stopRenderTexture();
+      disposeRenderTexture();
       stopTexturePostEffect();
-      scene.remove(mesh);
+      disposeTexturePostEffect();
       texture.dispose();
-      dilatedTexture.dispose();
+      scene.remove(mesh);
+      geometry.dispose();
     };
   }, [three, floorY, ceilingY, layout2D, panorama, panoramaOrigin]);
 

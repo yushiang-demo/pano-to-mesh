@@ -33,7 +33,13 @@ const TexturePostEffect = (texture, fragmentShader) => {
     renderer.render(scene, new THREE.Camera());
     renderer.setRenderTarget(null);
   };
-  return { render, texture: outline.texture };
+
+  const dispose = () => {
+    outline.dispose();
+    geometry.dispose();
+  };
+
+  return { render, texture: outline.texture, dispose };
 };
 
 export default TexturePostEffect;

@@ -76,6 +76,12 @@ const PanoramaOutline = ({
     if (mesh) {
       mesh.geometry = create3DRoom(layout2D, ceilingY, floorY);
     }
+
+    return () => {
+      if (mesh) {
+        mesh.geometry.dispose();
+      }
+    };
   }, [layout2D, floorY, ceilingY, mesh]);
 
   return null;
