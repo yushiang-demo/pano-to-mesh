@@ -14,6 +14,7 @@ import Input from "../components/Input";
 import Icons from "../components/Icon";
 import Toolbar from "../components/Toolbar";
 
+const dev = process.env.NODE_ENV === "development";
 const Editor = ({ src }) => {
   const textureCanvasRef = useRef(null);
   const [imageSrc, setImageSrc] = useState(src);
@@ -59,10 +60,10 @@ const Editor = ({ src }) => {
         {!!layout2D.length && <Icons.download onClick={onDownload} />}
       </Toolbar>
       <CanvasSwitch>
-        <ThreeCanvas {...eventHandlers}>
+        <ThreeCanvas {...eventHandlers} dev={dev}>
           <PanoramaOutline {...props} />
         </ThreeCanvas>
-        <ThreeCanvas>
+        <ThreeCanvas dev={dev}>
           <PanoramaTextureMesh {...props} />
         </ThreeCanvas>
       </CanvasSwitch>

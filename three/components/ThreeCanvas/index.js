@@ -2,6 +2,16 @@ import React, { forwardRef, useEffect, useRef, useState } from "react";
 
 import InitThree from "../../core";
 
+const monitorStyle = {
+  position: "absolute",
+  zIndex: "1",
+  background: "gray",
+  color: "white",
+  padding: "5px",
+  margin: "5px",
+  bottom: "0",
+};
+
 const WrapperStyle = {
   width: "100%",
   height: "100%",
@@ -18,12 +28,14 @@ const ThreeCanvas = (
     onMouseDown,
     onMouseMove,
     onMouseUp,
+    dev,
     aspectRatio = 9 / 16,
     ...props
   },
   ref
 ) => {
   const [three, setThree] = useState(null);
+  const [monitor, setMonitor] = useState("");
   const WrapperRef = useRef(null);
   const canvasRef = useRef(null);
   useEffect(() => {
@@ -39,6 +51,24 @@ const ThreeCanvas = (
       setCanvasSize(width, height);
     });
 
+    const stopMonitorMemory = dev
+      ? addBeforeRenderFunction((renderer) => {
+          const displayObject = renderer.info.memory;
+          const jsonText = JSON.stringify(displayObject, null, 4);
+
+          const formatJsonString = (jsonText) => {
+            const lines = jsonText.split("\n");
+            lines.shift();
+            lines.pop();
+            const result = lines.map((line) => line.trim()).join("\n");
+            return result;
+          };
+
+          const result = formatJsonString(jsonText);
+          setMonitor(result);
+        })
+      : () => null;
+
     if (ref) {
       ref.current = {
         getTexture: () => {
@@ -50,6 +80,7 @@ const ThreeCanvas = (
 
     return () => {
       cancelResizeListener();
+      stopMonitorMemory();
       destroy();
     };
   }, []);
@@ -80,6 +111,7 @@ const ThreeCanvas = (
 
   return (
     <div ref={WrapperRef} style={WrapperStyle}>
+      {dev && <pre style={monitorStyle}>{monitor}</pre>}
       <canvas
         tabIndex={1}
         ref={canvasRef}
