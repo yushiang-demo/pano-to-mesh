@@ -64,7 +64,7 @@ const Editor = ({ src }) => {
           <PanoramaOutline {...props} />
         </ThreeCanvas>
         <ThreeCanvas dev={dev}>
-          <PanoramaTextureMesh {...props} />
+          <PanoramaTextureMesh {...props} ref={textureCanvasRef} />
         </ThreeCanvas>
       </CanvasSwitch>
     </PageContainer>

@@ -1,25 +1,22 @@
-import { useEffect, useState } from "react";
+import { forwardRef, useEffect, useState } from "react";
 import * as THREE from "three";
 
 import { create3DRoom } from "../../core/RoomGeometry";
 import Shaders from "../../shaders";
 import TexturePostEffect from "../../core/TexturePostEffect";
+import { exportTexture } from "../../core/helpers/Texture";
 
 const TEXTURE_SIZE = 4096;
-const PanoramaTextureMesh = ({
-  three,
-  floorY,
-  ceilingY,
-  layout2D,
-  panorama,
-  panoramaOrigin,
-}) => {
+const PanoramaTextureMesh = (
+  { three, floorY, ceilingY, layout2D, panorama, panoramaOrigin },
+  ref
+) => {
   const [frameBuffer] = useState(
     new THREE.WebGLRenderTarget(TEXTURE_SIZE, TEXTURE_SIZE)
   );
 
   useEffect(() => {
-    const { scene, addBeforeRenderFunction } = three;
+    const { scene, addBeforeRenderFunction, renderer } = three;
 
     const geometry = create3DRoom(layout2D, ceilingY, floorY);
 
@@ -61,8 +58,12 @@ const PanoramaTextureMesh = ({
       texture: dilatedTexture,
       render: renderDilatedTexture,
       dispose: disposeTexturePostEffect,
+      material: dilationMaterial,
     } = TexturePostEffect(texture, Shaders.fragmentShaders.dilation);
     const stopTexturePostEffect = addBeforeRenderFunction(renderDilatedTexture);
+    Shaders.setUniforms.dilation(dilationMaterial, {
+      kernel: 5,
+    });
 
     const material = new THREE.ShaderMaterial({
       vertexShader: Shaders.vertexShaders.worldPosition,
@@ -73,6 +74,15 @@ const PanoramaTextureMesh = ({
     });
     const mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
+
+    if (ref) {
+      ref.current = {
+        getTexture: () => {
+          const dataURL = exportTexture(renderer, dilatedTexture, true);
+          return dataURL;
+        },
+      };
+    }
 
     return () => {
       disposeRenderTexture();
@@ -87,4 +97,4 @@ const PanoramaTextureMesh = ({
   return null;
 };
 
-export default PanoramaTextureMesh;
+export default forwardRef(PanoramaTextureMesh);

@@ -56,7 +56,7 @@ const InitThree = ({ canvas, alpha = true }) => {
     };
   };
 
-  return { destroy, setCanvasSize, scene, addBeforeRenderFunction };
+  return { destroy, setCanvasSize, scene, addBeforeRenderFunction, renderer };
 };
 
 export default InitThree;

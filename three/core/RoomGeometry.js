@@ -108,8 +108,8 @@ const pointsIndexToWallUvs = (steps) => {
     const toWallIndex = (index) => Math.trunc(index / 12);
     const getUv1X = (index) => steps[toWallIndex(index)];
     const getUv2X = (index) => steps[toWallIndex(index) + 1];
-    const getUvFloorY = () => 0;
-    const getUv2CeilingY = () => 0.5;
+    const getUvFloorY = () => 0.05;
+    const getUv2CeilingY = () => 0.45;
     // Order : [ceiling1, ceiling2, floor1, floor1, ceiling2, floor2];
     const parser = [
       [getUv1X, getUv2CeilingY],

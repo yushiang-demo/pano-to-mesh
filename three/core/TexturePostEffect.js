@@ -39,7 +39,7 @@ const TexturePostEffect = (texture, fragmentShader) => {
     geometry.dispose();
   };
 
-  return { render, texture: outline.texture, dispose };
+  return { render, texture: outline.texture, dispose, material };
 };
 
 export default TexturePostEffect;

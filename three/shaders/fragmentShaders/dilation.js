@@ -1,5 +1,13 @@
+export const setUniforms = (material, { kernel }) => {
+  if (!material.uniforms.kernel) {
+    material.uniforms.kernel = {};
+  }
+  material.uniforms.kernel.value = kernel;
+};
+
 export default `
 uniform sampler2D texture0;
+uniform float kernel;
 uniform float width;
 uniform float height;
 varying vec2 vUv;
@@ -28,6 +36,6 @@ vec4 getDilatedColor(sampler2D tex, vec2 uv, float kernel){
 }
 
 void main()  {
-	gl_FragColor =  getDilatedColor(texture0, vUv, 3.);
+	gl_FragColor =  getDilatedColor(texture0, vUv, kernel);
 }
 `;
