@@ -368,9 +368,11 @@ const OrbitControls = function (object, domElement) {
 
   function dollyIn(dollyScale) {
     if (scope.object.isPerspectiveCamera) {
+      scale *= dollyScale;
+    } else if (scope.object.isOrthographicCamera) {
       scope.object.zoom = Math.max(
         scope.minZoom,
-        Math.min(scope.maxZoom, scope.object.zoom * dollyScale)
+        Math.min(scope.maxZoom, scope.object.zoom / dollyScale)
       );
       scope.object.updateProjectionMatrix();
       zoomChanged = true;
@@ -384,9 +386,11 @@ const OrbitControls = function (object, domElement) {
 
   function dollyOut(dollyScale) {
     if (scope.object.isPerspectiveCamera) {
+      scale /= dollyScale;
+    } else if (scope.object.isOrthographicCamera) {
       scope.object.zoom = Math.max(
         scope.minZoom,
-        Math.min(scope.maxZoom, scope.object.zoom / dollyScale)
+        Math.min(scope.maxZoom, scope.object.zoom * dollyScale)
       );
       scope.object.updateProjectionMatrix();
       zoomChanged = true;
