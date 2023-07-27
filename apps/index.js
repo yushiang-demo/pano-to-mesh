@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 
 import {
   Loaders,
@@ -42,9 +42,16 @@ const Editor = ({ src }) => {
   const [panoramaOrigin, setPanoramaOrigin] = useState([0, 1.5, 0]);
   const [floorY] = useState(0.0);
   const [ceilingY, setCeilingY] = useState(2.0);
+  const geometryInfo = useMemo(
+    () => ({
+      floorY,
+      ceilingY,
+    }),
+    [floorY, ceilingY]
+  );
   const { layout2D, eventHandlers } = useClick2AddWalls({
     panoramaOrigin,
-    geometryInfo: { floorY, ceilingY },
+    geometryInfo,
     selectThresholdPixel: 5,
   });
 
