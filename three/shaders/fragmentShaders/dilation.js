@@ -7,29 +7,39 @@ export const setUniforms = (material, { kernel }) => {
 
 export default `
 uniform sampler2D texture0;
-uniform float kernel;
+uniform int kernel;
 uniform float width;
 uniform float height;
 varying vec2 vUv;
 
-vec4 getDilatedColor(sampler2D tex, vec2 uv, float kernel){
+vec4 getDilatedColor(sampler2D tex, vec2 uv, int kernel){
     vec4 color = texture2D(tex, uv);
 
     if(color.a <1e-5){
-        float nearestDistance = 1e+3;
-        vec4 nearestColor = color;
-        for(float i=-kernel;i<kernel;i++){
-            for(float j=-kernel;j<kernel;j++){
-                vec4 neighborColor = texture2D(tex, uv+vec2(i/width,j/height));
-                float distance = length(vec2(i,j));
-                if( (neighborColor.a > 1e-5) && (distance < nearestDistance) ){
-                    nearestDistance = distance;
-                    nearestColor = neighborColor;
+        for(int currentKernel=1;currentKernel<=kernel;currentKernel++){
+            float nearestDistance = 1e+3;
+            vec4 nearestColor = color;
+            bool foundColor = false;
+            for(int i=-currentKernel;i<=currentKernel;i++){
+                for(int j=-currentKernel;j<=currentKernel;j++){
+                    if(i!=-currentKernel && i!=currentKernel && j!=-currentKernel && j!=currentKernel) break;
+
+                    float i_f = float(i);
+                    float j_f = float(j);
+
+                    vec4 neighborColor = texture2D(tex, uv+vec2(i_f/width,j_f/height));
+                    float distance = length(vec2(i,j));
+                    if( (neighborColor.a > 1e-5) && (distance < nearestDistance) ){
+                        nearestDistance = distance;
+                        nearestColor = neighborColor;
+                        foundColor = true;
+                    }
                 }
             }
+            if(foundColor){
+                return nearestColor;
+            }
         }
-
-        return nearestColor;
     }
 
     return color;
