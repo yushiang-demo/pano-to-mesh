@@ -14,6 +14,26 @@ import Input from "../components/Input";
 import Icons from "../components/Icon";
 import Toolbar from "../components/Toolbar";
 
+const downloadImage = (filename, url) => {
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+};
+
+const getCurrentFormattedTime = () => {
+  const currentTime = new Date();
+  const year = currentTime.getFullYear();
+  const month = String(currentTime.getMonth() + 1).padStart(2, "0");
+  const date = String(currentTime.getDate()).padStart(2, "0");
+  const hours = String(currentTime.getHours()).padStart(2, "0");
+  const minutes = String(currentTime.getMinutes()).padStart(2, "0");
+  const seconds = String(currentTime.getSeconds()).padStart(2, "0");
+
+  return `${year}-${month}-${date}_${hours}-${minutes}-${seconds}`;
+};
+
 const dev = process.env.NODE_ENV === "development";
 const Editor = ({ src }) => {
   const textureCanvasRef = useRef(null);
@@ -41,15 +61,9 @@ const Editor = ({ src }) => {
   };
 
   const onDownload = () => {
-    const downloadImage = (filename, url) => {
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = filename;
-      a.click();
-      URL.revokeObjectURL(url);
-    };
-    Core.downloadMesh("test", layout2D, ceilingY, floorY);
-    downloadImage("test.png", textureCanvasRef.current.getTexture());
+    const filename = getCurrentFormattedTime();
+    Core.downloadMesh(filename, layout2D, ceilingY, floorY);
+    downloadImage(`${filename}.png`, textureCanvasRef.current.getTexture());
   };
 
   return (
