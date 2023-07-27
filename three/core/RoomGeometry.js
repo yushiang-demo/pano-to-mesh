@@ -15,6 +15,18 @@ export const getEmptyRoomGeometry = ({ floorY, ceilingY }) => {
       [planeSize, ceilingY, planeSize],
     ].flatMap((data) => data)
   );
+  const uvs = new Float32Array(
+    [
+      [0, 1],
+      [0, 0],
+      [1, 0],
+      [1, 1],
+      [0, 1],
+      [0, 0],
+      [1, 0],
+      [1, 1],
+    ].flatMap((data) => data)
+  );
   const indices = new Uint16Array(
     [
       [0, 2, 1],
@@ -22,6 +34,11 @@ export const getEmptyRoomGeometry = ({ floorY, ceilingY }) => {
       [4, 5, 6],
       [4, 6, 7],
     ].flatMap((data) => data)
+  );
+
+  geometry.setAttribute(
+    "textureUV",
+    new THREE.BufferAttribute(new Float32Array(uvs), 2)
   );
   geometry.setAttribute(
     "color",
@@ -46,7 +63,71 @@ const flattenTriangleVertices = (vertices, indexes) => {
   return flattenVertices;
 };
 
-const create = (points, ceilingY, floorY) => {
+const points3DToUvs = (verticesXYZ, baseScale, baseOffsetX, baseOffsetZ) => {
+  const xCoords = verticesXYZ.filter((_, index) => index % 3 === 0);
+  const zCoords = verticesXYZ.filter((_, index) => index % 3 === 2);
+  const getScale = (coords) => 1 / (Math.max(...coords) - Math.min(...coords));
+  const scale = Math.min(getScale(xCoords), getScale(zCoords));
+  const offsetX = Math.min(...xCoords);
+  const offsetZ = Math.min(...zCoords);
+
+  return (data, idx) => {
+    if (idx % 2 == 0) {
+      return (data - offsetX) * scale * baseScale + baseOffsetX;
+    } else {
+      return (data - offsetZ) * scale * baseScale + baseOffsetZ;
+    }
+  };
+};
+
+const getCumulativeDistanceOfWalls = (points2D) => {
+  const getCircularVectorsDistances = (vectors) => {
+    return vectors.map((vector, index) => {
+      const nextVector = vectors[(index + 1) % vectors.length];
+      const distance = vector.distanceTo(nextVector);
+      return distance;
+    });
+  };
+
+  const distances = getCircularVectorsDistances(points2D);
+  const sum = (array) =>
+    array.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+  const totalDistance = sum(distances);
+  const normalizedDistances = distances.map(
+    (distance) => distance / totalDistance
+  );
+  const cumulativeDistance = normalizedDistances.reduce(
+    (prev, currentValue) => [...prev, prev[prev.length - 1] + currentValue],
+    [0]
+  );
+  return cumulativeDistance;
+};
+
+const pointsIndexToWallUvs = (steps) => {
+  return (_, index) => {
+    const toWallIndex = (index) => Math.trunc(index / 12);
+    const getUv1X = (index) => steps[toWallIndex(index)];
+    const getUv2X = (index) => steps[toWallIndex(index) + 1];
+    const getUvFloorY = () => 0.05;
+    const getUv2CeilingY = () => 0.45;
+    // Order : [ceiling1, ceiling2, floor1, floor1, ceiling2, floor2];
+    const parser = [
+      [getUv1X, getUv2CeilingY],
+      [getUv2X, getUv2CeilingY],
+      [getUv1X, getUvFloorY],
+      [getUv1X, getUvFloorY],
+      [getUv2X, getUv2CeilingY],
+      [getUv2X, getUvFloorY],
+    ].flatMap((data) => data);
+    return parser[index % 12](index);
+  };
+};
+
+export const create3DRoom = (layout2DPointsArray, ceilingY, floorY) => {
+  const points = layout2DPointsArray.map(
+    (point) => new THREE.Vector2(point[0], point[1])
+  );
+
   if (points.length < 2) return getEmptyRoomGeometry({ ceilingY, floorY });
 
   const shape = new THREE.Shape(points);
@@ -89,7 +170,7 @@ const create = (points, ceilingY, floorY) => {
   const ceilingVertices = flattenTriangleVertices(verticesOrigin, indexesRaw);
   const floorVertices = flattenTriangleVertices(verticesOrigin, floorIndexes);
   const wallVertices = flattenTriangleVertices(verticesOrigin, wallIndexes);
-  const wallCount = wallVertices.length / 18;
+  const wallCount = points.length;
 
   const vertices = [...ceilingVertices, ...floorVertices, ...wallVertices];
   const colors = [
@@ -103,6 +184,18 @@ const create = (points, ceilingY, floorY) => {
     }),
   ];
 
+  const notYCoord = (_, idx) => idx % 3 !== 1;
+  const normalizedCeiling = points3DToUvs(ceilingVertices, 0.5, 0.0, 0.5);
+  const normalizedFloor = points3DToUvs(floorVertices, 0.5, 0.5, 0.5);
+  const normalizeWall = pointsIndexToWallUvs(
+    getCumulativeDistanceOfWalls(points)
+  );
+  const uvs = [
+    ...ceilingVertices.filter(notYCoord).map(normalizedCeiling),
+    ...floorVertices.filter(notYCoord).map(normalizedFloor),
+    ...wallVertices.filter(notYCoord).map(normalizeWall),
+  ];
+
   const indexes = Array.from(
     { length: vertices.length / 3 },
     (_, index) => index
@@ -114,6 +207,10 @@ const create = (points, ceilingY, floorY) => {
     new THREE.BufferAttribute(new Float32Array(colors), 3)
   );
   geometry.setAttribute(
+    "textureUV",
+    new THREE.BufferAttribute(new Float32Array(uvs), 2)
+  );
+  geometry.setAttribute(
     "position",
     new THREE.BufferAttribute(new Float32Array(vertices), 3)
   );
@@ -122,4 +219,66 @@ const create = (points, ceilingY, floorY) => {
   return geometry;
 };
 
-export default { create };
+export const downloadMesh = (() => {
+  const downloadFile = (filename, content) => {
+    const blob = new Blob([content], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const reshape1DArrayToTuple = (array, tupleSize) => {
+    return new Array(array.length / tupleSize)
+      .fill()
+      .map((_, tupleIndex) =>
+        new Array(tupleSize)
+          .fill()
+          .map((_, elementIdx) => array[tupleIndex * tupleSize + elementIdx])
+      );
+  };
+
+  const arrayToText = (prefix, array, textFormatter) => {
+    return array
+      .map((elements) => `${prefix} ${textFormatter(elements)}`)
+      .join("\n");
+  };
+
+  return (filename, layout2D, ceilingY, floorY) => {
+    const geometry = create3DRoom(layout2D, ceilingY, floorY);
+
+    const vertices = reshape1DArrayToTuple(
+      geometry.attributes.position.array,
+      3
+    );
+    const uvs = reshape1DArrayToTuple(geometry.attributes.textureUV.array, 2);
+    const indices = reshape1DArrayToTuple(geometry.index.array, 3);
+
+    const vertexText = arrayToText("v", vertices, (arr) => arr.join(" "));
+    const uvText = arrayToText("vt", uvs, (arr) => arr.join(" "));
+    const indexText = arrayToText("f", indices, (arr) =>
+      arr.map((value) => `${value + 1}/${value + 1}`).join(" ")
+    );
+
+    const objFile = [
+      `
+      mtllib ${filename}.mtl
+      usemtl PanormaTexture
+      `,
+      vertexText,
+      uvText,
+      indexText,
+    ].join("\n");
+
+    const mtlFile = `
+    newmtl PanormaTexture
+    map_Kd ${filename}.png
+    `;
+
+    downloadFile(`${filename}.obj`, objFile);
+    downloadFile(`${filename}.mtl`, mtlFile);
+  };
+})();

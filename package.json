@@ -2,10 +2,7 @@
   "name": "PanoToMesh",
   "version": "0.1.0",
   "scripts": {
-    "open-browser-mac": "open http://localhost:3000/?image=/images/panoramas/1.jpeg",
-    "open-browser-windows": "start http://localhost:3000/?image=/images/panoramas/1.jpeg",
-    "open-browser": "yarn open-browser-mac || yarn open-browser-windows",
-    "dev": "yarn open-browser && next dev",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -20,5 +17,8 @@
     "styled-components": "^6.0.4",
     "three": "^0.149.0",
     "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "babel-plugin-styled-components": "^2.1.4"
   }
 }

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import * as THREE from "three";
 
 import CapturePanorama from "../../core/CapturePanorama";
-import RoomGeometry from "../../core/RoomGeometry";
+import { create3DRoom } from "../../core/RoomGeometry";
 import TexturePostEffect from "../../core/TexturePostEffect";
 import Shaders from "../../shaders";
 
@@ -12,7 +12,7 @@ const PanoramaOutline = ({
   three,
   floorY,
   ceilingY,
-  wallVertices,
+  layout2D,
   panorama,
   panoramaOrigin,
 }) => {
@@ -74,13 +74,15 @@ const PanoramaOutline = ({
 
   useEffect(() => {
     if (mesh) {
-      mesh.geometry = RoomGeometry.create(
-        wallVertices.map((vertex) => new THREE.Vector2(vertex[0], vertex[1])),
-        ceilingY,
-        floorY
-      );
+      mesh.geometry = create3DRoom(layout2D, ceilingY, floorY);
     }
-  }, [wallVertices, floorY, ceilingY, mesh]);
+
+    return () => {
+      if (mesh) {
+        mesh.geometry.dispose();
+      }
+    };
+  }, [layout2D, floorY, ceilingY, mesh]);
 
   return null;
 };
