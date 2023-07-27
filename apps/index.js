@@ -84,12 +84,12 @@ const Editor = ({ src }) => {
             />
             <Icons.camera />
             <input
-              type="range"
+              type="number"
               value={panoramaOrigin[1]}
               onChange={(e) =>
                 setPanoramaOrigin((value) => [
                   value[0],
-                  e.target.value,
+                  Math.min(parseFloat(e.target.value), ceilingY),
                   value[2],
                 ])
               }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { Core } from "../three";
 
@@ -24,18 +24,21 @@ const useClick2AddWalls = ({
   const [imageCoord, setImageCoord] = useState([]);
   const [layout2D, setLayout2D] = useState([]);
 
-  const parseMousePointTo3D = ([normalizedX, normalizedY]) => {
-    const { longitude, latitude } =
-      Core.Math.coordinates.normalizedXY2Spherical(normalizedX, normalizedY);
-    const { x, y, z } = Core.Math.coordinates.spherical2CartesianDirection(
-      longitude,
-      latitude
-    );
+  const parseMousePointTo3D = useCallback(
+    ([normalizedX, normalizedY]) => {
+      const { longitude, latitude } =
+        Core.Math.coordinates.normalizedXY2Spherical(normalizedX, normalizedY);
+      const { x, y, z } = Core.Math.coordinates.spherical2CartesianDirection(
+        longitude,
+        latitude
+      );
 
-    const geometry = Core.getEmptyRoomGeometry(geometryInfo);
-    const point = Core.raycastGeometry(panoramaOrigin, [x, y, z], geometry);
-    return point;
-  };
+      const geometry = Core.getEmptyRoomGeometry(geometryInfo);
+      const point = Core.raycastGeometry(panoramaOrigin, [x, y, z], geometry);
+      return point;
+    },
+    [panoramaOrigin, geometryInfo]
+  );
 
   useEffect(() => {
     if (dragging) document.body.style.cursor = "crosshair";
@@ -106,7 +109,7 @@ const useClick2AddWalls = ({
       })
       .filter((value) => value);
     setLayout2D(pointsXZ);
-  }, [imageCoord, previewImageCoord]);
+  }, [imageCoord, previewImageCoord, parseMousePointTo3D]);
 
   return {
     layout2D,
