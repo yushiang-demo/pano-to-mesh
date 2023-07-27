@@ -39,7 +39,7 @@ const Editor = ({ src }) => {
   const textureCanvasRef = useRef(null);
   const [imageSrc, setImageSrc] = useState(src);
   const panorama = Loaders.useTexture({ src: imageSrc });
-  const [panoramaOrigin, setPanoramaOrigin] = useState([0, 1.0, 0]);
+  const [panoramaOrigin, setPanoramaOrigin] = useState([0, 1.5, 0]);
   const [floorY] = useState(0.0);
   const [ceilingY, setCeilingY] = useState(2.0);
   const { layout2D, eventHandlers } = useClick2AddWalls({
@@ -71,7 +71,36 @@ const Editor = ({ src }) => {
       <Toolbar>
         <Icons.panorama />
         <Input onChange={onChange} value={imageSrc} />
-        {!!layout2D.length && <Icons.download onClick={onDownload} />}
+        {!!layout2D.length && (
+          <>
+            <Icons.cube />
+            <input
+              type="range"
+              value={ceilingY}
+              onChange={(e) => setCeilingY(e.target.value)}
+              min={0}
+              max={10}
+              step={1e-2}
+            />
+            <Icons.camera />
+            <input
+              type="range"
+              value={panoramaOrigin[1]}
+              onChange={(e) =>
+                setPanoramaOrigin((value) => [
+                  value[0],
+                  e.target.value,
+                  value[2],
+                ])
+              }
+              min={1.0}
+              max={5.0}
+              step={1e-2}
+            />
+
+            <Icons.download onClick={onDownload} />
+          </>
+        )}
       </Toolbar>
       <CanvasSwitch>
         <ThreeCanvas {...eventHandlers} dev={dev}>

@@ -28,6 +28,8 @@ const IconFolder = `/icons`;
 const files = {
   download: `${IconFolder}/download.svg`,
   panorama: `${IconFolder}/panorama.svg`,
+  camera: `${IconFolder}/camera.svg`,
+  cube: `${IconFolder}/cube.svg`,
 };
 
 const Icons = Object.keys(files).reduce((acc, key) => {

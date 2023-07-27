@@ -17,6 +17,7 @@ const PanoramaOutline = ({
   panoramaOrigin,
 }) => {
   const [mesh, setMesh] = useState(null);
+  const [panoramaCapturer, setPanoramaCapturer] = useState(null);
   useEffect(() => {
     const { scene, addBeforeRenderFunction } = three;
 
@@ -27,9 +28,13 @@ const PanoramaOutline = ({
         vertexShader: Shaders.vertexShaders.worldPosition,
         fragmentShader: Shaders.fragmentShaders.vertexColor,
       });
-      const room = new THREE.Mesh(new THREE.BufferGeometry(), material);
-      setMesh(room);
-      panoramaScene.add(room);
+      if (!mesh) {
+        const room = new THREE.Mesh(new THREE.BufferGeometry(), material);
+        setMesh(room);
+        panoramaScene.add(room);
+      } else {
+        panoramaScene.add(mesh);
+      }
       return panoramaScene;
     };
 
@@ -38,18 +43,20 @@ const PanoramaOutline = ({
       ROOM_TEXTURE_WIDTH,
       ROOM_TEXTURE_HEIGHT
     );
-    panoramaCapturer.setCameraPosition(
-      new THREE.Vector3().fromArray(panoramaOrigin)
-    );
+    setPanoramaCapturer(panoramaCapturer);
+
     const stopCapturePanorama = addBeforeRenderFunction((renderer) => {
       panoramaCapturer.render(renderer);
     });
 
-    const { texture: outlineOf3DRoom, render: renderOutline } =
-      TexturePostEffect(
-        panoramaCapturer.texture,
-        Shaders.fragmentShaders.edgeDetection
-      );
+    const {
+      texture: outlineOf3DRoom,
+      render: renderOutline,
+      dispose: disposeOutlineTexture,
+    } = TexturePostEffect(
+      panoramaCapturer.texture,
+      Shaders.fragmentShaders.edgeDetection
+    );
     const stopTexturePostEffect = addBeforeRenderFunction(renderOutline);
 
     const geometry1 = new THREE.PlaneGeometry(1, 1);
@@ -69,11 +76,24 @@ const PanoramaOutline = ({
       scene.remove(panel);
       stopCapturePanorama();
       stopTexturePostEffect();
+      disposeOutlineTexture();
+      panoramaCapturer.dispose();
+      geometry1.dispose();
+      panorama.dispose();
     };
-  }, [three, panorama, panoramaOrigin]);
+  }, [three, panorama]);
+
+  useEffect(() => {
+    if (panoramaCapturer) {
+      panoramaCapturer.setCameraPosition(
+        new THREE.Vector3().fromArray(panoramaOrigin)
+      );
+    }
+  }, [panoramaOrigin, panoramaCapturer]);
 
   useEffect(() => {
     if (mesh) {
+      mesh.geometry.dispose();
       mesh.geometry = create3DRoom(layout2D, ceilingY, floorY);
     }
 
