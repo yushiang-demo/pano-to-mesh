@@ -113,7 +113,6 @@ const ThreeCanvas = (
     <div ref={WrapperRef} style={WrapperStyle}>
       {dev && <pre style={monitorStyle}>{monitor}</pre>}
       <canvas
-        tabIndex={1}
         ref={canvasRef}
         onMouseDown={handleMouseEvents(onMouseDown)}
         onMouseMove={handleMouseEvents(onMouseMove)}

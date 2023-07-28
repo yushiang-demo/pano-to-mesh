@@ -8,11 +8,11 @@ import {
   Core,
 } from "../three";
 import useClick2AddWalls from "../hooks/useClick2AddWalls";
-import CanvasSwitch from "../components/CanvasSwitch";
 import PageContainer from "../components/PageContainer";
 import Input from "../components/Input";
 import Icons from "../components/Icon";
 import Toolbar from "../components/Toolbar";
+import RatioLockedDiv from "../components/RatioLockedDiv";
 
 const downloadImage = (filename, url) => {
   const a = document.createElement("a");
@@ -37,6 +37,7 @@ const getCurrentFormattedTime = () => {
 const dev = process.env.NODE_ENV === "development";
 const Editor = ({ src }) => {
   const textureCanvasRef = useRef(null);
+  const [preview, setPreview] = useState(false);
   const [imageSrc, setImageSrc] = useState(src);
   const panorama = Loaders.useTexture({ src: imageSrc });
   const [panoramaOrigin, setPanoramaOrigin] = useState([0, 1.5, 0]);
@@ -63,6 +64,27 @@ const Editor = ({ src }) => {
     panoramaOrigin,
   };
 
+  const loadPanoramaFromLocal = () => {
+    const fileInput = document.createElement("input");
+    fileInput.type = "file";
+    fileInput.accept = "image/*";
+    fileInput.addEventListener("change", (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+
+        reader.onload = (e) => {
+          const dataURL = e.target.result;
+          setImageSrc(dataURL);
+        };
+
+        reader.readAsDataURL(file);
+      }
+    });
+
+    fileInput.click();
+  };
+
   const onChange = (value) => {
     setImageSrc(value);
   };
@@ -76,17 +98,28 @@ const Editor = ({ src }) => {
   return (
     <PageContainer>
       <Toolbar>
-        <Icons.panorama />
+        {!!layout2D.length && (
+          <>
+            {!preview ? (
+              <Icons.activated3D onClick={() => setPreview((data) => !data)} />
+            ) : (
+              <Icons.inactivated3D
+                onClick={() => setPreview((data) => !data)}
+              />
+            )}
+          </>
+        )}
+        <Icons.panorama onClick={loadPanoramaFromLocal} />
         <Input onChange={onChange} value={imageSrc} />
         {!!layout2D.length && (
           <>
             <Icons.cube />
             <input
-              type="range"
+              type="number"
               value={ceilingY}
               onChange={(e) => setCeilingY(e.target.value)}
-              min={0}
-              max={10}
+              min={panoramaOrigin[1]}
+              max={panoramaOrigin[1] + 10}
               step={1e-2}
             />
             <Icons.camera />
@@ -105,18 +138,21 @@ const Editor = ({ src }) => {
               step={1e-2}
             />
 
-            <Icons.download onClick={onDownload} />
+            {preview && <Icons.download onClick={onDownload} />}
           </>
         )}
       </Toolbar>
-      <CanvasSwitch>
-        <ThreeCanvas {...eventHandlers} dev={dev}>
-          <PanoramaOutline {...props} />
-        </ThreeCanvas>
-        <ThreeCanvas dev={dev}>
-          <PanoramaTextureMesh {...props} ref={textureCanvasRef} />
-        </ThreeCanvas>
-      </CanvasSwitch>
+      <RatioLockedDiv>
+        {!preview ? (
+          <ThreeCanvas {...eventHandlers} dev={dev}>
+            <PanoramaOutline {...props} />
+          </ThreeCanvas>
+        ) : (
+          <ThreeCanvas dev={dev}>
+            <PanoramaTextureMesh {...props} ref={textureCanvasRef} />
+          </ThreeCanvas>
+        )}
+      </RatioLockedDiv>
     </PageContainer>
   );
 };
