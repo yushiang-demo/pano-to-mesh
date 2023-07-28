@@ -4,7 +4,6 @@ const Wrapper = styled.div`
   position: relative;
   width: calc(100% * 0.7);
   padding-top: calc(56.25% * 0.7);
-  border-radius: 10px;
   border: 1px solid black;
 `;
 

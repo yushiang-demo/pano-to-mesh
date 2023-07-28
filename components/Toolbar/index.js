@@ -5,6 +5,7 @@ const Wrapper = styled.div`
   gap: 5px;
   padding: 5px;
   align-items: center;
+  position: relative;
 `;
 const Toolbar = ({ children }) => {
   return <Wrapper>{children}</Wrapper>;
