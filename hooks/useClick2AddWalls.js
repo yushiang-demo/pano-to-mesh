@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { Core } from "../three";
 
@@ -24,22 +24,39 @@ const useClick2AddWalls = ({
   const [imageCoord, setImageCoord] = useState([]);
   const [layout2D, setLayout2D] = useState([]);
 
-  const parseMousePointTo3D = ([normalizedX, normalizedY]) => {
-    const { longitude, latitude } =
-      Core.Math.coordinates.normalizedXY2Spherical(normalizedX, normalizedY);
-    const { x, y, z } = Core.Math.coordinates.spherical2CartesianDirection(
+  const parser2DCeilingCoordToFloorCoord = ([normalizedX, normalizedY]) => {
+    const point = parseMousePointTo3D([normalizedX, normalizedY]);
+    const { longitude, latitude } = Core.Math.coordinates.cartesian2Spherical(
+      point[0] - panoramaOrigin[0],
+      geometryInfo.floorY - panoramaOrigin[1],
+      point[1] - panoramaOrigin[2]
+    );
+    const { x, y } = Core.Math.coordinates.spherical2NormalizedXY(
       longitude,
       latitude
     );
-
-    const geometry = Core.getEmptyRoomGeometry(geometryInfo);
-    const point = Core.raycastGeometry(panoramaOrigin, [x, y, z], geometry);
-    return point;
+    return [x, y];
   };
 
+  const parseMousePointTo3D = useCallback(
+    ([normalizedX, normalizedY]) => {
+      const { longitude, latitude } =
+        Core.Math.coordinates.normalizedXY2Spherical(normalizedX, normalizedY);
+      const { x, y, z } = Core.Math.coordinates.spherical2CartesianDirection(
+        longitude,
+        latitude
+      );
+
+      const geometry = Core.getEmptyRoomGeometry(geometryInfo);
+      const point = Core.raycastGeometry(panoramaOrigin, [x, y, z], geometry);
+      return point;
+    },
+    [panoramaOrigin, geometryInfo]
+  );
+
   useEffect(() => {
-    if (dragging) document.body.style.cursor = "crosshair";
-    else document.body.style.cursor = "default";
+    if (dragging) document.body.style.cursor = "move";
+    else document.body.style.cursor = "copy";
   }, [dragging]);
 
   const onMouseLeave = () => {
@@ -61,15 +78,18 @@ const useClick2AddWalls = ({
           selectThresholdPixel
         )
       );
-      if (point) document.body.style.cursor = "crosshair";
-      else document.body.style.cursor = "default";
+      if (point) document.body.style.cursor = "move";
+      else document.body.style.cursor = "copy";
     }
   };
 
   const onMouseUp = ({ normalizedX, normalizedY }) => {
     if (dragging) {
       if (parseMousePointTo3D([normalizedX, normalizedY]))
-        setImageCoord([...imageCoord, [normalizedX, normalizedY]]);
+        setImageCoord([
+          ...imageCoord,
+          parser2DCeilingCoordToFloorCoord([normalizedX, normalizedY]),
+        ]);
       setPreviewImageCoord(null);
       setDragging(false);
     }
@@ -89,7 +109,10 @@ const useClick2AddWalls = ({
         )([x, y])
     );
     if (points.length) setImageCoord(points);
-    else setImageCoord([[normalizedX, normalizedY]]);
+    else
+      setImageCoord([
+        parser2DCeilingCoordToFloorCoord([normalizedX, normalizedY]),
+      ]);
     setDragging(true);
     setPreviewImageCoord([normalizedX, normalizedY]);
   };
@@ -106,7 +129,7 @@ const useClick2AddWalls = ({
       })
       .filter((value) => value);
     setLayout2D(pointsXZ);
-  }, [imageCoord, previewImageCoord]);
+  }, [imageCoord, previewImageCoord, parseMousePointTo3D]);
 
   return {
     layout2D,

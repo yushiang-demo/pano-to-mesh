@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 
 import {
   Loaders,
@@ -8,11 +8,11 @@ import {
   Core,
 } from "../three";
 import useClick2AddWalls from "../hooks/useClick2AddWalls";
-import CanvasSwitch from "../components/CanvasSwitch";
 import PageContainer from "../components/PageContainer";
 import Input from "../components/Input";
 import Icons from "../components/Icon";
 import Toolbar from "../components/Toolbar";
+import RatioLockedDiv from "../components/RatioLockedDiv";
 
 const downloadImage = (filename, url) => {
   const a = document.createElement("a");
@@ -37,14 +37,22 @@ const getCurrentFormattedTime = () => {
 const dev = process.env.NODE_ENV === "development";
 const Editor = ({ src }) => {
   const textureCanvasRef = useRef(null);
+  const [preview, setPreview] = useState(false);
   const [imageSrc, setImageSrc] = useState(src);
   const panorama = Loaders.useTexture({ src: imageSrc });
-  const [panoramaOrigin, setPanoramaOrigin] = useState([0, 1.0, 0]);
+  const [panoramaOrigin, setPanoramaOrigin] = useState([0, 1.5, 0]);
   const [floorY] = useState(0.0);
   const [ceilingY, setCeilingY] = useState(2.0);
+  const geometryInfo = useMemo(
+    () => ({
+      floorY,
+      ceilingY,
+    }),
+    [floorY, ceilingY]
+  );
   const { layout2D, eventHandlers } = useClick2AddWalls({
     panoramaOrigin,
-    geometryInfo: { floorY, ceilingY },
+    geometryInfo,
     selectThresholdPixel: 5,
   });
 
@@ -54,6 +62,27 @@ const Editor = ({ src }) => {
     layout2D,
     panorama,
     panoramaOrigin,
+  };
+
+  const loadPanoramaFromLocal = () => {
+    const fileInput = document.createElement("input");
+    fileInput.type = "file";
+    fileInput.accept = "image/*";
+    fileInput.addEventListener("change", (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+
+        reader.onload = (e) => {
+          const dataURL = e.target.result;
+          setImageSrc(dataURL);
+        };
+
+        reader.readAsDataURL(file);
+      }
+    });
+
+    fileInput.click();
   };
 
   const onChange = (value) => {
@@ -69,18 +98,61 @@ const Editor = ({ src }) => {
   return (
     <PageContainer>
       <Toolbar>
-        <Icons.panorama />
+        {!!layout2D.length && (
+          <>
+            {!preview ? (
+              <Icons.activated3D onClick={() => setPreview((data) => !data)} />
+            ) : (
+              <Icons.inactivated3D
+                onClick={() => setPreview((data) => !data)}
+              />
+            )}
+          </>
+        )}
+        <Icons.panorama onClick={loadPanoramaFromLocal} />
         <Input onChange={onChange} value={imageSrc} />
-        {!!layout2D.length && <Icons.download onClick={onDownload} />}
+        {!!layout2D.length && (
+          <>
+            <Icons.cube />
+            <input
+              type="number"
+              value={ceilingY}
+              onChange={(e) => setCeilingY(e.target.value)}
+              min={panoramaOrigin[1]}
+              max={panoramaOrigin[1] + 10}
+              step={1e-2}
+            />
+            <Icons.camera />
+            <input
+              type="number"
+              value={panoramaOrigin[1]}
+              onChange={(e) =>
+                setPanoramaOrigin((value) => [
+                  value[0],
+                  Math.min(parseFloat(e.target.value), ceilingY),
+                  value[2],
+                ])
+              }
+              min={1.0}
+              max={5.0}
+              step={1e-2}
+            />
+
+            {preview && <Icons.download onClick={onDownload} />}
+          </>
+        )}
       </Toolbar>
-      <CanvasSwitch>
-        <ThreeCanvas {...eventHandlers} dev={dev}>
-          <PanoramaOutline {...props} />
-        </ThreeCanvas>
-        <ThreeCanvas dev={dev}>
-          <PanoramaTextureMesh {...props} ref={textureCanvasRef} />
-        </ThreeCanvas>
-      </CanvasSwitch>
+      <RatioLockedDiv>
+        {!preview ? (
+          <ThreeCanvas {...eventHandlers} dev={dev}>
+            <PanoramaOutline {...props} />
+          </ThreeCanvas>
+        ) : (
+          <ThreeCanvas dev={dev}>
+            <PanoramaTextureMesh {...props} ref={textureCanvasRef} />
+          </ThreeCanvas>
+        )}
+      </RatioLockedDiv>
     </PageContainer>
   );
 };
