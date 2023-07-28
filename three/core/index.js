@@ -7,7 +7,11 @@ const InitThree = ({ canvas, alpha = true }) => {
   const { width, height } = canvas.getBoundingClientRect();
   const scene = new THREE.Scene();
 
-  const renderer = new THREE.WebGLRenderer({ canvas, alpha });
+  const renderer = new THREE.WebGLRenderer({
+    canvas,
+    alpha,
+    preserveDrawingBuffer: true,
+  });
   renderer.setSize(width, height);
 
   const camera = new THREE.PerspectiveCamera(75, width / height, 0.01, 1000);
@@ -19,10 +23,11 @@ const InitThree = ({ canvas, alpha = true }) => {
   const customRender = {};
   const animate = () => {
     const animeFrame = requestAnimationFrame(animate);
-    renderer.render(scene, camera);
     Object.keys(customRender)
       .map((key) => customRender[key])
       .forEach((func) => func(renderer));
+    renderer.render(scene, camera);
+
     return animeFrame;
   };
 
@@ -38,7 +43,7 @@ const InitThree = ({ canvas, alpha = true }) => {
     renderer.setSize(width, height);
   };
 
-  const addRenderFunction = (func) => {
+  const addBeforeRenderFunction = (func) => {
     let id = uuidv4();
 
     while (customRender[id] !== undefined) {
@@ -51,7 +56,7 @@ const InitThree = ({ canvas, alpha = true }) => {
     };
   };
 
-  return { destroy, setCanvasSize, scene, addRenderFunction };
+  return { destroy, setCanvasSize, scene, addBeforeRenderFunction, renderer };
 };
 
 export default InitThree;

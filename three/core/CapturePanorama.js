@@ -14,7 +14,7 @@ const CaptureCubemap = () => {
   return {
     setCameraPosition,
     cubeCamera,
-    cubeTexture: cubeRenderTarget.texture,
+    cubeTexture: cubeRenderTarget,
   };
 };
 
@@ -27,7 +27,7 @@ const CapturePanorama = (targetScene, width, height) => {
     fragmentShader: Shaders.fragmentShaders.cubemapToEquirectangular,
   });
   Shaders.setUniforms.cubemapToEquirectangular(material, {
-    cubeTexture,
+    cubeTexture: cubeTexture.texture,
   });
   const mesh = new THREE.Mesh(geometry, material);
   const scene = new THREE.Scene();
@@ -43,7 +43,14 @@ const CapturePanorama = (targetScene, width, height) => {
     cubeCamera.update(renderer, targetScene);
   };
 
-  return { render, setCameraPosition, texture: panorama.texture };
+  const dispose = () => {
+    panorama.dispose();
+    cubeTexture.dispose();
+    scene.remove(mesh);
+    geometry.dispose();
+  };
+
+  return { render, setCameraPosition, texture: panorama.texture, dispose };
 };
 
 export default CapturePanorama;
