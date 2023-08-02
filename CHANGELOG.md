@@ -9,20 +9,24 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 
 ### Added
 
-- Edit ceiling and camera height (#11)
-- Export mesh and texture (#9)
+- Edit ceiling and camera height (https://github.com/yushiang-demo/PanoToMesh/pull/11)
+- Export mesh and texture (https://github.com/yushiang-demo/PanoToMesh/pull/9)
 
 ### Changed
 
-- Extends 2d editor clickable region to ceiling part. (#7)
-- Camera dolly effect won't change cameras position instead of fov. (#10)
+- Extends 2d editor clickable region to ceiling part. (https://github.com/yushiang-demo/PanoToMesh/pull/7)
+- Camera dolly effect won't change cameras position instead of fov. (https://github.com/yushiang-demo/PanoToMesh/pull/10)
 
 ### Fixed 
 
-- flickering wall when editing layout. (#3)
+- flickering wall when editing layout. (https://github.com/yushiang-demo/PanoToMesh/pull/3)
 
 ### Removed
 
 ## [0.0.0]
 
 Code which doesn't make changes with pull requests won't be recorded.
+
+[unreleased]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/yushiang-demo/PanoToMesh/compare/v0.0.0...v1.0.0
+[0.0.0]: https://github.com/yushiang-demo/PanoToMesh/releases/tag/v0.0.0
