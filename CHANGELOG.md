@@ -9,6 +9,10 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 
 - Change `styled-component` babel setting to SWC according to [official document](https://styled-components.com/docs/advanced#with-swc). (https://github.com/yushiang-demo/PanoToMesh/pull/16)
 
+### Fixed
+
+- `PanoramaTextureMesh` frame buffer cause memory leak. (https://github.com/yushiang-demo/PanoToMesh/pull/17)
+
 ## [1.0.0] - 2023-08-28
 
 ### Added
@@ -21,7 +25,7 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 - Extends 2d editor clickable region to ceiling part. (https://github.com/yushiang-demo/PanoToMesh/pull/7)
 - Camera dolly effect won't change cameras position instead of fov. (https://github.com/yushiang-demo/PanoToMesh/pull/10)
 
-### Fixed 
+### Fixed
 
 - flickering wall when editing layout. (https://github.com/yushiang-demo/PanoToMesh/pull/3)
 
