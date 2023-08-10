@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 
 ## [Unreleased]
 
+### Changed
+
+- Change `styled-component` babel setting to SWC according to [official document](https://styled-components.com/docs/advanced#with-swc). (https://github.com/yushiang-demo/PanoToMesh/pull/16)
+
 ## [1.0.0] - 2023-08-28
 
 ### Added
