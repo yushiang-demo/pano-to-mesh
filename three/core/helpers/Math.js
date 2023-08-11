@@ -40,7 +40,7 @@ const spherical2NormalizedXY = (longitude, latitude) => {
   return { x: normalizedX, y: normalizedY };
 };
 
-export default {
+const Math = {
   coordinates: {
     spherical2CartesianDirection,
     normalizedXY2Spherical,
@@ -48,3 +48,5 @@ export default {
     spherical2NormalizedXY,
   },
 };
+
+export default Math;

@@ -23,15 +23,7 @@ const CanvasStyle = {
 };
 
 const ThreeCanvas = (
-  {
-    children,
-    onMouseDown,
-    onMouseMove,
-    onMouseUp,
-    dev,
-    aspectRatio = 9 / 16,
-    ...props
-  },
+  { children, onMouseDown, onMouseMove, onMouseUp, dev, ...props },
   ref
 ) => {
   const [three, setThree] = useState(null);
@@ -89,7 +81,7 @@ const ThreeCanvas = (
       stopMonitorMemory();
       destroy();
     };
-  }, []);
+  }, [dev, ref]);
 
   const childrenWithProps = React.Children.map(children, (child) => {
     if (React.isValidElement(child)) {

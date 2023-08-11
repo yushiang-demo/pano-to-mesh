@@ -81,7 +81,7 @@ const PanoramaOutline = ({
       geometry1.dispose();
       panorama.dispose();
     };
-  }, [three, panorama]);
+  }, [three, panorama, mesh]);
 
   useEffect(() => {
     if (panoramaCapturer) {

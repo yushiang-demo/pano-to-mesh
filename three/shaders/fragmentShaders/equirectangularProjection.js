@@ -11,7 +11,7 @@ export const setUniforms = (material, { texture, cameraPosition }) => {
   material.uniforms.camerasPosition.value = cameraPosition;
 };
 
-export default `
+const shader = `
 #define M_PI 3.14159
 uniform sampler2D tEquirect;
 uniform vec3 camerasPosition;
@@ -31,3 +31,5 @@ void main() {
     gl_FragColor=texture2D(tEquirect, uv);
 }
 `;
+
+export default shader;
