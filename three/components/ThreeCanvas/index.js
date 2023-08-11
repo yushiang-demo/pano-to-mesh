@@ -39,12 +39,18 @@ const ThreeCanvas = (
   const WrapperRef = useRef(null);
   const canvasRef = useRef(null);
   useEffect(() => {
-    const { destroy, setCanvasSize, scene, addBeforeRenderFunction, renderer } =
-      InitThree({
-        canvas: canvasRef.current,
-      });
+    const {
+      destroy,
+      setCanvasSize,
+      scene,
+      addBeforeRenderFunction,
+      renderer,
+      cameraControls,
+    } = InitThree({
+      canvas: canvasRef.current,
+    });
 
-    setThree({ scene, addBeforeRenderFunction, renderer });
+    setThree({ scene, addBeforeRenderFunction, renderer, cameraControls });
 
     const cancelResizeListener = addBeforeRenderFunction(() => {
       const { clientWidth: width, clientHeight: height } = WrapperRef.current;
