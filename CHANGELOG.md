@@ -13,6 +13,10 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 
 - `PanoramaTextureMesh` frame buffer cause memory leak. (https://github.com/yushiang-demo/PanoToMesh/pull/17)
 
+### Removed
+
+- Remove source code of `OrbitControls` use add-on version from three.(https://github.com/yushiang-demo/PanoToMesh/pull/18)
+
 ## [1.0.0] - 2023-08-28
 
 ### Added

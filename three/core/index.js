@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { v4 as uuidv4 } from "uuid";
 
-import OribitControl from "./OribitControl";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
 const InitThree = ({ canvas, alpha = true }) => {
   const { width, height } = canvas.getBoundingClientRect();
@@ -16,7 +16,7 @@ const InitThree = ({ canvas, alpha = true }) => {
 
   const camera = new THREE.PerspectiveCamera(75, width / height, 0.01, 1000);
   camera.position.set(0, 5, 0);
-  const controls = new OribitControl(camera, renderer.domElement);
+  const controls = new OrbitControls(camera, renderer.domElement);
   controls.target.set(0, 1, 0);
   controls.domElement = renderer.domElement;
 
@@ -56,7 +56,23 @@ const InitThree = ({ canvas, alpha = true }) => {
     };
   };
 
-  return { destroy, setCanvasSize, scene, addBeforeRenderFunction, renderer };
+  const cameraControls = () => {
+    return {
+      getCamera: () => camera,
+      setEnable: (data) => {
+        controls.enabled = data;
+      },
+    };
+  };
+
+  return {
+    destroy,
+    setCanvasSize,
+    scene,
+    addBeforeRenderFunction,
+    renderer,
+    cameraControls,
+  };
 };
 
 export default InitThree;
