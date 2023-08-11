@@ -1,4 +1,4 @@
-export default `
+const shader = `
 uniform sampler2D texture0;
 uniform float width;
 uniform float height;
@@ -24,3 +24,5 @@ void main()  {
 	gl_FragColor = vec4(color,color,color,1.0);
 }
 `;
+
+export default shader;

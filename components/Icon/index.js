@@ -20,7 +20,7 @@ export const Image = styled.div`
 `;
 
 const Icon = ({ src, ...props }) => {
-  return <Image src={src} {...props} />;
+  return <Image src={src} {...props} alt={src} />;
 };
 
 // all svg resources is download from https://www.svgrepo.com/vectors/cursor/

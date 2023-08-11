@@ -5,7 +5,7 @@ export const setUniforms = (material, { kernel }) => {
   material.uniforms.kernel.value = kernel;
 };
 
-export default `
+const shader = `
 uniform sampler2D texture0;
 uniform int kernel;
 uniform float width;
@@ -49,3 +49,5 @@ void main()  {
 	gl_FragColor =  getDilatedColor(texture0, vUv, kernel);
 }
 `;
+
+export default shader;

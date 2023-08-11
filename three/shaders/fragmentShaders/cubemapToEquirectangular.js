@@ -5,7 +5,7 @@ export const setUniforms = (material, { cubeTexture }) => {
   material.uniforms.cubeTexture.value = cubeTexture;
 };
 
-export default `
+const shader = `
 precision mediump float;
 uniform samplerCube cubeTexture;
 varying vec2 vUv;
@@ -23,3 +23,5 @@ void main()  {
 	gl_FragColor = textureCube( cubeTexture, dir );
 }
 `;
+
+export default shader;

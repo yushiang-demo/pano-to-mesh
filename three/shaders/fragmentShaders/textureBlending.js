@@ -9,7 +9,7 @@ export const setUniforms = (material, { texture0, texture1, percentage }) => {
   material.uniforms.percentage.value = percentage;
 };
 
-export default `
+const shader = `
 uniform sampler2D texture0;
 uniform sampler2D texture1;
 uniform float percentage;
@@ -22,3 +22,5 @@ void main()  {
 	gl_FragColor = mix(color0,color1,percentage);
 }
 `;
+
+export default shader;
