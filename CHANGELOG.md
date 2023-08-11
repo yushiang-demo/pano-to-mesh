@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 ### Fixed
 
 - `PanoramaTextureMesh` frame buffer cause memory leak. (https://github.com/yushiang-demo/PanoToMesh/pull/17)
+- `yarn audit` get 1 high vulnerabilities, resolved by remove `react-script`.(https://github.com/yushiang-demo/PanoToMesh/pull/20)
 
 ### Removed
 
