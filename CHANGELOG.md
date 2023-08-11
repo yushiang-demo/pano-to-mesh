@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 
 ## [Unreleased]
 
+### Added
+
+- Eslint [working directory](https://nextjs.org/docs/app/building-your-application/configuring/eslint#linting-custom-directories-and-files) and github ci for testing.(https://github.com/yushiang-demo/PanoToMesh/pull/19)
+
 ### Changed
 
 - Change `styled-component` babel setting to SWC according to [official document](https://styled-components.com/docs/advanced#with-swc). (https://github.com/yushiang-demo/PanoToMesh/pull/16)

@@ -6,8 +6,8 @@ on:
 
 jobs:
   build:
-    name: Eslint_and_Build
-    runs-on: ubuntu-18.04
+    name: test
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         node_version: [16]
