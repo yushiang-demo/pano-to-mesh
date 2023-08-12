@@ -1,8 +1,10 @@
 import React from "react";
-import Editor from "../apps";
+import Viewer from "../apps/viewer";
+import useQueryString from "../hooks/useQueryString";
 
 const Apps = () => {
-  return <Editor src={""} />;
+  const { data } = useQueryString();
+  return <Viewer data={data} />;
 };
 
 export default Apps;

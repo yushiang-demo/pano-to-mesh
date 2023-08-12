@@ -13,6 +13,7 @@ import Input from "../components/Input";
 import Icons from "../components/Icon";
 import Toolbar from "../components/Toolbar";
 import RatioLockedDiv from "../components/RatioLockedDiv";
+import { encodeString } from "../helpers/pako";
 
 const downloadImage = (filename, url) => {
   const a = document.createElement("a");
@@ -95,6 +96,16 @@ const Editor = ({ src }) => {
     downloadImage(`${filename}.png`, textureCanvasRef.current.getTexture());
   };
 
+  const onShare = () => {
+    const raw = {
+      ...props,
+      panorama: imageSrc,
+    };
+    const rawString = JSON.stringify(raw);
+    const encodedString = encodeString(rawString);
+    window.open(`/?data=${encodedString}`);
+  };
+
   return (
     <PageContainer>
       <Toolbar>
@@ -139,6 +150,7 @@ const Editor = ({ src }) => {
             />
 
             {preview && <Icons.download onClick={onDownload} />}
+            <Icons.share onClick={onShare} />
           </>
         )}
       </Toolbar>

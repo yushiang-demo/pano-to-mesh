@@ -32,6 +32,7 @@ const files = {
   cube: `${IconFolder}/cube.svg`,
   activated3D: `${IconFolder}/activated3D.svg`,
   inactivated3D: `${IconFolder}/inactivated3D.svg`,
+  share: `${IconFolder}/share.svg`,
 };
 
 const Icons = Object.keys(files).reduce((acc, key) => {
