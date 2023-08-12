@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 ### Added
 
 - Eslint [working directory](https://nextjs.org/docs/app/building-your-application/configuring/eslint#linting-custom-directories-and-files) and github ci for testing.(https://github.com/yushiang-demo/PanoToMesh/pull/19)
+- Use [js-base64](https://github.com/dankogai/js-base64) and [pako](https://github.com/nodeca/pako) as encoder for passing editor result to viewer through query string.(https://github.com/yushiang-demo/PanoToMesh/pull/23)
 
 ### Changed
 
