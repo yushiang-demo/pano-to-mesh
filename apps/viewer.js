@@ -14,20 +14,12 @@ const Viewer = ({ ceilingY, floorY, layout2D, panorama, panoramaOrigin }) => {
   };
 
   useEffect(() => {
-    threeRef.current.cameraControls.setHemisphereConstraint();
-
-    let removeCameraEvent = null;
     const removeSceneEvent = threeRef.current.scene.onChange(({ target }) => {
       const scene = target.getScene();
-      removeCameraEvent = threeRef.current.cameraControls.focus(
-        scene,
-        true,
-        true
-      );
+      threeRef.current.cameraControls.focus(scene);
     });
 
     return () => {
-      if (removeCameraEvent) removeCameraEvent();
       removeSceneEvent();
     };
   }, []);

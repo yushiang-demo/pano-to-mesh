@@ -33,6 +33,7 @@ const InitThree = ({ canvas, alpha = true }) => {
 
   const destroy = () => {
     cancelAnimationFrame(animeFrame);
+    cameraControls.destroy();
   };
 
   const setCanvasSize = (width, height) => {

@@ -37,7 +37,13 @@ function CameraControls(camera, domElement) {
     };
   };
 
-  const focus = (object, constraintZoom, constraintPan) => {
+  let constraintPanEvent = null;
+  const focus = (
+    object,
+    constraintZoom = true,
+    constraintPan = true,
+    constraintRotate = true
+  ) => {
     if (!object) return;
     const { origin, distance, boundingBox } = getFocusSettings(object, 0.8);
     lookAt(...origin.toArray());
@@ -51,6 +57,14 @@ function CameraControls(camera, domElement) {
       const { distance: maxDistance } = getFocusSettings(object, 0.5);
       controls.maxDistance = maxDistance;
       controls.minDistance = minDistance;
+      controls.update();
+    }
+
+    if (constraintRotate) {
+      controls.maxPolarAngle = Math.PI / 2;
+      controls.minPolarAngle = 0;
+      controls.maxAzimuthAngle = Infinity;
+      controls.minAzimuthAngle = -Infinity;
       controls.update();
     }
 
@@ -81,7 +95,13 @@ function CameraControls(camera, domElement) {
         setTarget(newTarget);
       };
       controls.addEventListener("change", checkTarget);
-      return () => controls.removeEventListener("change");
+      constraintPanEvent = () => controls.removeEventListener("change");
+    }
+  };
+
+  const destroy = () => {
+    if (constraintPanEvent) {
+      constraintPanEvent();
     }
   };
 
@@ -91,14 +111,8 @@ function CameraControls(camera, domElement) {
       controls.enabled = data;
     },
     lookAt,
-    setHemisphereConstraint: () => {
-      controls.maxPolarAngle = Math.PI / 2;
-      controls.minPolarAngle = 0;
-      controls.maxAzimuthAngle = Infinity;
-      controls.minAzimuthAngle = -Infinity;
-      controls.update();
-    },
     focus,
+    destroy,
   };
 }
 
