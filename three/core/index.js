@@ -1,12 +1,12 @@
 import * as THREE from "three";
 import { v4 as uuidv4 } from "uuid";
-
-import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import CameraControls from "./helpers/CameraControls";
+import SceneControls from "./helpers/SceneControls";
 
 const InitThree = ({ canvas, alpha = true }) => {
   const { width, height } = canvas.getBoundingClientRect();
-  const scene = new THREE.Scene();
 
+  const sceneControls = new SceneControls();
   const renderer = new THREE.WebGLRenderer({
     canvas,
     alpha,
@@ -15,11 +15,9 @@ const InitThree = ({ canvas, alpha = true }) => {
   renderer.setSize(width, height);
 
   const camera = new THREE.PerspectiveCamera(75, width / height, 0.01, 1000);
-  camera.position.set(0, 5, 0);
-  const controls = new OrbitControls(camera, renderer.domElement);
-  controls.target.set(0, 1, 0);
-  controls.domElement = renderer.domElement;
+  const cameraControls = new CameraControls(camera, renderer.domElement);
 
+  const scene = sceneControls.getScene();
   const customRender = {};
   const animate = () => {
     const animeFrame = requestAnimationFrame(animate);
@@ -56,19 +54,10 @@ const InitThree = ({ canvas, alpha = true }) => {
     };
   };
 
-  const cameraControls = () => {
-    return {
-      getCamera: () => camera,
-      setEnable: (data) => {
-        controls.enabled = data;
-      },
-    };
-  };
-
   return {
     destroy,
     setCanvasSize,
-    scene,
+    scene: sceneControls,
     addBeforeRenderFunction,
     renderer,
     cameraControls,

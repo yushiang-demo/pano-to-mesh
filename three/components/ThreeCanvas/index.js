@@ -42,7 +42,14 @@ const ThreeCanvas = (
       canvas: canvasRef.current,
     });
 
-    setThree({ scene, addBeforeRenderFunction, renderer, cameraControls });
+    const publicProps = {
+      scene,
+      addBeforeRenderFunction,
+      renderer,
+      cameraControls,
+    };
+
+    setThree(publicProps);
 
     const cancelResizeListener = addBeforeRenderFunction(() => {
       const { clientWidth: width, clientHeight: height } = WrapperRef.current;
@@ -69,10 +76,7 @@ const ThreeCanvas = (
 
     if (ref) {
       ref.current = {
-        getTexture: () => {
-          const dataURL = canvasRef.current.toDataURL();
-          return dataURL;
-        },
+        ...publicProps,
       };
     }
 
