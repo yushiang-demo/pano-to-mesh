@@ -4,6 +4,15 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 function CameraControls(camera, domElement) {
   const controls = new OrbitControls(camera, domElement);
 
+  const setTarget = (target) => {
+    const delta = new THREE.Vector3().subVectors(
+      camera.position,
+      controls.target
+    );
+    controls.target.copy(target);
+    camera.position.addVectors(delta, controls.target);
+  };
+
   const lookAt = (x, y, z) => {
     controls.target.set(x, y, z);
   };
@@ -24,12 +33,13 @@ function CameraControls(camera, domElement) {
     return {
       origin,
       distance: distanceFromFloor + originToCeilingDistance,
+      boundingBox,
     };
   };
 
-  const focus = (object, constraintZoom) => {
+  const focus = (object, constraintZoom, constraintPan) => {
     if (!object) return;
-    const { origin, distance } = getFocusSettings(object, 0.8);
+    const { origin, distance, boundingBox } = getFocusSettings(object, 0.8);
     lookAt(...origin.toArray());
 
     controls.maxDistance = distance;
@@ -42,6 +52,36 @@ function CameraControls(camera, domElement) {
       controls.maxDistance = maxDistance;
       controls.minDistance = minDistance;
       controls.update();
+    }
+
+    if (constraintPan) {
+      const checkTarget = () => {
+        if (
+          boundingBox.min.length() === Infinity ||
+          boundingBox.max.length() === Infinity
+        ) {
+          return;
+        }
+
+        const minPan = new THREE.Vector3(
+          boundingBox.min.x,
+          origin.y,
+          boundingBox.min.z
+        );
+        const maxPan = new THREE.Vector3(
+          boundingBox.max.x,
+          origin.y,
+          boundingBox.max.z
+        );
+
+        const newTarget = new THREE.Vector3()
+          .copy(controls.target)
+          .clamp(minPan, maxPan);
+
+        setTarget(newTarget);
+      };
+      controls.addEventListener("change", checkTarget);
+      return () => controls.removeEventListener("change");
     }
   };
 
