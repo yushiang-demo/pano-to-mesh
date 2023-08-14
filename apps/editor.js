@@ -121,7 +121,14 @@ const Editor = ({ src }) => {
           </>
         )}
         <Icons.panorama onClick={loadPanoramaFromLocal} />
-        <Input onChange={onChange} value={imageSrc} />
+        <Input
+          onChange={onChange}
+          value={imageSrc}
+          candidates={[
+            "https://as1.ftcdn.net/v2/jpg/05/34/28/38/1000_F_534283809_qJ4LqArfGQ51g8X3RuwmLpo6ATUdXngR.jpg",
+            "https://as1.ftcdn.net/v2/jpg/01/89/08/78/1000_F_189087887_OBrl3f117Yicp94SBhFwMyxVgbN5Nfcb.jpg",
+          ]}
+        />
         {!!layout2D.length && (
           <>
             <Icons.cube />
