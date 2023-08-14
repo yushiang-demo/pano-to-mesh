@@ -30,7 +30,7 @@ const Input = ({ onChange, value, candidates }) => {
       />
       <datalist id={listID}>
         {candidates.map((value) => (
-          <option value={value} />
+          <option key={value} value={value} />
         ))}
       </datalist>
     </>
