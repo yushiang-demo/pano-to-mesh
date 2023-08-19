@@ -1,12 +1,12 @@
 import * as THREE from "three";
 import { v4 as uuidv4 } from "uuid";
-
-import OribitControl from "./OribitControl";
+import CameraControls from "./helpers/CameraControls";
+import SceneControls from "./helpers/SceneControls";
 
 const InitThree = ({ canvas, alpha = true }) => {
   const { width, height } = canvas.getBoundingClientRect();
-  const scene = new THREE.Scene();
 
+  const sceneControls = new SceneControls();
   const renderer = new THREE.WebGLRenderer({
     canvas,
     alpha,
@@ -15,11 +15,9 @@ const InitThree = ({ canvas, alpha = true }) => {
   renderer.setSize(width, height);
 
   const camera = new THREE.PerspectiveCamera(75, width / height, 0.01, 1000);
-  camera.position.set(0, 5, 0);
-  const controls = new OribitControl(camera, renderer.domElement);
-  controls.target.set(0, 1, 0);
-  controls.domElement = renderer.domElement;
+  const cameraControls = new CameraControls(camera, renderer.domElement);
 
+  const scene = sceneControls.getScene();
   const customRender = {};
   const animate = () => {
     const animeFrame = requestAnimationFrame(animate);
@@ -35,6 +33,7 @@ const InitThree = ({ canvas, alpha = true }) => {
 
   const destroy = () => {
     cancelAnimationFrame(animeFrame);
+    cameraControls.destroy();
   };
 
   const setCanvasSize = (width, height) => {
@@ -56,7 +55,14 @@ const InitThree = ({ canvas, alpha = true }) => {
     };
   };
 
-  return { destroy, setCanvasSize, scene, addBeforeRenderFunction, renderer };
+  return {
+    destroy,
+    setCanvasSize,
+    scene: sceneControls,
+    addBeforeRenderFunction,
+    renderer,
+    cameraControls,
+  };
 };
 
 export default InitThree;

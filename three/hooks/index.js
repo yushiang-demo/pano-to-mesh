@@ -1,3 +1,5 @@
 import { useTexture } from "./texture";
 
-export default { useTexture };
+const hooks = { useTexture };
+
+export default hooks;

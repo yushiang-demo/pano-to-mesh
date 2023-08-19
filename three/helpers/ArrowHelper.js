@@ -13,14 +13,14 @@ const ArrowHelper = ({ three, origin, dir, length, color }) => {
       rayDirection,
       rayOrigin,
       length,
-      color,
+      color
     );
     scene.add(arrowHelper);
 
     return () => {
       scene.remove(arrowHelper);
     };
-  }, [origin, dir, length, color]);
+  }, [three, origin, dir, length, color]);
   return null;
 };
 

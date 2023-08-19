@@ -13,6 +13,7 @@ import Input from "../components/Input";
 import Icons from "../components/Icon";
 import Toolbar from "../components/Toolbar";
 import RatioLockedDiv from "../components/RatioLockedDiv";
+import { useStoreDataToHash } from "../hooks/useHash";
 
 const downloadImage = (filename, url) => {
   const a = document.createElement("a");
@@ -63,6 +64,10 @@ const Editor = ({ src }) => {
     panorama,
     panoramaOrigin,
   };
+  const hash = useStoreDataToHash({
+    ...props,
+    panorama: imageSrc,
+  });
 
   const loadPanoramaFromLocal = () => {
     const fileInput = document.createElement("input");
@@ -95,6 +100,13 @@ const Editor = ({ src }) => {
     downloadImage(`${filename}.png`, textureCanvasRef.current.getTexture());
   };
 
+  const onShare = () => {
+    const newTab = window.open(`/#${hash}`);
+    if (!newTab) {
+      alert("Pop-up blocker prevented opening the new tab.");
+    }
+  };
+
   return (
     <PageContainer>
       <Toolbar>
@@ -110,7 +122,14 @@ const Editor = ({ src }) => {
           </>
         )}
         <Icons.panorama onClick={loadPanoramaFromLocal} />
-        <Input onChange={onChange} value={imageSrc} />
+        <Input
+          onChange={onChange}
+          value={imageSrc}
+          candidates={[
+            "https://as1.ftcdn.net/v2/jpg/05/34/28/38/1000_F_534283809_qJ4LqArfGQ51g8X3RuwmLpo6ATUdXngR.jpg",
+            "https://as1.ftcdn.net/v2/jpg/01/89/08/78/1000_F_189087887_OBrl3f117Yicp94SBhFwMyxVgbN5Nfcb.jpg",
+          ]}
+        />
         {!!layout2D.length && (
           <>
             <Icons.cube />
@@ -139,6 +158,7 @@ const Editor = ({ src }) => {
             />
 
             {preview && <Icons.download onClick={onDownload} />}
+            <Icons.share onClick={onShare} />
           </>
         )}
       </Toolbar>

@@ -1,4 +1,4 @@
-export default `
+const shader = `
 attribute vec2 textureUV;
 attribute vec3 color;
 varying vec3 pos;
@@ -12,3 +12,5 @@ void main() {
   gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
 }
 `;
+
+export default shader;

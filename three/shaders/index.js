@@ -20,7 +20,7 @@ import screenPosition from "./vertexShaders/screenPosition";
 import worldPosition from "./vertexShaders/worldPosition";
 import uvPosition from "./vertexShaders/uvPosition";
 
-export default {
+const Shaders = {
   vertexShaders: { worldPosition, screenPosition, uvPosition },
   fragmentShaders: {
     vertexColor,
@@ -40,3 +40,5 @@ export default {
     dilation: dilationUniforms,
   },
 };
+
+export default Shaders;

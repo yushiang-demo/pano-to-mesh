@@ -1,8 +1,10 @@
 import React from "react";
-import Editor from "../apps";
+import Viewer from "../apps/viewer";
+import { useDecodedHash } from "../hooks/useHash";
 
 const Apps = () => {
-  return <Editor src={""} />;
+  const data = useDecodedHash();
+  return <Viewer data={data} />;
 };
 
 export default Apps;

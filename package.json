@@ -8,17 +8,17 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "eslint": "8.36.0",
-    "eslint-config-next": "13.2.4",
+    "js-base64": "^3.7.5",
     "next": "13.2.4",
+    "pako": "^2.1.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-scripts": "5.0.1",
     "styled-components": "^6.0.4",
     "three": "^0.149.0",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "babel-plugin-styled-components": "^2.1.4"
+    "eslint": "^8.46.0",
+    "eslint-config-next": "^13.4.13"
   }
 }

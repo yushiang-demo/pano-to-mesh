@@ -16,6 +16,12 @@ const PanoramaTextureMesh = (
   );
 
   useEffect(() => {
+    return () => {
+      frameBuffer.dispose();
+    };
+  }, [frameBuffer]);
+
+  useEffect(() => {
     const { scene, addBeforeRenderFunction, renderer } = three;
 
     const geometry = create3DRoom(layout2D, ceilingY, floorY);
@@ -92,7 +98,16 @@ const PanoramaTextureMesh = (
       scene.remove(mesh);
       geometry.dispose();
     };
-  }, [three, floorY, ceilingY, layout2D, panorama, panoramaOrigin]);
+  }, [
+    three,
+    floorY,
+    ceilingY,
+    layout2D,
+    panorama,
+    panoramaOrigin,
+    frameBuffer,
+    ref,
+  ]);
 
   return null;
 };

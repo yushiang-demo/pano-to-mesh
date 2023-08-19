@@ -23,15 +23,7 @@ const CanvasStyle = {
 };
 
 const ThreeCanvas = (
-  {
-    children,
-    onMouseDown,
-    onMouseMove,
-    onMouseUp,
-    dev,
-    aspectRatio = 9 / 16,
-    ...props
-  },
+  { children, onMouseDown, onMouseMove, onMouseUp, dev, ...props },
   ref
 ) => {
   const [three, setThree] = useState(null);
@@ -39,12 +31,25 @@ const ThreeCanvas = (
   const WrapperRef = useRef(null);
   const canvasRef = useRef(null);
   useEffect(() => {
-    const { destroy, setCanvasSize, scene, addBeforeRenderFunction, renderer } =
-      InitThree({
-        canvas: canvasRef.current,
-      });
+    const {
+      destroy,
+      setCanvasSize,
+      scene,
+      addBeforeRenderFunction,
+      renderer,
+      cameraControls,
+    } = InitThree({
+      canvas: canvasRef.current,
+    });
 
-    setThree({ scene, addBeforeRenderFunction, renderer });
+    const publicProps = {
+      scene,
+      addBeforeRenderFunction,
+      renderer,
+      cameraControls,
+    };
+
+    setThree(publicProps);
 
     const cancelResizeListener = addBeforeRenderFunction(() => {
       const { clientWidth: width, clientHeight: height } = WrapperRef.current;
@@ -71,10 +76,7 @@ const ThreeCanvas = (
 
     if (ref) {
       ref.current = {
-        getTexture: () => {
-          const dataURL = canvasRef.current.toDataURL();
-          return dataURL;
-        },
+        ...publicProps,
       };
     }
 
@@ -83,7 +85,7 @@ const ThreeCanvas = (
       stopMonitorMemory();
       destroy();
     };
-  }, []);
+  }, [dev, ref]);
 
   const childrenWithProps = React.Children.map(children, (child) => {
     if (React.isValidElement(child)) {

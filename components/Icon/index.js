@@ -20,7 +20,7 @@ export const Image = styled.div`
 `;
 
 const Icon = ({ src, ...props }) => {
-  return <Image src={src} {...props} />;
+  return <Image src={src} {...props} alt={src} />;
 };
 
 // all svg resources is download from https://www.svgrepo.com/vectors/cursor/
@@ -32,6 +32,7 @@ const files = {
   cube: `${IconFolder}/cube.svg`,
   activated3D: `${IconFolder}/activated3D.svg`,
   inactivated3D: `${IconFolder}/inactivated3D.svg`,
+  share: `${IconFolder}/share.svg`,
 };
 
 const Icons = Object.keys(files).reduce((acc, key) => {
