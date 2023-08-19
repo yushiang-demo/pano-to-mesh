@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 ### Changed
 
 - Change `styled-component` babel setting to SWC according to [official document](https://styled-components.com/docs/advanced#with-swc). (https://github.com/yushiang-demo/PanoToMesh/pull/16)
+- Change share link to load data from hash instead of query string. (https://github.com/yushiang-demo/PanoToMesh/pull/26)
 
 ### Fixed
 
