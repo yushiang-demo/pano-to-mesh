@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 
 ## [Unreleased]
 
+## [1.1.0] - 2023-08-19
+
 ### Added
 
 - Eslint [working directory](https://nextjs.org/docs/app/building-your-application/configuring/eslint#linting-custom-directories-and-files) and github ci for testing.(https://github.com/yushiang-demo/PanoToMesh/pull/19)
@@ -26,7 +28,7 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 
 - Remove source code of `OrbitControls` use add-on version from three.(https://github.com/yushiang-demo/PanoToMesh/pull/18)
 
-## [1.0.0] - 2023-08-28
+## [1.0.0] - 2023-07-28
 
 ### Added
 
@@ -49,5 +51,6 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 Code which doesn't make changes with pull requests won't be recorded.
 
 [unreleased]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/yushiang-demo/PanoToMesh/compare/v0.0.0...v1.0.0
 [0.0.0]: https://github.com/yushiang-demo/PanoToMesh/releases/tag/v0.0.0
