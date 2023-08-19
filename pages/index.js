@@ -1,9 +1,9 @@
 import React from "react";
 import Viewer from "../apps/viewer";
-import useQueryString from "../hooks/useQueryString";
+import { useDecodedHash } from "../hooks/useHash";
 
 const Apps = () => {
-  const { data } = useQueryString();
+  const data = useDecodedHash();
   return <Viewer data={data} />;
 };
 

@@ -13,7 +13,7 @@ import Input from "../components/Input";
 import Icons from "../components/Icon";
 import Toolbar from "../components/Toolbar";
 import RatioLockedDiv from "../components/RatioLockedDiv";
-import { encodeString } from "../helpers/pako";
+import { useStoreDataToHash } from "../hooks/useHash";
 
 const downloadImage = (filename, url) => {
   const a = document.createElement("a");
@@ -64,6 +64,10 @@ const Editor = ({ src }) => {
     panorama,
     panoramaOrigin,
   };
+  const hash = useStoreDataToHash({
+    ...props,
+    panorama: imageSrc,
+  });
 
   const loadPanoramaFromLocal = () => {
     const fileInput = document.createElement("input");
@@ -97,13 +101,10 @@ const Editor = ({ src }) => {
   };
 
   const onShare = () => {
-    const raw = {
-      ...props,
-      panorama: imageSrc,
-    };
-    const rawString = JSON.stringify(raw);
-    const encodedString = encodeString(rawString);
-    window.open(`/?data=${encodedString}`);
+    const newTab = window.open(`/#${hash}`);
+    if (!newTab) {
+      alert("Pop-up blocker prevented opening the new tab.");
+    }
   };
 
   return (
