@@ -11,6 +11,16 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 
 ### Fixed
 
+### Removed
+
+## [1.1.1] - 2023-08-21
+
+### Added
+
+### Changed
+
+### Fixed
+
 - Fix editor's preview viewer and data loader. (https://github.com/yushiang-demo/PanoToMesh/pull/29)
 
 ### Removed
@@ -61,6 +71,7 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 Code which doesn't make changes with pull requests won't be recorded.
 
 [unreleased]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.0.0...HEAD
+[1.1.1]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/yushiang-demo/PanoToMesh/compare/v0.0.0...v1.0.0
 [0.0.0]: https://github.com/yushiang-demo/PanoToMesh/releases/tag/v0.0.0
