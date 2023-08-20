@@ -15,13 +15,14 @@ const pointSelector = (x, y, unitParser, threshold) => {
 };
 
 const useClick2AddWalls = ({
+  defaultData,
   panoramaOrigin,
   geometryInfo,
   selectThresholdPixel,
 }) => {
   const [dragging, setDragging] = useState(false);
   const [previewImageCoord, setPreviewImageCoord] = useState(null);
-  const [imageCoord, setImageCoord] = useState([]);
+  const [imageCoord, setImageCoord] = useState(defaultData || []);
   const [layout2D, setLayout2D] = useState([]);
 
   const parser2DCeilingCoordToFloorCoord = ([normalizedX, normalizedY]) => {
@@ -132,6 +133,7 @@ const useClick2AddWalls = ({
   }, [imageCoord, previewImageCoord, parseMousePointTo3D]);
 
   return {
+    imageCoord,
     layout2D,
     eventHandlers: {
       onMouseDown,

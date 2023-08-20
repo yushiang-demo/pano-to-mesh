@@ -1,16 +1,30 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useMemo } from "react";
 
 import { Loaders, ThreeCanvas, PanoramaProjectionMesh } from "../three";
+import useClick2AddWalls from "../hooks/useClick2AddWalls";
 
 const dev = process.env.NODE_ENV === "development";
-const Viewer = ({ ceilingY, floorY, layout2D, panorama, panoramaOrigin }) => {
+const Viewer = ({ data }) => {
   const threeRef = useRef(null);
+
+  const geometryInfo = useMemo(
+    () => ({
+      floorY: data.floorY,
+      ceilingY: data.ceilingY,
+    }),
+    [data]
+  );
+  const { layout2D } = useClick2AddWalls({
+    defaultData: data.layout2D,
+    panoramaOrigin: data.panoramaOrigin,
+    geometryInfo,
+    selectThresholdPixel: 5,
+  });
+
   const textureMeshProps = {
-    ceilingY,
-    floorY,
+    ...data,
     layout2D,
-    panorama: Loaders.useTexture({ src: panorama }),
-    panoramaOrigin,
+    panorama: Loaders.useTexture({ src: data.panorama }),
   };
 
   useEffect(() => {
@@ -33,7 +47,7 @@ const Viewer = ({ ceilingY, floorY, layout2D, panorama, panoramaOrigin }) => {
 
 const PropsParser = ({ data }) => {
   if (!data) return null;
-  return <Viewer {...data} />;
+  return <Viewer data={data} />;
 };
 
 export default PropsParser;

@@ -5,6 +5,16 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 
 ## [Unreleased]
 
+### Added
+
+### Changed
+
+### Fixed
+
+- Fix editor's preview viewer and data loader. (https://github.com/yushiang-demo/PanoToMesh/pull/29)
+
+### Removed
+
 ## [1.1.0] - 2023-08-19
 
 ### Added

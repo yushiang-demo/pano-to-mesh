@@ -3,8 +3,8 @@ import Viewer from "../apps/viewer";
 import { useDecodedHash } from "../hooks/useHash";
 
 const Apps = () => {
-  const data = useDecodedHash();
-  return <Viewer data={data} />;
+  const { data, isLoading } = useDecodedHash();
+  return !isLoading && <Viewer data={data} />;
 };
 
 export default Apps;
