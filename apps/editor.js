@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 
 import {
   Loaders,
@@ -36,14 +36,15 @@ const getCurrentFormattedTime = () => {
 };
 
 const dev = process.env.NODE_ENV === "development";
-const Editor = ({ src }) => {
+const Editor = ({ data }) => {
+  const canvas3DRef = useRef(null);
   const textureCanvasRef = useRef(null);
   const [preview, setPreview] = useState(false);
-  const [imageSrc, setImageSrc] = useState(src);
+  const [imageSrc, setImageSrc] = useState(data.panorama);
   const panorama = Loaders.useTexture({ src: imageSrc });
-  const [panoramaOrigin, setPanoramaOrigin] = useState([0, 1.5, 0]);
-  const [floorY] = useState(0.0);
-  const [ceilingY, setCeilingY] = useState(2.0);
+  const [panoramaOrigin, setPanoramaOrigin] = useState(data.panoramaOrigin);
+  const [floorY] = useState(data.floorY);
+  const [ceilingY, setCeilingY] = useState(data.ceilingY);
   const geometryInfo = useMemo(
     () => ({
       floorY,
@@ -51,7 +52,8 @@ const Editor = ({ src }) => {
     }),
     [floorY, ceilingY]
   );
-  const { layout2D, eventHandlers } = useClick2AddWalls({
+  const { layout2D, eventHandlers, imageCoord } = useClick2AddWalls({
+    defaultData: data.layout2D,
     panoramaOrigin,
     geometryInfo,
     selectThresholdPixel: 5,
@@ -66,6 +68,7 @@ const Editor = ({ src }) => {
   };
   const hash = useStoreDataToHash({
     ...props,
+    layout2D: imageCoord,
     panorama: imageSrc,
   });
 
@@ -106,6 +109,21 @@ const Editor = ({ src }) => {
       alert("Pop-up blocker prevented opening the new tab.");
     }
   };
+
+  useEffect(() => {
+    if (canvas3DRef.current) {
+      const removeSceneEvent = canvas3DRef.current.scene.onChange(
+        ({ target }) => {
+          const scene = target.getScene();
+          canvas3DRef.current.cameraControls.focus(scene);
+        }
+      );
+
+      return () => {
+        removeSceneEvent();
+      };
+    }
+  }, [preview]);
 
   return (
     <PageContainer>
@@ -168,7 +186,7 @@ const Editor = ({ src }) => {
             <PanoramaOutline {...props} />
           </ThreeCanvas>
         ) : (
-          <ThreeCanvas dev={dev}>
+          <ThreeCanvas dev={dev} ref={canvas3DRef}>
             <PanoramaTextureMesh {...props} ref={textureCanvasRef} />
           </ThreeCanvas>
         )}
@@ -177,4 +195,20 @@ const Editor = ({ src }) => {
   );
 };
 
-export default Editor;
+const PropsParser = ({ data }) => {
+  return (
+    <Editor
+      data={
+        data || {
+          panorama: "",
+          panoramaOrigin: [0, 1.5, 0],
+          floorY: 0,
+          ceilingY: 2.0,
+          layout2D: [],
+        }
+      }
+    />
+  );
+};
+
+export default PropsParser;

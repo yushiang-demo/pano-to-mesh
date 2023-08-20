@@ -15,6 +15,7 @@ export const useStoreDataToHash = (data) => {
 };
 
 export const useDecodedHash = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState(null);
 
   useEffect(() => {
@@ -27,7 +28,8 @@ export const useDecodedHash = () => {
     } catch (e) {
       console.error(e);
     }
+    setIsLoading(false);
   }, []);
 
-  return data;
+  return { data, isLoading };
 };

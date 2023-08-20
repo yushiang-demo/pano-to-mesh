@@ -5,25 +5,28 @@ yarn
 yarn dev
 ```
 
-## Introduction
+# Introduction
 
-### Demo
+## Demo
+
+- [Editor](https://pano-to-mesh.vercel.app/editor#eNqrVkrLyc8vilSyMtBRSk7NzMnMSwdyjHSUchIr80tLjFyUrKJjdZQKEvPyixJzE5WslJQQPP-izPTMPKAKAx1DPVMdg9haABJxGUo#eNpdkMtqwzAQRf9FayGNNJJG8jKU7JosCoUQjFHc2HFxbeOoj1D671W8qeniLGY43Hl8s6Yfx_nACuCsPnd9N7S5YChQMc76eBvfk35gxfEIQjm0zhOhRqMByHAQloxeU_IsBgrWYgBEY0mbcPcC4QqzeA6DAavBGAfBOcvvLcA1i_dPW-YGoBW-LDmb4jDO8S3m_S8pTddCynhVokn1yyCGc5IfWr5OrQQlfZDgJXmpAKDaVsrnDPKeqv1m7rFRig5dPQXztLlsPx9vX8_taWd3TX0SOYH9zdrPXdsN-T_AlcgHlD-_jHJYMQ)
+- [Viewer](https://pano-to-mesh.vercel.app#eNqrVkrLyc8vilSyMtBRSk7NzMnMSwdyjHSUchIr80tLjFyUrKJjdZQKEvPyixJzE5WslJQQPP-izPTMPKAKAx1DPVMdg9haABJxGUo#eNpdkMtqwzAQRf9FayGNNJJG8jKU7JosCoUQjFHc2HFxbeOoj1D671W8qeniLGY43Hl8s6Yfx_nACuCsPnd9N7S5YChQMc76eBvfk35gxfEIQjm0zhOhRqMByHAQloxeU_IsBgrWYgBEY0mbcPcC4QqzeA6DAavBGAfBOcvvLcA1i_dPW-YGoBW-LDmb4jDO8S3m_S8pTddCynhVokn1yyCGc5IfWr5OrQQlfZDgJXmpAKDaVsrnDPKeqv1m7rFRig5dPQXztLlsPx9vX8_taWd3TX0SOYH9zdrPXdsN-T_AlcgHlD-_jHJYMQ)
 
 ![image](./Demo.png)
 
 > Demo image is provided by:
 > https://as1.ftcdn.net/v2/jpg/01/89/08/78/1000_F_189087887_OBrl3f117Yicp94SBhFwMyxVgbN5Nfcb.jpg
 
-### Features
+## Features
 
-- Load panorama from local and url.
-- Annotate 3D layout from a panorama.
-- Preview 3D mesh.
-- Export 3D mesh and texture.
+- Load panorama from local or url.
+- Annotate layout from a panorama and preview 3D Mesh.
+- Save 3D mesh and texture to local.
+- Share result of viewer and editor with data embedded in URL.
 
-### Algorithm
+## Algorithm
 
-Following flowchart describes how to get geometry layout and texture.
+## Mesh and Texture
 
 ```mermaid
 flowchart LR
