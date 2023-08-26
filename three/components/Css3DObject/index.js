@@ -41,7 +41,7 @@ const Css3DObject = ({
     return () => {
       remove();
     };
-  }, []);
+  }, [three, resolution, position, scale, quaternion]);
 
   return <>{container && createPortal(children, container)}</>;
 };
