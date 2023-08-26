@@ -12,6 +12,7 @@ const PanoramaProjectionMesh = ({
   layout2D,
   panorama,
   panoramaOrigin,
+  onLoad,
 }) => {
   useEffect(() => {
     const { scene } = three;
@@ -31,6 +32,9 @@ const PanoramaProjectionMesh = ({
     const room = new THREE.Mesh(geometry, material);
     room.renderOrder = RENDER_ORDER.MESH;
     scene.add(room);
+
+    onLoad(room);
+
     return () => {
       scene.remove(room);
     };

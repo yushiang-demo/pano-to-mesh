@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 
 import { Loaders, ThreeCanvas, PanoramaTextureMesh, Core } from "../../three";
 import useClick2AddWalls from "../../hooks/useClick2AddWalls";
@@ -67,25 +67,18 @@ const Editor = ({ data }) => {
     downloadImage(`${filename}.png`, textureCanvasRef.current.getTexture());
   };
 
-  useEffect(() => {
-    if (canvas3DRef.current) {
-      const removeSceneEvent = canvas3DRef.current.scene.onChange(
-        ({ target }) => {
-          const scene = target.getScene();
-          canvas3DRef.current.cameraControls.focus(scene, false, false, false);
-        }
-      );
-
-      return () => {
-        removeSceneEvent();
-      };
-    }
-  }, []);
+  const onLoad = (mesh) => {
+    canvas3DRef.current.cameraControls.focus(mesh, false, false, false);
+  };
 
   return (
     <>
       <ThreeCanvas dev={dev} ref={canvas3DRef}>
-        <PanoramaTextureMesh {...props} ref={textureCanvasRef} />
+        <PanoramaTextureMesh
+          {...props}
+          ref={textureCanvasRef}
+          onLoad={onLoad}
+        />
       </ThreeCanvas>
       <Toolbar>
         {!!layout2D.length && (

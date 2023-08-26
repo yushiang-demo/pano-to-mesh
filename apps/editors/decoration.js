@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useMemo } from "react";
+import React, { useRef, useMemo } from "react";
 
 import {
   Loaders,
@@ -32,20 +32,13 @@ const Editor = ({ data }) => {
     panorama: Loaders.useTexture({ src: data.panorama }),
   };
 
-  useEffect(() => {
-    const removeSceneEvent = threeRef.current.scene.onChange(({ target }) => {
-      const scene = target.getScene();
-      threeRef.current.cameraControls.focus(scene, false, false, false);
-    });
-
-    return () => {
-      removeSceneEvent();
-    };
-  }, []);
+  const onLoad = (mesh) => {
+    threeRef.current.cameraControls.focus(mesh, false, false, false);
+  };
 
   return (
     <ThreeCanvas dev={dev} ref={threeRef}>
-      <PanoramaProjectionMesh {...textureMeshProps} />
+      <PanoramaProjectionMesh {...textureMeshProps} onLoad={onLoad} />
       <Css3DObject
         resolution={[1280, 720]}
         position={[0, 1e-2, 0]}
