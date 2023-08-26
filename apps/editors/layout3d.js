@@ -1,5 +1,5 @@
 import React, { useMemo, useRef, useState } from "react";
-
+import ToolbarRnd from "../../components/ToolbarRnd";
 import { Loaders, ThreeCanvas, PanoramaTextureMesh, Core } from "../../three";
 import useClick2AddWalls from "../../hooks/useClick2AddWalls";
 import Icons from "../../components/Icon";
@@ -80,37 +80,39 @@ const Editor = ({ data }) => {
           onLoad={onLoad}
         />
       </ThreeCanvas>
-      <Toolbar>
-        {!!layout2D.length && (
-          <>
-            <Icons.cube />
-            <input
-              type="number"
-              value={ceilingY}
-              onChange={(e) => setCeilingY(e.target.value)}
-              min={panoramaOrigin[1]}
-              max={panoramaOrigin[1] + 10}
-              step={1e-2}
-            />
-            <Icons.camera />
-            <input
-              type="number"
-              value={panoramaOrigin[1]}
-              onChange={(e) =>
-                setPanoramaOrigin((value) => [
-                  value[0],
-                  Math.min(parseFloat(e.target.value), ceilingY),
-                  value[2],
-                ])
-              }
-              min={1.0}
-              max={5.0}
-              step={1e-2}
-            />
-            <Icons.download onClick={onDownload} />
-          </>
-        )}
-      </Toolbar>
+      <ToolbarRnd>
+        <Toolbar>
+          {!!layout2D.length && (
+            <>
+              <Icons.cube />
+              <input
+                type="number"
+                value={ceilingY}
+                onChange={(e) => setCeilingY(e.target.value)}
+                min={panoramaOrigin[1]}
+                max={panoramaOrigin[1] + 10}
+                step={1e-2}
+              />
+              <Icons.camera />
+              <input
+                type="number"
+                value={panoramaOrigin[1]}
+                onChange={(e) =>
+                  setPanoramaOrigin((value) => [
+                    value[0],
+                    Math.min(parseFloat(e.target.value), ceilingY),
+                    value[2],
+                  ])
+                }
+                min={1.0}
+                max={5.0}
+                step={1e-2}
+              />
+              <Icons.download onClick={onDownload} />
+            </>
+          )}
+        </Toolbar>
+      </ToolbarRnd>
     </>
   );
 };
