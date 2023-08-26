@@ -51,6 +51,8 @@ function CameraControls(camera, domElement) {
     controls.maxDistance = distance;
     controls.minDistance = distance;
     controls.update();
+    controls.maxDistance = Infinity;
+    controls.minDistance = 0;
 
     if (constraintZoom) {
       const { distance: minDistance } = getFocusSettings(object, 1.0);

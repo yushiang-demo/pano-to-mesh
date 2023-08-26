@@ -72,7 +72,7 @@ const Editor = ({ data }) => {
       const removeSceneEvent = canvas3DRef.current.scene.onChange(
         ({ target }) => {
           const scene = target.getScene();
-          canvas3DRef.current.cameraControls.focus(scene);
+          canvas3DRef.current.cameraControls.focus(scene, false, false, false);
         }
       );
 

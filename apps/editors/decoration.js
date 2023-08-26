@@ -35,7 +35,7 @@ const Editor = ({ data }) => {
   useEffect(() => {
     const removeSceneEvent = threeRef.current.scene.onChange(({ target }) => {
       const scene = target.getScene();
-      threeRef.current.cameraControls.focus(scene);
+      threeRef.current.cameraControls.focus(scene, false, false, false);
     });
 
     return () => {
