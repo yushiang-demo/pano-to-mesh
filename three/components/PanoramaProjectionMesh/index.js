@@ -3,6 +3,7 @@ import * as THREE from "three";
 
 import { create3DRoom } from "../../core/RoomGeometry";
 import Shaders from "../../shaders";
+import { RENDER_ORDER } from "../../constant";
 
 const PanoramaProjectionMesh = ({
   three,
@@ -20,6 +21,7 @@ const PanoramaProjectionMesh = ({
     const material = new THREE.ShaderMaterial({
       vertexShader: Shaders.vertexShaders.worldPosition,
       fragmentShader: Shaders.fragmentShaders.equirectangularProjection,
+      transparent: true,
     });
     Shaders.setUniforms.equirectangularProjection(material, {
       texture: panorama,
@@ -27,6 +29,7 @@ const PanoramaProjectionMesh = ({
     });
 
     const room = new THREE.Mesh(geometry, material);
+    room.renderOrder = RENDER_ORDER.MESH;
     scene.add(room);
     return () => {
       scene.remove(room);

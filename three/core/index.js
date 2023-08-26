@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import CameraControls from "./helpers/CameraControls";
 import SceneControls from "./helpers/SceneControls";
 
-const InitThree = ({ canvas, alpha = true }) => {
+function Three({ canvas, alpha = true, interactElement }) {
   const { width, height } = canvas.getBoundingClientRect();
 
   const sceneControls = new SceneControls();
@@ -15,7 +15,7 @@ const InitThree = ({ canvas, alpha = true }) => {
   renderer.setSize(width, height);
 
   const camera = new THREE.PerspectiveCamera(75, width / height, 0.01, 1000);
-  const cameraControls = new CameraControls(camera, renderer.domElement);
+  const cameraControls = new CameraControls(camera, interactElement);
 
   const scene = sceneControls.getScene();
   const customRender = {};
@@ -63,6 +63,6 @@ const InitThree = ({ canvas, alpha = true }) => {
     renderer,
     cameraControls,
   };
-};
+}
 
-export default InitThree;
+export default Three;

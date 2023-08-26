@@ -1,6 +1,7 @@
 import React, { forwardRef, useEffect, useRef, useState } from "react";
 
-import InitThree from "../../core";
+import Css3D from "../../core/Css3D";
+import Three from "../../core";
 
 const monitorStyle = {
   position: "absolute",
@@ -20,6 +21,12 @@ const WrapperStyle = {
 
 const CanvasStyle = {
   position: "absolute",
+  pointerEvents: "none",
+};
+
+const Css3DContainerStyle = {
+  position: "absolute",
+  pointerEvents: "none",
 };
 
 const ThreeCanvas = (
@@ -30,6 +37,7 @@ const ThreeCanvas = (
   const [monitor, setMonitor] = useState("");
   const WrapperRef = useRef(null);
   const canvasRef = useRef(null);
+  const css3DWrapperRef = useRef(null);
   useEffect(() => {
     const {
       destroy,
@@ -38,8 +46,18 @@ const ThreeCanvas = (
       addBeforeRenderFunction,
       renderer,
       cameraControls,
-    } = InitThree({
+    } = new Three({
+      interactElement: WrapperRef.current,
       canvas: canvasRef.current,
+    });
+
+    const css3DControls = new Css3D({
+      container: css3DWrapperRef.current,
+      camera: cameraControls.getCamera(),
+    });
+
+    const stopRenderCss3D = addBeforeRenderFunction(() => {
+      css3DControls.render();
     });
 
     const publicProps = {
@@ -47,6 +65,7 @@ const ThreeCanvas = (
       addBeforeRenderFunction,
       renderer,
       cameraControls,
+      css3DControls,
     };
 
     setThree(publicProps);
@@ -54,6 +73,7 @@ const ThreeCanvas = (
     const cancelResizeListener = addBeforeRenderFunction(() => {
       const { clientWidth: width, clientHeight: height } = WrapperRef.current;
       setCanvasSize(width, height);
+      css3DControls.setSize(width, height);
     });
 
     const stopMonitorMemory = dev
@@ -84,6 +104,7 @@ const ThreeCanvas = (
       cancelResizeListener();
       stopMonitorMemory();
       destroy();
+      stopRenderCss3D();
     };
   }, [dev, ref]);
 
@@ -112,16 +133,16 @@ const ThreeCanvas = (
   };
 
   return (
-    <div ref={WrapperRef} style={WrapperStyle}>
+    <div
+      ref={WrapperRef}
+      style={WrapperStyle}
+      onMouseDown={handleMouseEvents(onMouseDown)}
+      onMouseMove={handleMouseEvents(onMouseMove)}
+      onMouseUp={handleMouseEvents(onMouseUp)}
+    >
       {dev && <pre style={monitorStyle}>{monitor}</pre>}
-      <canvas
-        ref={canvasRef}
-        onMouseDown={handleMouseEvents(onMouseDown)}
-        onMouseMove={handleMouseEvents(onMouseMove)}
-        onMouseUp={handleMouseEvents(onMouseUp)}
-        {...props}
-        style={CanvasStyle}
-      />
+      <div ref={css3DWrapperRef} style={Css3DContainerStyle} />
+      <canvas ref={canvasRef} {...props} style={CanvasStyle} />
       {three && childrenWithProps}
     </div>
   );
