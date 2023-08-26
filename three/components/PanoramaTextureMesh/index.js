@@ -112,6 +112,7 @@ const PanoramaTextureMesh = (
     panoramaOrigin,
     frameBuffer,
     ref,
+    onLoad,
   ]);
 
   return null;

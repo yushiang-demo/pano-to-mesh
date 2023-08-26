@@ -38,7 +38,7 @@ const PanoramaProjectionMesh = ({
     return () => {
       scene.remove(room);
     };
-  }, [three, floorY, ceilingY, layout2D, panorama, panoramaOrigin]);
+  }, [three, floorY, ceilingY, layout2D, panorama, panoramaOrigin, onLoad]);
 
   return null;
 };
