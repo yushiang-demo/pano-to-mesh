@@ -1,14 +1,9 @@
 import React, { useRef, useMemo, useState } from "react";
 
-import {
-  Loaders,
-  ThreeCanvas,
-  PanoramaProjectionMesh,
-  Css3DObject,
-} from "../../three";
+import { Loaders, ThreeCanvas, PanoramaProjectionMesh } from "../../three";
 import useClick2AddWalls from "../../hooks/useClick2AddWalls";
 import { useStoreDataToHash } from "../../hooks/useHash";
-import RawHTML from "../../components/RawHTML";
+import MediaManager from "../../components/MediaManager";
 
 const dev = process.env.NODE_ENV === "development";
 const Editor = ({ data }) => {
@@ -46,11 +41,7 @@ const Editor = ({ data }) => {
   return (
     <ThreeCanvas dev={dev} ref={threeRef}>
       <PanoramaProjectionMesh {...textureMeshProps} onLoad={onLoad} />
-      {media.map(({ props, content }, index) => (
-        <Css3DObject {...props} key={index}>
-          <RawHTML content={content} />
-        </Css3DObject>
-      ))}
+      <MediaManager data={media} />
     </ThreeCanvas>
   );
 };
