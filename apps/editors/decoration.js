@@ -1,4 +1,4 @@
-import React, { useRef, useMemo } from "react";
+import React, { useRef, useMemo, useState } from "react";
 
 import {
   Loaders,
@@ -7,11 +7,13 @@ import {
   Css3DObject,
 } from "../../three";
 import useClick2AddWalls from "../../hooks/useClick2AddWalls";
+import { useStoreDataToHash } from "../../hooks/useHash";
+import RawHTML from "../../components/RawHTML";
 
 const dev = process.env.NODE_ENV === "development";
 const Editor = ({ data }) => {
   const threeRef = useRef(null);
-
+  const [media] = useState(data.media);
   const geometryInfo = useMemo(
     () => ({
       floorY: data.floorY,
@@ -24,6 +26,11 @@ const Editor = ({ data }) => {
     panoramaOrigin: data.panoramaOrigin,
     geometryInfo,
     selectThresholdPixel: 5,
+  });
+
+  useStoreDataToHash({
+    ...data,
+    media,
   });
 
   const textureMeshProps = {
@@ -39,19 +46,11 @@ const Editor = ({ data }) => {
   return (
     <ThreeCanvas dev={dev} ref={threeRef}>
       <PanoramaProjectionMesh {...textureMeshProps} onLoad={onLoad} />
-      <Css3DObject
-        resolution={[1280, 720]}
-        position={[0, 1e-2, 0]}
-        scale={[3, 1.8, 1]}
-        quaternion={[-0.7071068, 0, 0, 0.7071068]}
-      >
-        <video width={"100%"} height={"100%"} controls>
-          <source
-            src="https://www.w3schools.com/tags/movie.mp4"
-            type="video/mp4"
-          />
-        </video>
-      </Css3DObject>
+      {media.map(({ props, content }, index) => (
+        <Css3DObject {...props} key={index}>
+          <RawHTML content={content} />
+        </Css3DObject>
+      ))}
     </ThreeCanvas>
   );
 };

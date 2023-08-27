@@ -7,6 +7,7 @@ import {
   Css3DObject,
 } from "../three";
 import useClick2AddWalls from "../hooks/useClick2AddWalls";
+import RawHTML from "../components/RawHTML";
 
 const dev = process.env.NODE_ENV === "development";
 const Viewer = ({ data }) => {
@@ -39,19 +40,11 @@ const Viewer = ({ data }) => {
   return (
     <ThreeCanvas dev={dev} ref={threeRef}>
       <PanoramaProjectionMesh {...textureMeshProps} onLoad={onLoad} />
-      <Css3DObject
-        resolution={[1280, 720]}
-        position={[0, 1e-2, 0]}
-        scale={[3, 1.8, 1]}
-        quaternion={[-0.7071068, 0, 0, 0.7071068]}
-      >
-        <video width={"100%"} height={"100%"} controls>
-          <source
-            src="https://www.w3schools.com/tags/movie.mp4"
-            type="video/mp4"
-          />
-        </video>
-      </Css3DObject>
+      {data.media?.map(({ props, content }, index) => (
+        <Css3DObject {...props} key={index}>
+          <RawHTML content={content} />
+        </Css3DObject>
+      ))}
     </ThreeCanvas>
   );
 };
