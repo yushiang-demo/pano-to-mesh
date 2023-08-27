@@ -39,6 +39,8 @@ const Css3DObject = ({
     scene.add(plane);
 
     return () => {
+      scene.remove(plane);
+      geometry.dispose();
       remove();
     };
   }, [three, resolution, position, scale, quaternion]);

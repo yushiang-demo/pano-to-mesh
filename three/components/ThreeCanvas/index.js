@@ -117,6 +117,7 @@ const ThreeCanvas = (
 
   const handleMouseEvents = (callback) => {
     return (e) => {
+      if (e.target !== WrapperRef.current) return;
       const { offsetX, offsetY } = e.nativeEvent;
       const { width, height } = canvasRef.current;
       if (callback)

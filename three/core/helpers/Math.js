@@ -1,3 +1,5 @@
+import * as THREE from "three";
+
 const normalizedXY2Spherical = (normalizedX, normalizedY) => {
   const longitude = normalizedX * 2 * Math.PI - Math.PI;
   const latitude = normalizedY * Math.PI;
@@ -40,12 +42,42 @@ const spherical2NormalizedXY = (longitude, latitude) => {
   return { x: normalizedX, y: normalizedY };
 };
 
+const planeMatrixFromAToB = (pointA, pointB, normal) => {
+  if (!pointA || !pointB || !normal) return null;
+
+  const pointStart = new THREE.Vector3().fromArray(pointA);
+  const pointEnd = new THREE.Vector3().fromArray(pointB);
+
+  const center = new THREE.Vector3()
+    .addVectors(pointStart, pointEnd)
+    .multiplyScalar(0.5);
+
+  const quaternion = new THREE.Quaternion().setFromUnitVectors(
+    new THREE.Vector3(0, 0, 1),
+    new THREE.Vector3().fromArray(normal)
+  );
+
+  const direction = new THREE.Vector3().subVectors(pointStart, pointEnd);
+  const size = direction.clone().applyQuaternion(quaternion.clone().invert());
+
+  return {
+    position: new THREE.Vector3()
+      .subVectors(center, direction.normalize().multiplyScalar(-1e-1))
+      .toArray(),
+    scale: [Math.abs(size.x), Math.abs(size.y), 1],
+    quaternion: quaternion.toArray(),
+  };
+};
+
 const math = {
   coordinates: {
     spherical2CartesianDirection,
     normalizedXY2Spherical,
     cartesian2Spherical,
     spherical2NormalizedXY,
+  },
+  transformation: {
+    planeMatrixFromAToB,
   },
 };
 

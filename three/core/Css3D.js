@@ -26,7 +26,16 @@ function Css3D({ container, camera }) {
 
     group.add(object);
     scene.add(group);
-    const remove = () => scene.remove(group);
+    const remove = () => {
+      scene.remove(group);
+      group.remove(object);
+      if (
+        object.element instanceof Element &&
+        object.element.parentNode !== null
+      ) {
+        object.element.parentNode.removeChild(object.element);
+      }
+    };
     return { object3D: group, remove, element };
   };
 

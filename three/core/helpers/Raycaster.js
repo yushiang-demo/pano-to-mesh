@@ -17,3 +17,21 @@ export const raycastGeometry = (origin, direction, geometry) => {
   }
   return null;
 };
+
+export const raycastMeshFromScreen = (
+  [normalizedX, normalizedY],
+  camera,
+  mesh
+) => {
+  const raycaster = new THREE.Raycaster();
+  const pointer = new THREE.Vector2(normalizedX * 2 - 1, -normalizedY * 2 + 1);
+  raycaster.setFromCamera(pointer, camera);
+  const intersects = raycaster.intersectObjects(mesh, true);
+
+  const data = intersects.map(({ point, face: { normal } }) => ({
+    faceNormal: [normal.x, normal.y, normal.z],
+    point: [point.x, point.y, point.z],
+  }));
+
+  return data;
+};
