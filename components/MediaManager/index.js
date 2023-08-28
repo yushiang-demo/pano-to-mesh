@@ -3,7 +3,7 @@ import { Css3DObject } from "../../three";
 import RawHTML from "./RawHTML";
 import { MEDIA } from "../../constant/media";
 
-const MediaManager = ({ three, data }) => {
+const MediaManager = ({ three, data, readonly }) => {
   const getMediaByType = ({ content, type }) => {
     if (type === MEDIA.HTML) {
       return <RawHTML content={content} />;
@@ -11,7 +11,12 @@ const MediaManager = ({ three, data }) => {
   };
 
   return data.map(({ props, ...item }, index) => (
-    <Css3DObject three={three} key={index} {...props}>
+    <Css3DObject
+      three={three}
+      key={index}
+      {...props}
+      readonly={readonly || props.readonly}
+    >
       {getMediaByType(item)}
     </Css3DObject>
   ));

@@ -57,13 +57,31 @@ const ModeSwitch = ({ mode, setMode }) => {
   );
 };
 
+const getNewMedia = (startPoint, endPoint, faceNormal) => {
+  const transformation = Core.Math.transformation.planeMatrixFromAToB(
+    startPoint,
+    endPoint,
+    faceNormal
+  );
+
+  if (!transformation) return null;
+
+  return {
+    content: `<div style="background:gray; width:100%; height:100%"/>`,
+    props: {
+      resolution: [1, 1],
+      ...transformation,
+    },
+    type: "HTML",
+  };
+};
 const dev = process.env.NODE_ENV === "development";
 const Editor = ({ data }) => {
   const threeRef = useRef(null);
   const [raycasterTarget, setRaycasterTarget] = useState(null);
   const [camera, setCamera] = useState(null);
   const [mode, setMode] = useState(null);
-  const [media] = useState(data.media);
+  const [media, setMedia] = useState(data.media);
 
   const geometryInfo = useMemo(
     () => ({
@@ -87,27 +105,13 @@ const Editor = ({ data }) => {
   } = useDrag2AddPlane({
     raycasterTarget: [raycasterTarget],
     camera,
-    onEnd: () => {},
+    onEnd: (startPoint, endPoint, faceNormal) => {
+      const newMedia = getNewMedia(startPoint, endPoint, faceNormal);
+      setMedia((state) => [...state, newMedia]);
+    },
   });
 
-  const previewMedia = ((startPoint, endPoint, faceNormal) => {
-    const transformation = Core.Math.transformation.planeMatrixFromAToB(
-      startPoint,
-      endPoint,
-      faceNormal
-    );
-
-    if (!transformation) return null;
-
-    return {
-      content: `<div style="background:gray; width:100%; height:100%"/>`,
-      props: {
-        resolution: [1, 1],
-        ...transformation,
-      },
-      type: "HTML",
-    };
-  })(startPoint, endPoint, faceNormal);
+  const previewMedia = getNewMedia(startPoint, endPoint, faceNormal);
 
   useStoreDataToHash({
     ...data,
@@ -142,7 +146,10 @@ const Editor = ({ data }) => {
     <>
       <ThreeCanvas dev={dev} ref={threeRef} {...eventHandlers}>
         <PanoramaProjectionMesh {...textureMeshProps} onLoad={onLoad} />
-        <MediaManager data={previewMedia ? [...media, previewMedia] : media} />
+        <MediaManager
+          data={previewMedia ? [...media, previewMedia] : media}
+          readonly={mode !== MODE.VIEW}
+        />
       </ThreeCanvas>
       <ModeSwitch mode={mode} setMode={setMode} />
     </>

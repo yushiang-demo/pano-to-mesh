@@ -30,35 +30,46 @@ const useDrag2AddPlane = ({ camera, raycasterTarget, onEnd }) => {
     }
   };
 
+  const normalIsTheSame = (normal) => {
+    const distance = Math.sqrt(
+      (normal[0] - faceNormal[0]) ** 2 +
+        (normal[1] - faceNormal[1]) ** 2 +
+        (normal[2] - faceNormal[2]) ** 2
+    );
+    return distance < 1e-1;
+  };
+
   const onMouseMove = ({ normalizedX, normalizedY }) => {
     if (!isDragging) return;
-    const { point, faceNormal: normal } = get3DPoint([
-      normalizedX,
-      normalizedY,
-    ]);
-    if (JSON.stringify(normal) !== JSON.stringify(faceNormal)) return;
+    const intersect = get3DPoint([normalizedX, normalizedY]);
+    if (!intersect) return;
+    const { point, faceNormal } = intersect;
+
+    if (!normalIsTheSame(faceNormal)) return;
     if (point) {
       setEndPoint(point);
     }
   };
   const onMouseUp = ({ normalizedX, normalizedY }) => {
+    const intersect = get3DPoint([normalizedX, normalizedY]);
+    if (!intersect) return;
+    const { point, faceNormal } = intersect;
+    if (!normalIsTheSame(faceNormal)) return;
     setIsDragging(false);
-    const { point } = get3DPoint([normalizedX, normalizedY]);
 
     if (onEnd) {
-      onEnd(startPoint, point);
+      onEnd(startPoint, point, faceNormal);
     }
     setStartPoint(null);
     setEndPoint(null);
   };
   const onMouseDown = ({ normalizedX, normalizedY }) => {
+    if (isDragging) return;
+
     setIsDragging(true);
-    const { point, faceNormal } = get3DPoint([normalizedX, normalizedY]);
-    if (isDragging) {
-      setEndPoint(point);
-      setIsDragging(false);
-      return;
-    }
+    const intersect = get3DPoint([normalizedX, normalizedY]);
+    if (!intersect) return;
+    const { point, faceNormal } = intersect;
 
     if (point) {
       setStartPoint(point);

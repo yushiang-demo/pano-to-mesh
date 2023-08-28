@@ -61,9 +61,7 @@ const planeMatrixFromAToB = (pointA, pointB, normal) => {
   const size = direction.clone().applyQuaternion(quaternion.clone().invert());
 
   return {
-    position: new THREE.Vector3()
-      .subVectors(center, direction.normalize().multiplyScalar(-1e-1))
-      .toArray(),
+    position: center.toArray(),
     scale: [Math.abs(size.x), Math.abs(size.y), 1],
     quaternion: quaternion.toArray(),
   };

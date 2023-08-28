@@ -10,6 +10,7 @@ const Css3DObject = ({
   position,
   scale,
   quaternion,
+  readonly,
 }) => {
   const [container, setContainer] = useState(null);
 
@@ -21,8 +22,10 @@ const Css3DObject = ({
     );
 
     const { css3DControls, scene } = three;
-    const { object3D, remove, element } =
-      css3DControls.create3DElement(resolution);
+    const { object3D, remove, element } = css3DControls.create3DElement(
+      resolution,
+      readonly
+    );
     setContainer(element);
 
     object3D.applyMatrix4(matrix);
@@ -43,7 +46,7 @@ const Css3DObject = ({
       geometry.dispose();
       remove();
     };
-  }, [three, resolution, position, scale, quaternion]);
+  }, [three, resolution, position, scale, quaternion, readonly]);
 
   return <>{container && createPortal(children, container)}</>;
 };

@@ -15,13 +15,16 @@ function Css3D({ container, camera }) {
     renderer.setSize(width, height);
   };
 
-  const create3DElement = ([width, height]) => {
+  const create3DElement = ([width, height], readonly) => {
     const element = document.createElement("div");
     element.style.width = `${width}px`;
     element.style.height = `${height}px`;
 
     const group = new THREE.Group();
     const object = new CSS3DObject(element);
+    if (readonly) {
+      object.element.style.pointerEvents = "none";
+    }
     object.scale.set(1 / width, 1 / height, 1);
 
     group.add(object);
