@@ -7,11 +7,18 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 
 ### Added
 
+- Show embed htmls in Viewer. (https://github.com/yushiang-demo/PanoToMesh/pull/32)
+- Add `react-rnd` for floating toolbar. (https://github.com/yushiang-demo/PanoToMesh/pull/32)
+
 ### Changed
+
+- Separate editor page to `editors/layout2d`, `editors/layout3d`, `editors/decoration` (https://github.com/yushiang-demo/PanoToMesh/pull/32)
 
 ### Fixed
 
 ### Removed
+
+- `SceneControls` is removed use `onLoad` of components to get mesh instead. (https://github.com/yushiang-demo/PanoToMesh/pull/32)
 
 ## [1.1.1] - 2023-08-21
 
