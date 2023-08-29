@@ -37,19 +37,19 @@ const ModeSwitch = ({ mode, setMode }) => {
     <ToolbarRnd>
       <Toolbar>
         <Icons.cursor
-          highlight={mode === MODE.VIEW}
+          $highlight={mode === MODE.VIEW}
           onClick={changeMode(MODE.VIEW)}
         />
         <Icons.placeholder
-          highlight={mode === MODE.ADD_2D}
+          $highlight={mode === MODE.ADD_2D}
           onClick={changeMode(MODE.ADD_2D)}
         />
         <Icons.box
-          highlight={mode === MODE.ADD_3D}
+          $highlight={mode === MODE.ADD_3D}
           onClick={changeMode(MODE.ADD_3D)}
         />
         <Icons.axis
-          highlight={mode === MODE.TRANSFORM}
+          $highlight={mode === MODE.TRANSFORM}
           onClick={changeMode(MODE.TRANSFORM)}
         />
       </Toolbar>
@@ -81,7 +81,7 @@ const Editor = ({ data }) => {
   const [raycasterTarget, setRaycasterTarget] = useState(null);
   const [camera, setCamera] = useState(null);
   const [mode, setMode] = useState(null);
-  const [media, setMedia] = useState(data.media);
+  const [media, setMedia] = useState(data.media || []);
 
   const geometryInfo = useMemo(
     () => ({

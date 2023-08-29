@@ -22,7 +22,7 @@ export const Image = styled.div`
 export const Wrapper = styled.div`
   width: 24px;
   height: 24px;
-  background: ${(props) => (props.highlight ? "white" : "transparent")};
+  background: ${(props) => (props.$highlight ? "white" : "transparent")};
   border-radius: 50%;
   padding: 5px;
 `;
