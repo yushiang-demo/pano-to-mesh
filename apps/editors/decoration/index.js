@@ -38,17 +38,27 @@ const Editor = ({ data }) => {
     selectThresholdPixel: 5,
   });
 
+  const newMediaType = {
+    [MODE.ADD_3D]: MEDIA.BBOX,
+    [MODE.ADD_2D]: MEDIA.HTML,
+  };
   const { transformation, eventHandlers: handleAddPlaceholder } =
     useDragTransformation({
       raycasterTarget: [raycasterTarget],
       camera,
       onEnd: (transformation) => {
-        const newMedia = getNewMedia(MEDIA.HTML, transformation);
+        const newMedia = getNewMedia(newMediaType[mode], transformation);
         setMedia((state) => [...state, newMedia]);
       },
     });
-
-  const previewMedia = getNewMedia(MEDIA.HTML, transformation);
+  const eventDictionary = {
+    [MODE.VIEW]: null,
+    [MODE.TRANSFORM]: null,
+    [MODE.ADD_3D]: handleAddPlaceholder,
+    [MODE.ADD_2D]: handleAddPlaceholder,
+  };
+  const eventHandlers = eventDictionary[mode];
+  const previewMedia = getNewMedia(newMediaType[mode], transformation);
 
   useStoreDataToHash({
     ...data,
@@ -70,14 +80,6 @@ const Editor = ({ data }) => {
   useEffect(() => {
     threeRef.current.cameraControls.setEnable(mode === MODE.VIEW);
   }, [mode]);
-
-  const eventDictionary = {
-    [MODE.VIEW]: null,
-    [MODE.TRANSFORM]: null,
-    [MODE.ADD_3D]: null,
-    [MODE.ADD_2D]: handleAddPlaceholder,
-  };
-  const eventHandlers = eventDictionary[mode];
 
   return (
     <>

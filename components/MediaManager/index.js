@@ -1,5 +1,5 @@
 import React from "react";
-import { Css3DObject } from "../../three";
+import { Css3DObject, Placeholder } from "../../three";
 
 import RawHTML from "./RawHTML";
 import { MEDIA } from "../../constant/media";
@@ -22,6 +22,10 @@ const MediaManager = ({ three, data, readonly: globalReadonly }) => {
           <RawHTML content={data.html} />
         </Css3DObject>
       );
+    }
+
+    if (type === MEDIA.BBOX) {
+      return <Placeholder three={three} {...transformation} />;
     }
   };
 

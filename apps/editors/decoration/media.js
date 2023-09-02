@@ -19,4 +19,11 @@ export const getNewMedia = (type, transformation) => {
       },
     };
   }
+
+  if (type === MEDIA.BBOX) {
+    return {
+      ...baseProps,
+      data: {},
+    };
+  }
 };

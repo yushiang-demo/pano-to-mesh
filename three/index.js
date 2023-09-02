@@ -10,10 +10,12 @@ import {
 } from "./core/helpers/Raycaster";
 import { getEmptyRoomGeometry, downloadMesh } from "./core/RoomGeometry";
 import THREECss3DObject from "./components/Css3DObject";
+import THREEPlaceholder from "./components/Placeholder";
 
 // React components
 export const ThreeCanvas = Canvas;
 export const Css3DObject = THREECss3DObject;
+export const Placeholder = THREEPlaceholder;
 export const PanoramaOutline = THREEPanoramaOutline;
 export const PanoramaProjectionMesh = ProjectionMesh;
 export const PanoramaTextureMesh = TextureMesh;
