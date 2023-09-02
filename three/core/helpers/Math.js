@@ -62,7 +62,7 @@ const matrixFromPointsAndNormal = (pointA, pointB, normal) => {
 
   return {
     position: center.toArray(),
-    scale: [Math.abs(size.x), Math.abs(size.y), 1],
+    scale: [size.x, size.y, Math.max(size.x, size.y)],
     quaternion: quaternion.toArray(),
   };
 };
