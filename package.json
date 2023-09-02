@@ -13,6 +13,7 @@
     "pako": "^2.1.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-rnd": "^10.4.1",
     "styled-components": "^6.0.4",
     "three": "^0.149.0",
     "uuid": "^9.0.0"

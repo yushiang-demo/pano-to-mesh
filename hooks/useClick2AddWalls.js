@@ -55,11 +55,6 @@ const useClick2AddWalls = ({
     [panoramaOrigin, geometryInfo]
   );
 
-  useEffect(() => {
-    if (dragging) document.body.style.cursor = "move";
-    else document.body.style.cursor = "copy";
-  }, [dragging]);
-
   const onMouseLeave = () => {
     setPreviewImageCoord(null);
     setDragging(false);

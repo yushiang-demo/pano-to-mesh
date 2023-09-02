@@ -7,11 +7,24 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 
 ### Added
 
+- Show embed htmls in Viewer. (https://github.com/yushiang-demo/PanoToMesh/pull/32)
+- Add `react-rnd` for floating toolbar. (https://github.com/yushiang-demo/PanoToMesh/pull/32)
+- Add `matrixFromPointsAndNormal` to math for calculating plane transform from two point and face normal. (https://github.com/yushiang-demo/PanoToMesh/pull/32)
+- Add `raycastMeshFromScreen` to raycast from current view. (https://github.com/yushiang-demo/PanoToMesh/pull/32)
+- Add `.renderOrder` and set material `transparent:true` to make a hole on canvas. (https://github.com/yushiang-demo/PanoToMesh/pull/32)
+
 ### Changed
+
+- Separate editor page to `editors/layout2d`, `editors/layout3d`, `editors/decoration`. (https://github.com/yushiang-demo/PanoToMesh/pull/32)
+- `PanoramaTextureMesh`, `PanoramaProjectionMesh` add `onLoad` to pass mesh to app. (https://github.com/yushiang-demo/PanoToMesh/pull/32)
 
 ### Fixed
 
+- `CameraControls.focus` lock distance if param is false. (https://github.com/yushiang-demo/PanoToMesh/pull/32)
+
 ### Removed
+
+- `SceneControls` is removed use `onLoad` of components to get mesh instead. (https://github.com/yushiang-demo/PanoToMesh/pull/32)
 
 ## [1.1.1] - 2023-08-21
 
