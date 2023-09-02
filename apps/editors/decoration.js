@@ -6,14 +6,9 @@ import React, {
   useEffect,
 } from "react";
 
-import {
-  Loaders,
-  ThreeCanvas,
-  PanoramaProjectionMesh,
-  Core,
-} from "../../three";
+import { Loaders, ThreeCanvas, PanoramaProjectionMesh } from "../../three";
 import useClick2AddWalls from "../../hooks/useClick2AddWalls";
-import useDrag2AddPlane from "../../hooks/useDrag2AddPlane";
+import useDragTransformation from "../../hooks/useDragTransformation";
 import { useStoreDataToHash } from "../../hooks/useHash";
 import MediaManager from "../../components/MediaManager";
 import ToolbarRnd from "../../components/ToolbarRnd";
@@ -57,13 +52,7 @@ const ModeSwitch = ({ mode, setMode }) => {
   );
 };
 
-const getNewMedia = (startPoint, endPoint, faceNormal) => {
-  const transformation = Core.Math.transformation.planeMatrixFromAToB(
-    startPoint,
-    endPoint,
-    faceNormal
-  );
-
+const getNewMedia = (transformation) => {
   if (!transformation) return null;
 
   return {
@@ -97,21 +86,17 @@ const Editor = ({ data }) => {
     selectThresholdPixel: 5,
   });
 
-  const {
-    startPoint,
-    endPoint,
-    faceNormal,
-    eventHandlers: addPlaneEvents,
-  } = useDrag2AddPlane({
-    raycasterTarget: [raycasterTarget],
-    camera,
-    onEnd: (startPoint, endPoint, faceNormal) => {
-      const newMedia = getNewMedia(startPoint, endPoint, faceNormal);
-      setMedia((state) => [...state, newMedia]);
-    },
-  });
+  const { transformation, eventHandlers: handleAddPlaceholder } =
+    useDragTransformation({
+      raycasterTarget: [raycasterTarget],
+      camera,
+      onEnd: (transformation) => {
+        const newMedia = getNewMedia(transformation);
+        setMedia((state) => [...state, newMedia]);
+      },
+    });
 
-  const previewMedia = getNewMedia(startPoint, endPoint, faceNormal);
+  const previewMedia = getNewMedia(transformation);
 
   useStoreDataToHash({
     ...data,
@@ -138,7 +123,7 @@ const Editor = ({ data }) => {
     [MODE.VIEW]: null,
     [MODE.TRANSFORM]: null,
     [MODE.ADD_3D]: null,
-    [MODE.ADD_2D]: addPlaneEvents,
+    [MODE.ADD_2D]: handleAddPlaceholder,
   };
   const eventHandlers = eventDictionary[mode];
 

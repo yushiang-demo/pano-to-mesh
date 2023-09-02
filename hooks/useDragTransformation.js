@@ -92,4 +92,27 @@ const useDrag2AddPlane = ({ camera, raycasterTarget, onEnd }) => {
   };
 };
 
-export default useDrag2AddPlane;
+const useDragTransformation = ({ camera, raycasterTarget, onEnd }) => {
+  const { startPoint, endPoint, faceNormal, eventHandlers } = useDrag2AddPlane({
+    raycasterTarget,
+    camera,
+    onEnd: (startPoint, endPoint, faceNormal) => {
+      const transformation = Core.Math.transformation.matrixFromPointsAndNormal(
+        startPoint,
+        endPoint,
+        faceNormal
+      );
+      onEnd(transformation);
+    },
+  });
+
+  const transformation = Core.Math.transformation.matrixFromPointsAndNormal(
+    startPoint,
+    endPoint,
+    faceNormal
+  );
+
+  return { eventHandlers, transformation };
+};
+
+export default useDragTransformation;

@@ -42,7 +42,7 @@ const spherical2NormalizedXY = (longitude, latitude) => {
   return { x: normalizedX, y: normalizedY };
 };
 
-const planeMatrixFromAToB = (pointA, pointB, normal) => {
+const matrixFromPointsAndNormal = (pointA, pointB, normal) => {
   if (!pointA || !pointB || !normal) return null;
 
   const pointStart = new THREE.Vector3().fromArray(pointA);
@@ -75,7 +75,7 @@ const math = {
     spherical2NormalizedXY,
   },
   transformation: {
-    planeMatrixFromAToB,
+    matrixFromPointsAndNormal,
   },
 };
 
