@@ -6,64 +6,16 @@ import React, {
   useEffect,
 } from "react";
 
-import { Loaders, ThreeCanvas, PanoramaProjectionMesh } from "../../three";
-import useClick2AddWalls from "../../hooks/useClick2AddWalls";
-import useDragTransformation from "../../hooks/useDragTransformation";
-import { useStoreDataToHash } from "../../hooks/useHash";
-import MediaManager from "../../components/MediaManager";
-import ToolbarRnd from "../../components/ToolbarRnd";
-import Toolbar from "../../components/Toolbar";
-import Icons from "../../components/Icon";
+import { Loaders, ThreeCanvas, PanoramaProjectionMesh } from "../../../three";
+import useClick2AddWalls from "../../../hooks/useClick2AddWalls";
+import useDragTransformation from "../../../hooks/useDragTransformation";
+import { useStoreDataToHash } from "../../../hooks/useHash";
+import MediaManager from "../../../components/MediaManager";
+import { MODE } from "./constant";
+import ModeSwitch from "./ModeSwitch";
+import { getNewMedia } from "./media";
+import { MEDIA } from "../../../constant/media";
 
-const MODE = {
-  VIEW: "VIEW",
-  ADD_2D: "ADD_2D",
-  ADD_3D: "ADD_3D",
-  TRANSFORM: "TRANSFORM",
-};
-
-const ModeSwitch = ({ mode, setMode }) => {
-  useEffect(() => {
-    if (!mode) setMode(MODE.VIEW);
-  }, [mode, setMode]);
-
-  const changeMode = (mode) => () => setMode(mode);
-  return (
-    <ToolbarRnd>
-      <Toolbar>
-        <Icons.cursor
-          $highlight={mode === MODE.VIEW}
-          onClick={changeMode(MODE.VIEW)}
-        />
-        <Icons.placeholder
-          $highlight={mode === MODE.ADD_2D}
-          onClick={changeMode(MODE.ADD_2D)}
-        />
-        <Icons.box
-          $highlight={mode === MODE.ADD_3D}
-          onClick={changeMode(MODE.ADD_3D)}
-        />
-        <Icons.axis
-          $highlight={mode === MODE.TRANSFORM}
-          onClick={changeMode(MODE.TRANSFORM)}
-        />
-      </Toolbar>
-    </ToolbarRnd>
-  );
-};
-
-const getNewMedia = (transformation) => {
-  if (!transformation) return null;
-
-  return {
-    content: `<div style="background:gray; width:100%; height:100%"/>`,
-    props: {
-      resolution: [1, 1],
-      ...transformation,
-    },
-    type: "HTML",
-  };
-};
 const dev = process.env.NODE_ENV === "development";
 const Editor = ({ data }) => {
   const threeRef = useRef(null);
@@ -91,12 +43,12 @@ const Editor = ({ data }) => {
       raycasterTarget: [raycasterTarget],
       camera,
       onEnd: (transformation) => {
-        const newMedia = getNewMedia(transformation);
+        const newMedia = getNewMedia(MEDIA.HTML, transformation);
         setMedia((state) => [...state, newMedia]);
       },
     });
 
-  const previewMedia = getNewMedia(transformation);
+  const previewMedia = getNewMedia(MEDIA.HTML, transformation);
 
   useStoreDataToHash({
     ...data,
