@@ -71,6 +71,7 @@ const MeshIndexMap = ({ three, meshes, mouse }, ref) => {
       mouse: new THREE.Vector2(mouseX, mouseY),
     });
     const mesh = new THREE.Mesh(geometry, material);
+    mesh.frustumCulled = false;
     globalScene.add(mesh);
 
     const getIndex = (mouseX, mouseY) => {
