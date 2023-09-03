@@ -11,17 +11,22 @@ import {
 import { getEmptyRoomGeometry, downloadMesh } from "./core/RoomGeometry";
 import THREECss3DObject from "./components/Css3DObject";
 import THREEPlaceholder from "./components/Placeholder";
+import THREEMeshIndexMap from "./components/MeshIndexMap";
+import { getBoxMesh, getPlaneMesh } from "./helpers/MediaLoader";
 
 // React components
 export const ThreeCanvas = Canvas;
 export const Css3DObject = THREECss3DObject;
 export const Placeholder = THREEPlaceholder;
+export const MeshIndexMap = THREEMeshIndexMap;
 export const PanoramaOutline = THREEPanoramaOutline;
 export const PanoramaProjectionMesh = ProjectionMesh;
 export const PanoramaTextureMesh = TextureMesh;
 
 // React Hooks
 export const Loaders = hooks;
+
+export const Media = { getBoxMesh, getPlaneMesh };
 
 // THREE Algorithm
 export const Core = {

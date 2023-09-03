@@ -6,7 +6,13 @@ import React, {
   useEffect,
 } from "react";
 
-import { Loaders, ThreeCanvas, PanoramaProjectionMesh } from "../../../three";
+import {
+  Media,
+  Loaders,
+  ThreeCanvas,
+  PanoramaProjectionMesh,
+  MeshIndexMap,
+} from "../../../three";
 import useClick2AddWalls from "../../../hooks/useClick2AddWalls";
 import useDragTransformation from "../../../hooks/useDragTransformation";
 import { useStoreDataToHash } from "../../../hooks/useHash";
@@ -16,10 +22,28 @@ import ModeSwitch from "./ModeSwitch";
 import { getNewMedia } from "./media";
 import { MEDIA } from "../../../constant/media";
 
+const mapMediaToMesh = (media) => {
+  const { transformation, type } = media;
+
+  const mesh = ((type) => {
+    if (type === MEDIA.BBOX) {
+      return Media.getBoxMesh();
+    } else if (type === MEDIA.HTML) {
+      return Media.getPlaneMesh();
+    }
+  })(type);
+
+  return {
+    transformation,
+    mesh,
+  };
+};
+
 const dev = process.env.NODE_ENV === "development";
 const Editor = ({ data }) => {
   const threeRef = useRef(null);
   const [raycasterTarget, setRaycasterTarget] = useState(null);
+  const [mouse, setMouse] = useState([0, 0]);
   const [camera, setCamera] = useState(null);
   const [mode, setMode] = useState(null);
   const [media, setMedia] = useState(data.media || []);
@@ -51,8 +75,12 @@ const Editor = ({ data }) => {
         setMedia((state) => [...state, newMedia]);
       },
     });
+
+  const handleMouseHover = ({ normalizedX, normalizedY }) => {
+    setMouse([normalizedX, 1 - normalizedY]);
+  };
   const eventDictionary = {
-    [MODE.VIEW]: null,
+    [MODE.VIEW]: { onMouseMove: handleMouseHover },
     [MODE.TRANSFORM]: null,
     [MODE.ADD_3D]: handleAddPlaceholder,
     [MODE.ADD_2D]: handleAddPlaceholder,
@@ -89,6 +117,7 @@ const Editor = ({ data }) => {
           data={previewMedia ? [...media, previewMedia] : media}
           readonly={mode !== MODE.VIEW}
         />
+        <MeshIndexMap meshes={media.map(mapMediaToMesh)} mouse={mouse} />
       </ThreeCanvas>
       <ModeSwitch mode={mode} setMode={setMode} />
     </>
