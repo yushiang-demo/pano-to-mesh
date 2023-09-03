@@ -12,11 +12,14 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 - Add `matrixFromPointsAndNormal` to math for calculating plane transform from two point and face normal. (https://github.com/yushiang-demo/PanoToMesh/pull/32)
 - Add `raycastMeshFromScreen` to raycast from current view. (https://github.com/yushiang-demo/PanoToMesh/pull/32)
 - Add `.renderOrder` and set material `transparent:true` to make a hole on canvas. (https://github.com/yushiang-demo/PanoToMesh/pull/32)
+- Add `MeshIndexMap` as object selector for media. (https://github.com/yushiang-demo/PanoToMesh/pull/33)
 
 ### Changed
 
 - Separate editor page to `editors/layout2d`, `editors/layout3d`, `editors/decoration`. (https://github.com/yushiang-demo/PanoToMesh/pull/32)
 - `PanoramaTextureMesh`, `PanoramaProjectionMesh` add `onLoad` to pass mesh to app. (https://github.com/yushiang-demo/PanoToMesh/pull/32)
+- Change `vertexShaders/screenPosition` to render plane at the front. (https://github.com/yushiang-demo/PanoToMesh/pull/32)
+- Separate algorithms from `README.md` to `DOCUMENT.md`. (https://github.com/yushiang-demo/PanoToMesh/pull/32)
 
 ### Fixed
 
@@ -81,7 +84,17 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 
 ## [0.0.0]
 
-Code which doesn't make changes with pull requests won't be recorded.
+Codes without pull requests won't be recorded.
+
+### Added
+
+- Initialize panorama annotator.
+
+### Changed
+
+### Fixed
+
+### Removed
 
 [unreleased]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.0.0...HEAD
 [1.1.1]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.1.0...v1.1.1
