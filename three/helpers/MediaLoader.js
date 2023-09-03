@@ -16,7 +16,7 @@ export const getBoxMesh = () => {
   const box = new THREE.Mesh(geometry, material);
   const boxWireframe = new THREE.Mesh(geometry, wireframeMaterial);
 
-  const object = new THREE.Group();
+  const object = new THREE.Object3D();
   object.add(box);
   object.add(boxWireframe);
 

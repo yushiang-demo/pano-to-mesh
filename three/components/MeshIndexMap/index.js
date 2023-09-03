@@ -1,6 +1,7 @@
 import { useEffect, useState, forwardRef } from "react";
 import * as THREE from "three";
 import Shaders from "../../shaders";
+import { RENDER_ORDER } from "../../constant";
 
 const TEXTURE_SIZE = 4096;
 const MeshIndexMap = ({ three, meshes, mouse }, ref) => {
@@ -62,6 +63,7 @@ const MeshIndexMap = ({ three, meshes, mouse }, ref) => {
 
     const geometry = new THREE.PlaneGeometry(1, 1);
     const material = new THREE.ShaderMaterial({
+      transparent: true,
       vertexShader: Shaders.vertexShaders.screenPosition,
       fragmentShader: Shaders.fragmentShaders.hoverEffect,
     });
@@ -71,6 +73,7 @@ const MeshIndexMap = ({ three, meshes, mouse }, ref) => {
       mouse: new THREE.Vector2(mouseX, mouseY),
     });
     const mesh = new THREE.Mesh(geometry, material);
+    mesh.renderOrder = RENDER_ORDER.HOVER_PANEL;
     mesh.frustumCulled = false;
     globalScene.add(mesh);
 
