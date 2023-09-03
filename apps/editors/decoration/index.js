@@ -42,6 +42,7 @@ const mapMediaToMesh = (media) => {
 const dev = process.env.NODE_ENV === "development";
 const Editor = ({ data }) => {
   const threeRef = useRef(null);
+  const mediaIndexMap = useRef(null);
   const [raycasterTarget, setRaycasterTarget] = useState(null);
   const [mouse, setMouse] = useState([0, 0]);
   const [camera, setCamera] = useState(null);
@@ -76,11 +77,27 @@ const Editor = ({ data }) => {
       },
     });
 
-  const handleMouseHover = ({ normalizedX, normalizedY }) => {
-    setMouse([normalizedX, 1 - normalizedY]);
-  };
+  const objectSelectorEventHandlers = (() => {
+    const onMouseMove = ({ normalizedX, normalizedY }) => {
+      setMouse([normalizedX, 1 - normalizedY]);
+    };
+
+    const onMouseUp = ({ normalizedX, normalizedY }) => {
+      const index = mediaIndexMap.current.getIndex(
+        normalizedX,
+        1 - normalizedY
+      );
+      console.log(index);
+    };
+
+    return {
+      onMouseMove,
+      onMouseUp,
+    };
+  })();
+
   const eventDictionary = {
-    [MODE.VIEW]: { onMouseMove: handleMouseHover },
+    [MODE.VIEW]: objectSelectorEventHandlers,
     [MODE.TRANSFORM]: null,
     [MODE.ADD_3D]: handleAddPlaceholder,
     [MODE.ADD_2D]: handleAddPlaceholder,
@@ -115,9 +132,13 @@ const Editor = ({ data }) => {
         <PanoramaProjectionMesh {...textureMeshProps} onLoad={onLoad} />
         <MediaManager
           data={previewMedia ? [...media, previewMedia] : media}
-          readonly={mode !== MODE.VIEW}
+          readonly
         />
-        <MeshIndexMap meshes={media.map(mapMediaToMesh)} mouse={mouse} />
+        <MeshIndexMap
+          meshes={media.map(mapMediaToMesh)}
+          mouse={mouse}
+          ref={mediaIndexMap}
+        />
       </ThreeCanvas>
       <ModeSwitch mode={mode} setMode={setMode} />
     </>

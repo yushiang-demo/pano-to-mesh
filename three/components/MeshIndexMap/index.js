@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, forwardRef } from "react";
 import * as THREE from "three";
 import Shaders from "../../shaders";
 
 const TEXTURE_SIZE = 4096;
-const MeshIndexMap = ({ three, meshes, mouse }) => {
+const MeshIndexMap = ({ three, meshes, mouse }, ref) => {
   const [frameBuffer] = useState(
     new THREE.WebGLRenderTarget(TEXTURE_SIZE, TEXTURE_SIZE)
   );
@@ -15,6 +15,9 @@ const MeshIndexMap = ({ three, meshes, mouse }) => {
   }, [frameBuffer]);
 
   useEffect(() => {
+    const colors = meshes.map((_, index) =>
+      Math.trunc((index / meshes.length) * 0xffffff)
+    );
     const transformedMeshes = meshes
       .map(({ mesh, transformation }) => {
         const { position, quaternion, scale } = transformation;
@@ -30,9 +33,8 @@ const MeshIndexMap = ({ three, meshes, mouse }) => {
         mesh.object.traverse((child) => {
           if (child.material) {
             child.material.dispose();
-            const color = Math.trunc((index / meshes.length) * 0xffffff);
             child.material = new THREE.MeshBasicMaterial({
-              color,
+              color: colors[index],
             });
           }
         });
@@ -43,6 +45,7 @@ const MeshIndexMap = ({ three, meshes, mouse }) => {
       addBeforeRenderFunction,
       cameraControls,
       scene: globalScene,
+      renderer,
     } = three;
 
     const scene = new THREE.Scene();
@@ -70,6 +73,34 @@ const MeshIndexMap = ({ three, meshes, mouse }) => {
     const mesh = new THREE.Mesh(geometry, material);
     globalScene.add(mesh);
 
+    const getIndex = (mouseX, mouseY) => {
+      const pixel = new Uint8Array(4);
+      renderer.readRenderTargetPixels(
+        frameBuffer,
+        mouseX * TEXTURE_SIZE,
+        mouseY * TEXTURE_SIZE,
+        1,
+        1,
+        pixel
+      );
+      if (!pixel[3]) return null;
+      const color = pixel[0] * 2 ** 16 + pixel[1] * 2 ** 8 + pixel[2] * 2 ** 0;
+      const findIndexOfNearestNumber = (arr, target) => {
+        const diffArr = arr.map((x) => Math.abs(target - x));
+        const minNumber = Math.min(...diffArr);
+        const index = diffArr.findIndex((x) => x === minNumber);
+        return index;
+      };
+      const index = findIndexOfNearestNumber(colors, color);
+      return index;
+    };
+
+    if (ref) {
+      ref.current = {
+        getIndex,
+      };
+    }
+
     return () => {
       transformedMeshes.forEach((mesh) => scene.remove(mesh.object));
       transformedMeshes.forEach((mesh) => mesh.dispose());
@@ -83,4 +114,4 @@ const MeshIndexMap = ({ three, meshes, mouse }) => {
   return null;
 };
 
-export default MeshIndexMap;
+export default forwardRef(MeshIndexMap);
