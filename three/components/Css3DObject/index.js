@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import * as THREE from "three";
 import { RENDER_ORDER } from "../../constant";
+import { getPlaneMesh } from "../../helpers/MediaLoader";
 
 const Css3DObject = ({
   three,
@@ -30,20 +31,15 @@ const Css3DObject = ({
 
     object3D.applyMatrix4(matrix);
 
-    const geometry = new THREE.PlaneGeometry(1, 1);
-    const material = new THREE.MeshBasicMaterial({
-      transparent: true,
-      opacity: 0,
-    });
-    const plane = new THREE.Mesh(geometry, material);
-    plane.renderOrder = RENDER_ORDER.CSS3D;
-    plane.applyMatrix4(matrix);
+    const mesh = getPlaneMesh();
+    mesh.object.renderOrder = RENDER_ORDER.CSS3D;
+    mesh.object.applyMatrix4(matrix);
 
-    scene.add(plane);
+    scene.add(mesh.object);
 
     return () => {
-      scene.remove(plane);
-      geometry.dispose();
+      scene.remove(mesh.object);
+      mesh.dispose();
       remove();
     };
   }, [three, resolution, position, scale, quaternion, readonly]);

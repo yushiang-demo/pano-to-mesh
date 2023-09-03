@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import * as THREE from "three";
 import { RENDER_ORDER } from "../../constant";
+import { getBoxMesh } from "../../helpers/MediaLoader";
 
 const Placeholder = ({ three, position, scale, quaternion }) => {
   useEffect(() => {
@@ -12,21 +13,14 @@ const Placeholder = ({ three, position, scale, quaternion }) => {
 
     const { scene } = three;
 
-    const geometry = new THREE.BoxGeometry(1, 1, 1);
-    geometry.translate(0, 0, 0.5);
-    const material = new THREE.MeshBasicMaterial({
-      transparent: true,
-      wireframe: true,
-      color: new THREE.Color(0, 0, 0),
-    });
-    const box = new THREE.Mesh(geometry, material);
-    box.renderOrder = RENDER_ORDER.MESH;
-    box.applyMatrix4(matrix);
-    scene.add(box);
+    const mesh = getBoxMesh();
+    mesh.object.renderOrder = RENDER_ORDER.MESH;
+    mesh.object.applyMatrix4(matrix);
+    scene.add(mesh.object);
 
     return () => {
-      scene.remove(box);
-      geometry.dispose();
+      scene.remove(mesh.object);
+      mesh.dispose();
     };
   }, [three, position, scale, quaternion]);
 
