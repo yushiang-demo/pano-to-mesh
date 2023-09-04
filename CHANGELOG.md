@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 - Add `raycastMeshFromScreen` to raycast from current view. (https://github.com/yushiang-demo/PanoToMesh/pull/32)
 - Add `.renderOrder` and set material `transparent:true` to make a hole on canvas. (https://github.com/yushiang-demo/PanoToMesh/pull/32)
 - Add `MeshIndexMap` as object selector for media. (https://github.com/yushiang-demo/PanoToMesh/pull/33)
+- Add `Dockerfile` and github ci to deploy production to Github registry. (https://github.com/yushiang-demo/PanoToMesh/pull/34)
 
 ### Changed
 
