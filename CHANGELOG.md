@@ -7,6 +7,16 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 
 ### Added
 
+### Changed
+
+### Fixed
+
+### Removed
+
+## [1.2.0] - 2023-09-04
+
+### Added
+
 - Show embed htmls in Viewer. (https://github.com/yushiang-demo/PanoToMesh/pull/32)
 - Add `react-rnd` for floating toolbar. (https://github.com/yushiang-demo/PanoToMesh/pull/32)
 - Add `matrixFromPointsAndNormal` to math for calculating plane transform from two point and face normal. (https://github.com/yushiang-demo/PanoToMesh/pull/32)
@@ -97,7 +107,8 @@ Codes without pull requests won't be recorded.
 
 ### Removed
 
-[unreleased]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.0.0...HEAD
+[unreleased]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.2.0...HEAD
+[1.1.1]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.1.1...v1.2.0
 [1.1.1]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/yushiang-demo/PanoToMesh/compare/v0.0.0...v1.0.0
