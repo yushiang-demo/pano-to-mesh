@@ -1,8 +1,25 @@
 # Quick start
 
+## Development with Yarn
+
 ```
 yarn
 yarn dev
+```
+
+## Production with Docker
+
+### From Dockerfile
+
+```
+docker build . -t pano-to-mesh --no-cache
+docker run -p 3000:3000 pano-to-mesh
+```
+
+### From Github Docker Registry
+
+```
+docker run -p 3000:3000 ghcr.io/yushiang-demo/pano-to-mesh
 ```
 
 # Introduction

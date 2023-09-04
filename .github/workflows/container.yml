@@ -1,0 +1,16 @@
+name: Publish package to GitHub Docker Registry
+on:
+  push:
+    tags:
+      - "*"
+jobs:
+  publish-package:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    steps:
+      - uses: actions/checkout@v3
+      - run: |
+          docker login --username ${{ github.actor }} --password ${{ secrets.WRITE_PACKAGE_TOKEN }} ghcr.io
+          docker build . --build-arg repo=${{ github.repository }} -t ghcr.io/${{ github.repository }}:${{ github.ref_name }} --no-cache
+          docker push ghcr.io/${{ github.repository }}:${{ github.ref_name }}
