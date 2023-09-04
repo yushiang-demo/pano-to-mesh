@@ -16,6 +16,9 @@ import textureBlending, {
 import texture, {
   setUniforms as textureUniforms,
 } from "./fragmentShaders/texture";
+import hoverEffect, {
+  setUniforms as hoverEffectUniforms,
+} from "./fragmentShaders/hoverEffect";
 import screenPosition from "./vertexShaders/screenPosition";
 import worldPosition from "./vertexShaders/worldPosition";
 import uvPosition from "./vertexShaders/uvPosition";
@@ -31,6 +34,7 @@ const Shaders = {
     textureBlending,
     equirectangularProjection,
     cubemapToEquirectangular,
+    hoverEffect,
   },
   setUniforms: {
     equirectangularProjection: equirectangularProjectionUniforms,
@@ -38,6 +42,7 @@ const Shaders = {
     texture: textureUniforms,
     textureBlending: textureBlendingUniforms,
     dilation: dilationUniforms,
+    hoverEffect: hoverEffectUniforms,
   },
 };
 

@@ -1,12 +1,11 @@
 import * as THREE from "three";
 import { v4 as uuidv4 } from "uuid";
 import CameraControls from "./helpers/CameraControls";
-import SceneControls from "./helpers/SceneControls";
 
-const InitThree = ({ canvas, alpha = true }) => {
+function Three({ canvas, alpha = true, interactElement }) {
   const { width, height } = canvas.getBoundingClientRect();
 
-  const sceneControls = new SceneControls();
+  const scene = new THREE.Scene();
   const renderer = new THREE.WebGLRenderer({
     canvas,
     alpha,
@@ -15,9 +14,8 @@ const InitThree = ({ canvas, alpha = true }) => {
   renderer.setSize(width, height);
 
   const camera = new THREE.PerspectiveCamera(75, width / height, 0.01, 1000);
-  const cameraControls = new CameraControls(camera, renderer.domElement);
+  const cameraControls = new CameraControls(camera, interactElement);
 
-  const scene = sceneControls.getScene();
   const customRender = {};
   const animate = () => {
     const animeFrame = requestAnimationFrame(animate);
@@ -58,11 +56,11 @@ const InitThree = ({ canvas, alpha = true }) => {
   return {
     destroy,
     setCanvasSize,
-    scene: sceneControls,
+    scene,
     addBeforeRenderFunction,
     renderer,
     cameraControls,
   };
-};
+}
 
-export default InitThree;
+export default Three;

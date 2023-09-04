@@ -5,10 +5,11 @@ import { create3DRoom } from "../../core/RoomGeometry";
 import Shaders from "../../shaders";
 import TexturePostEffect from "../../core/TexturePostEffect";
 import { exportTexture } from "../../core/helpers/Texture";
+import { RENDER_ORDER } from "../../constant";
 
 const TEXTURE_SIZE = 4096;
 const PanoramaTextureMesh = (
-  { three, floorY, ceilingY, layout2D, panorama, panoramaOrigin },
+  { three, floorY, ceilingY, layout2D, panorama, panoramaOrigin, onLoad },
   ref
 ) => {
   const [frameBuffer] = useState(
@@ -74,12 +75,16 @@ const PanoramaTextureMesh = (
     const material = new THREE.ShaderMaterial({
       vertexShader: Shaders.vertexShaders.worldPosition,
       fragmentShader: Shaders.fragmentShaders.texture,
+      transparent: true,
     });
     Shaders.setUniforms.texture(material, {
       map: dilatedTexture,
     });
     const mesh = new THREE.Mesh(geometry, material);
+    mesh.renderOrder = RENDER_ORDER.MESH;
     scene.add(mesh);
+
+    onLoad(mesh);
 
     if (ref) {
       ref.current = {
@@ -107,6 +112,7 @@ const PanoramaTextureMesh = (
     panoramaOrigin,
     frameBuffer,
     ref,
+    onLoad,
   ]);
 
   return null;

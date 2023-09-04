@@ -26,54 +26,25 @@ docker run -p 3000:3000 ghcr.io/yushiang-demo/pano-to-mesh
 
 ## Demo
 
-- [Editor](https://pano-to-mesh.vercel.app/editor#eNpdkE9rwzAMxb-Lz8aWHP-Rcyyjt7WHwqCUENKsST0yJ6TptjL23ecUtrDp8EPiPaSHPlnT9f24ZzlwVp9CF2KbBpaJDBlnXXXrr5N6YPnhAALt38o4CEMuA1xY8GTUoAEdGYdazTSz0VtjgfQP70arwapZTY1CXHhXvXP23xYLhhTgL4uCs6GK_Vi9Vin2eZqGSy5ldUHRTPVzFPE0yTclX4ZWAkryEkg6kggA5bpE8kCOyJXb1dhlDaLbh3rwerc6r98fbx9P7XFjNk19FGkDW25tx9CGmN4CHEUKVnx9A-oPVjs)
-- [Viewer](https://pano-to-mesh.vercel.app/#eNpdkE9rwzAMxb-Lz8aWHP-Rcyyjt7WHwqCUENKsST0yJ6TptjL23ecUtrDp8EPiPaSHPlnT9f24ZzlwVp9CF2KbBpaJDBlnXXXrr5N6YPnhAALt38o4CEMuA1xY8GTUoAEdGYdazTSz0VtjgfQP70arwapZTY1CXHhXvXP23xYLhhTgL4uCs6GK_Vi9Vin2eZqGSy5ldUHRTPVzFPE0yTclX4ZWAkryEkg6kggA5bpE8kCOyJXb1dhlDaLbh3rwerc6r98fbx9P7XFjNk19FGkDW25tx9CGmN4CHEUKVnx9A-oPVjs)
+### Editor
+
+- [Panorama to mesh](https://pano-to-mesh.vercel.app/editors/layout2d#eNpdkE9rwzAMxb-Lz8aWHP-Rcyyjt7WHwqCUENKsSTMyJ6TutjL23ecUtrDp8EPiPZ6EPlnTD8O0ZzlwVp-6vgttGlgmtGac9dVtuEb1wPLDAQTav5VxEIZcBriw4MmoQQM6Mg61mmlmo7fGAukf3o1Wg1WzmhqFuPCueufsvxQLhhTgL4uCs7EKw1S9Vunsc4zjJZeyuqBoYv0cRDhF-abky9hKQEleAklHEgGgXJdIHsgRuXK7mvqsQXT7rh693q3O6_fH28dTe9yYTVMfRUpgy67t1LVdSG8BjmJ-RPH1DUTpVnM)
+- [Mesh preview and download](https://pano-to-mesh.vercel.app/editors/layout3d#eNpdkE9rwzAMxb-Lz8aWHP-Rcyyjt7WHwqCUENKsSTMyJ6TutjL23ecUtrDp8EPiPZ6EPlnTD8O0ZzlwVp-6vgttGlgmtGac9dVtuEb1wPLDAQTav5VxEIZcBriw4MmoQQM6Mg61mmlmo7fGAukf3o1Wg1WzmhqFuPCueufsvxQLhhTgL4uCs7EKw1S9Vunsc4zjJZeyuqBoYv0cRDhF-abky9hKQEleAklHEgGgXJdIHsgRuXK7mvqsQXT7rh693q3O6_fH28dTe9yYTVMfRUpgy67t1LVdSG8BjmJ-RPH1DUTpVnM)
+- [Decoration with media](https://pano-to-mesh.vercel.app/editors/decoration#eNpdkE9rwzAMxb-Lz8aWHP-Rcyyjt7WHwqCUENKsSTMyJ6TutjL23ecUtrDp8EPiPZ6EPlnTD8O0ZzlwVp-6vgttGlgmtGac9dVtuEb1wPLDAQTav5VxEIZcBriw4MmoQQM6Mg61mmlmo7fGAukf3o1Wg1WzmhqFuPCueufsvxQLhhTgL4uCs7EKw1S9Vunsc4zjJZeyuqBoYv0cRDhF-abky9hKQEleAklHEgGgXJdIHsgRuXK7mvqsQXT7rh693q3O6_fH28dTe9yYTVMfRUpgy67t1LVdSG8BjmJ-RPH1DUTpVnM)
 
 ![image](./Demo.png)
+
+### Viewer
+
+- [Viewer](https://pano-to-mesh.vercel.app#eNpdkE9rwzAMxb-Lz8aWHP-Rcyyjt7WHwqCUENKsSTMyJ6TutjL23ecUtrDp8EPiPZ6EPlnTD8O0ZzlwVp-6vgttGlgmtGac9dVtuEb1wPLDAQTav5VxEIZcBriw4MmoQQM6Mg61mmlmo7fGAukf3o1Wg1WzmhqFuPCueufsvxQLhhTgL4uCs7EKw1S9Vunsc4zjJZeyuqBoYv0cRDhF-abky9hKQEleAklHEgGgXJdIHsgRuXK7mvqsQXT7rh693q3O6_fH28dTe9yYTVMfRUpgy67t1LVdSG8BjmJ-RPH1DUTpVnM)
 
 > Demo image is provided by:
 > https://as1.ftcdn.net/v2/jpg/01/89/08/78/1000_F_189087887_OBrl3f117Yicp94SBhFwMyxVgbN5Nfcb.jpg
 
 ## Features
 
-- Load panorama from local or url.
+- Load panorama from url.
 - Annotate layout from a panorama and preview 3D Mesh.
 - Save 3D mesh and texture to local.
 - Share result of viewer and editor with data embedded in URL.
-
-## Algorithm
-
-## Mesh and Texture
-
-```mermaid
-flowchart LR
-
-    dilatedTexture["dilatedTexture(Anti aliasing)"]
-
-    Panorama --> AnnotatedImage
-    Panorama --> Texture
-
-    user --> AnnotatedImage
-    AnnotatedImage --> Geometry
-
-    Geometry --> download
-
-    Geometry --> Texture
-    Texture --> dilatedTexture
-    dilatedTexture --> download
-    dilatedTexture --> 3DMesh
-    Geometry --> 3DMesh
-
-    Geometry --> WallIndexColorMesh
-    WallIndexColorMesh --> PanoramaCapturer
-    PanoramaCapturer --> IndexColorPanorama
-    IndexColorPanorama --> edgeDetection
-    edgeDetection --> Layout
-    Layout --> AnnotatedImage
-
-    Panorama[/Panorama/]
-    3DMesh[/3DMesh/]
-    Layout[/Layout/]
-    user((click))
-    download((download))
-```
+- Editor of arranging media for viewer.

@@ -1,6 +1,6 @@
 import React from "react";
-import Editor from "../apps/editor";
-import { useDecodedHash } from "../hooks/useHash";
+import Editor from "../../apps/editors/decoration";
+import { useDecodedHash } from "../../hooks/useHash";
 
 const Apps = () => {
   const { data, isLoading } = useDecodedHash();
