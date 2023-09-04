@@ -13,6 +13,33 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 
 ### Removed
 
+## [1.2.0] - 2023-09-04
+
+### Added
+
+- Show embed htmls in Viewer. (https://github.com/yushiang-demo/PanoToMesh/pull/32)
+- Add `react-rnd` for floating toolbar. (https://github.com/yushiang-demo/PanoToMesh/pull/32)
+- Add `matrixFromPointsAndNormal` to math for calculating plane transform from two point and face normal. (https://github.com/yushiang-demo/PanoToMesh/pull/32)
+- Add `raycastMeshFromScreen` to raycast from current view. (https://github.com/yushiang-demo/PanoToMesh/pull/32)
+- Add `.renderOrder` and set material `transparent:true` to make a hole on canvas. (https://github.com/yushiang-demo/PanoToMesh/pull/32)
+- Add `MeshIndexMap` as object selector for media. (https://github.com/yushiang-demo/PanoToMesh/pull/33)
+- Add `Dockerfile` and github ci to deploy production to Github registry. (https://github.com/yushiang-demo/PanoToMesh/pull/34)
+
+### Changed
+
+- Separate editor page to `editors/layout2d`, `editors/layout3d`, `editors/decoration`. (https://github.com/yushiang-demo/PanoToMesh/pull/32)
+- `PanoramaTextureMesh`, `PanoramaProjectionMesh` add `onLoad` to pass mesh to app. (https://github.com/yushiang-demo/PanoToMesh/pull/32)
+- Change `vertexShaders/screenPosition` to render plane at the front. (https://github.com/yushiang-demo/PanoToMesh/pull/32)
+- Separate algorithms from `README.md` to `DOCUMENT.md`. (https://github.com/yushiang-demo/PanoToMesh/pull/32)
+
+### Fixed
+
+- `CameraControls.focus` lock distance if param is false. (https://github.com/yushiang-demo/PanoToMesh/pull/32)
+
+### Removed
+
+- `SceneControls` is removed use `onLoad` of components to get mesh instead. (https://github.com/yushiang-demo/PanoToMesh/pull/32)
+
 ## [1.1.1] - 2023-08-21
 
 ### Added
@@ -68,9 +95,20 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 
 ## [0.0.0]
 
-Code which doesn't make changes with pull requests won't be recorded.
+Codes without pull requests won't be recorded.
 
-[unreleased]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.0.0...HEAD
+### Added
+
+- Initialize panorama annotator.
+
+### Changed
+
+### Fixed
+
+### Removed
+
+[unreleased]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.2.0...HEAD
+[1.1.1]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.1.1...v1.2.0
 [1.1.1]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/yushiang-demo/PanoToMesh/compare/v0.0.0...v1.0.0

@@ -1,7 +1,8 @@
-import React, { useEffect, useRef, useMemo } from "react";
+import React, { useRef, useMemo } from "react";
 
 import { Loaders, ThreeCanvas, PanoramaProjectionMesh } from "../three";
 import useClick2AddWalls from "../hooks/useClick2AddWalls";
+import MediaManager from "../components/MediaManager";
 
 const dev = process.env.NODE_ENV === "development";
 const Viewer = ({ data }) => {
@@ -27,20 +28,14 @@ const Viewer = ({ data }) => {
     panorama: Loaders.useTexture({ src: data.panorama }),
   };
 
-  useEffect(() => {
-    const removeSceneEvent = threeRef.current.scene.onChange(({ target }) => {
-      const scene = target.getScene();
-      threeRef.current.cameraControls.focus(scene);
-    });
-
-    return () => {
-      removeSceneEvent();
-    };
-  }, []);
+  const onLoad = (mesh) => {
+    threeRef.current.cameraControls.focus(mesh);
+  };
 
   return (
     <ThreeCanvas dev={dev} ref={threeRef}>
-      <PanoramaProjectionMesh {...textureMeshProps} />
+      <PanoramaProjectionMesh {...textureMeshProps} onLoad={onLoad} />
+      <MediaManager data={data.media} />
     </ThreeCanvas>
   );
 };
