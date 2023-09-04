@@ -108,7 +108,7 @@ Codes without pull requests won't be recorded.
 ### Removed
 
 [unreleased]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.2.0...HEAD
-[1.1.1]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.1.1...v1.2.0
+[1.2.0]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.1.1...v1.2.0
 [1.1.1]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/yushiang-demo/PanoToMesh/compare/v0.0.0...v1.0.0
