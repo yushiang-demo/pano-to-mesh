@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 
 ### Added
 
+- Raycaster to new media. (https://github.com/yushiang-demo/PanoToMesh/pull/38)
+
 ### Changed
 
 ### Fixed
