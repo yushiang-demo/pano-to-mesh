@@ -28,8 +28,17 @@ export const raycastMeshFromScreen = (
   raycaster.setFromCamera(pointer, camera);
   const intersects = raycaster.intersectObjects(mesh, true);
 
-  const data = intersects.map(({ point, face: { normal } }) => ({
-    faceNormal: [normal.x, normal.y, normal.z],
+  const applyWorldMatrix = (normal, object) => {
+    const position = new THREE.Vector3();
+    const quaternion = new THREE.Quaternion();
+    const scale = new THREE.Vector3();
+    object.matrixWorld.decompose(position, quaternion, scale);
+    const worldNormal = normal.clone().applyQuaternion(quaternion);
+    return [worldNormal.x, worldNormal.y, worldNormal.z];
+  };
+
+  const data = intersects.map(({ object, point, face: { normal } }) => ({
+    faceNormal: applyWorldMatrix(normal, object),
     point: [point.x, point.y, point.z],
   }));
 
