@@ -19,28 +19,17 @@ const MeshIndexMap = ({ three, meshes, mouse }, ref) => {
     const colors = meshes.map((_, index) =>
       Math.trunc((index / meshes.length) * 0xffffff)
     );
-    const transformedMeshes = meshes
-      .map(({ mesh, transformation }) => {
-        const { position, quaternion, scale } = transformation;
-        const matrix = new THREE.Matrix4().compose(
-          new THREE.Vector3().fromArray(position),
-          new THREE.Quaternion().fromArray(quaternion),
-          new THREE.Vector3().fromArray(scale)
-        );
-        mesh.object.applyMatrix4(matrix);
-        return mesh;
-      })
-      .map((mesh, index) => {
-        mesh.object.traverse((child) => {
-          if (child.material) {
-            child.material.dispose();
-            child.material = new THREE.MeshBasicMaterial({
-              color: colors[index],
-            });
-          }
-        });
-        return mesh;
+    const coloredMesh = meshes.map((mesh, index) => {
+      mesh.object.traverse((child) => {
+        if (child.material) {
+          child.material.dispose();
+          child.material = new THREE.MeshBasicMaterial({
+            color: colors[index],
+          });
+        }
       });
+      return mesh;
+    });
 
     const {
       addBeforeRenderFunction,
@@ -59,7 +48,7 @@ const MeshIndexMap = ({ three, meshes, mouse }, ref) => {
 
     const stopRenderTexture = addBeforeRenderFunction(render);
 
-    transformedMeshes.forEach((mesh) => scene.add(mesh.object));
+    coloredMesh.forEach((mesh) => scene.add(mesh.object));
 
     const geometry = new THREE.PlaneGeometry(1, 1);
     const material = new THREE.ShaderMaterial({
@@ -106,14 +95,14 @@ const MeshIndexMap = ({ three, meshes, mouse }, ref) => {
     }
 
     return () => {
-      transformedMeshes.forEach((mesh) => scene.remove(mesh.object));
-      transformedMeshes.forEach((mesh) => mesh.dispose());
+      coloredMesh.forEach((mesh) => scene.remove(mesh.object));
+      coloredMesh.forEach((mesh) => mesh.dispose());
 
       geometry.dispose();
       globalScene.remove(mesh);
       stopRenderTexture();
     };
-  }, [three, meshes, mouse]);
+  }, [three, meshes, mouse, frameBuffer, ref]);
 
   return null;
 };

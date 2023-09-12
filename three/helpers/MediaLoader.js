@@ -1,6 +1,21 @@
 import * as THREE from "three";
 
-export const getBoxMesh = () => {
+const withTransform = (callback) => {
+  return () => {
+    const { object, ...props } = callback();
+
+    const setTransform = (transformation) => {
+      const { position, quaternion, scale } = transformation;
+      object.position.fromArray(position);
+      object.quaternion.fromArray(quaternion);
+      object.scale.fromArray(scale);
+    };
+
+    return { object, setTransform, ...props };
+  };
+};
+
+export const getBoxMesh = withTransform(() => {
   const geometry = new THREE.BoxGeometry(1, 1, 1);
   geometry.translate(0, 0, 0.5);
   const material = new THREE.MeshBasicMaterial({
@@ -25,9 +40,9 @@ export const getBoxMesh = () => {
   };
 
   return { object, dispose };
-};
+});
 
-export const getPlaneMesh = () => {
+export const getPlaneMesh = withTransform(() => {
   const geometry = new THREE.PlaneGeometry(1, 1);
   const material = new THREE.MeshBasicMaterial({
     transparent: true,
@@ -40,4 +55,4 @@ export const getPlaneMesh = () => {
   };
 
   return { object, dispose };
-};
+});

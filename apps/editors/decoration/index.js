@@ -33,10 +33,9 @@ const mapMediaToMesh = (media) => {
     }
   })(type);
 
-  return {
-    transformation,
-    mesh,
-  };
+  mesh.setTransform(transformation);
+
+  return mesh;
 };
 
 const dev = process.env.NODE_ENV === "development";
@@ -48,7 +47,7 @@ const Editor = ({ data }) => {
   const [camera, setCamera] = useState(null);
   const [mode, setMode] = useState(null);
   const [media, setMedia] = useState(data.media || []);
-
+  const meshes = media.map(mapMediaToMesh);
   const geometryInfo = useMemo(
     () => ({
       floorY: data.floorY,
@@ -69,7 +68,7 @@ const Editor = ({ data }) => {
   };
   const { transformation, eventHandlers: handleAddPlaceholder } =
     useDragTransformation({
-      raycasterTarget: [raycasterTarget],
+      raycasterTarget: [raycasterTarget, ...meshes.map(({ object }) => object)],
       camera,
       onEnd: (transformation) => {
         const newMedia = getNewMedia(newMediaType[mode], transformation);
@@ -134,11 +133,7 @@ const Editor = ({ data }) => {
           data={previewMedia ? [...media, previewMedia] : media}
           readonly
         />
-        <MeshIndexMap
-          meshes={media.map(mapMediaToMesh)}
-          mouse={mouse}
-          ref={mediaIndexMap}
-        />
+        <MeshIndexMap meshes={meshes} mouse={mouse} ref={mediaIndexMap} />
       </ThreeCanvas>
       <ModeSwitch mode={mode} setMode={setMode} />
     </>
