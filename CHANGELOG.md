@@ -11,6 +11,8 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 
 ### Fixed
 
+- Avoid creating backface plane and bbox. (https://github.com/yushiang-demo/PanoToMesh/pull/37)
+
 ### Removed
 
 ## [1.2.0] - 2023-09-04

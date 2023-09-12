@@ -57,8 +57,23 @@ const matrixFromPointsAndNormal = (pointA, pointB, normal) => {
     new THREE.Vector3().fromArray(normal)
   );
 
-  const direction = new THREE.Vector3().subVectors(pointStart, pointEnd);
-  const size = direction.clone().applyQuaternion(quaternion.clone().invert());
+  const getSize = (pointStart, pointEnd, quaternion) => {
+    const calcSize = (pointStart, pointEnd, quaternion) => {
+      const direction = new THREE.Vector3().subVectors(pointStart, pointEnd);
+      const size = direction
+        .clone()
+        .applyQuaternion(quaternion.clone().invert());
+      return size;
+    };
+
+    const size = calcSize(pointStart, pointEnd, quaternion);
+    if (size.x < 0 && size.y < 0) {
+      return calcSize(pointEnd, pointStart, quaternion);
+    }
+    return size;
+  };
+
+  const size = getSize(pointStart, pointEnd, quaternion);
 
   return {
     position: center.toArray(),
