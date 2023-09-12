@@ -13,7 +13,7 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 
 ### Fixed
 
-- Avoid creating backface plane and bbox. (https://github.com/yushiang-demo/PanoToMesh/pull/37)
+- Avoid creating backface plane and bbox. (https://github.com/yushiang-demo/PanoToMesh/pull/39)
 
 ### Removed
 
