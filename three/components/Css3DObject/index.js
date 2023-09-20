@@ -35,6 +35,22 @@ const Css3DObject = ({
     mesh.object.renderOrder = RENDER_ORDER.CSS3D;
     mesh.object.applyMatrix4(matrix);
 
+    mesh.object.onBeforeRender = (renderer, scene, camera) => {
+      const cameraForward = new THREE.Vector3(0, 0, -1);
+      cameraForward.applyQuaternion(mesh.object.quaternion);
+
+      const directionToMesh = new THREE.Vector3();
+      mesh.object.getWorldPosition(directionToMesh);
+      directionToMesh.sub(camera.position);
+
+      cameraForward.normalize();
+      directionToMesh.normalize();
+
+      const angle = cameraForward.dot(directionToMesh);
+
+      element.style.opacity = angle < 0 ? 0 : 1;
+    };
+
     scene.add(mesh.object);
 
     return () => {
