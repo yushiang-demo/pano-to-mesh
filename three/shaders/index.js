@@ -5,6 +5,7 @@ import edgeDetection from "./fragmentShaders/edgeDetection";
 import dilation, {
   setUniforms as dilationUniforms,
 } from "./fragmentShaders/dilation";
+import textureBoundary from "./fragmentShaders/textureBoundary";
 import vertexColor from "./fragmentShaders/vertexColor";
 import equirectangularProjection, {
   setUniforms as equirectangularProjectionUniforms,
@@ -32,6 +33,7 @@ const Shaders = {
     faceNormal,
     texture,
     textureBlending,
+    textureBoundary,
     equirectangularProjection,
     cubemapToEquirectangular,
     hoverEffect,
