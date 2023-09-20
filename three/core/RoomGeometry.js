@@ -37,7 +37,7 @@ export const getEmptyRoomGeometry = ({ floorY, ceilingY }) => {
   );
 
   geometry.setAttribute(
-    "textureUV",
+    "uv",
     new THREE.BufferAttribute(new Float32Array(uvs), 2)
   );
   geometry.setAttribute(
@@ -207,7 +207,7 @@ export const create3DRoom = (layout2DPointsArray, ceilingY, floorY) => {
     new THREE.BufferAttribute(new Float32Array(colors), 3)
   );
   geometry.setAttribute(
-    "textureUV",
+    "uv",
     new THREE.BufferAttribute(new Float32Array(uvs), 2)
   );
   geometry.setAttribute(
@@ -254,7 +254,7 @@ export const downloadMesh = (() => {
       geometry.attributes.position.array,
       3
     );
-    const uvs = reshape1DArrayToTuple(geometry.attributes.textureUV.array, 2);
+    const uvs = reshape1DArrayToTuple(geometry.attributes.uv.array, 2);
     const indices = reshape1DArrayToTuple(geometry.index.array, 3);
 
     const vertexText = arrayToText("v", vertices, (arr) => arr.join(" "));

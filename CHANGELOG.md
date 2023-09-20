@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 ### Fixed
 
 - Avoid creating backface plane and bbox. (https://github.com/yushiang-demo/PanoToMesh/pull/39)
+- Hide Css3d elements when rendering back face and change placeholder style. (https://github.com/yushiang-demo/pano-to-mesh/pull/40)
 
 ### Removed
 

@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import Shaders from "../shaders";
 
 const withTransform = (callback) => {
   return () => {
@@ -18,28 +19,18 @@ const withTransform = (callback) => {
 export const getBoxMesh = withTransform(() => {
   const geometry = new THREE.BoxGeometry(1, 1, 1);
   geometry.translate(0, 0, 0.5);
-  const material = new THREE.MeshBasicMaterial({
+  const material = new THREE.ShaderMaterial({
     transparent: true,
-    polygonOffset: true,
-    polygonOffsetFactor: 1,
-  });
-  const wireframeMaterial = new THREE.MeshBasicMaterial({
-    transparent: true,
-    wireframe: true,
-    color: new THREE.Color(0, 0, 0),
+    vertexShader: Shaders.vertexShaders.worldPosition,
+    fragmentShader: Shaders.fragmentShaders.textureBoundary,
   });
   const box = new THREE.Mesh(geometry, material);
-  const boxWireframe = new THREE.Mesh(geometry, wireframeMaterial);
-
-  const object = new THREE.Object3D();
-  object.add(box);
-  object.add(boxWireframe);
 
   const dispose = () => {
     geometry.dispose();
   };
 
-  return { object, dispose };
+  return { object: box, dispose };
 });
 
 export const getPlaneMesh = withTransform(() => {
