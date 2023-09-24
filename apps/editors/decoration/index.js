@@ -12,15 +12,19 @@ import {
   ThreeCanvas,
   PanoramaProjectionMesh,
   MeshIndexMap,
+  TransformControls,
+  TRANSFORM_CONTROLS_MODE,
 } from "@pano-to-mesh/three";
 import useClick2AddWalls from "../../../hooks/useClick2AddWalls";
 import useDragTransformation from "../../../hooks/useDragTransformation";
 import { useStoreDataToHash } from "../../../hooks/useHash";
 import MediaManager from "../../../components/MediaManager";
 import { MODE } from "./constant";
-import ModeSwitch from "./ModeSwitch";
+import { EditorModeSwitch, TransformModeSwitch } from "./ModeSwitch";
 import { getNewMedia } from "./media";
 import { MEDIA } from "../../../constant/media";
+import ToolbarRnd from "../../../components/ToolbarRnd";
+import Icons from "../../../components/Icon";
 
 const mapMediaToMesh = (media) => {
   const { transformation, type } = media;
@@ -45,7 +49,12 @@ const Editor = ({ data }) => {
   const [raycasterTarget, setRaycasterTarget] = useState(null);
   const [mouse, setMouse] = useState([0, 0]);
   const [camera, setCamera] = useState(null);
+  const [transformMode, setTransformMode] = useState(
+    TRANSFORM_CONTROLS_MODE.TRANSLATE
+  );
   const [mode, setMode] = useState(null);
+  const [focusedIndex, setFocusedIndex] = useState(null);
+  const [isDragging, setIsDragging] = useState(false);
   const [media, setMedia] = useState(data.media || []);
   const meshes = media.map(mapMediaToMesh);
   const geometryInfo = useMemo(
@@ -81,23 +90,24 @@ const Editor = ({ data }) => {
       setMouse([normalizedX, 1 - normalizedY]);
     };
 
-    const onMouseUp = ({ normalizedX, normalizedY }) => {
+    const onMouseDown = ({ normalizedX, normalizedY }) => {
       const index = mediaIndexMap.current.getIndex(
         normalizedX,
         1 - normalizedY
       );
-      console.log(index);
+      setFocusedIndex((prev) => {
+        return prev === index ? null : index;
+      });
     };
 
     return {
       onMouseMove,
-      onMouseUp,
+      onMouseDown,
     };
   })();
 
   const eventDictionary = {
-    [MODE.VIEW]: objectSelectorEventHandlers,
-    [MODE.TRANSFORM]: null,
+    [MODE.VIEW]: isDragging ? null : objectSelectorEventHandlers,
     [MODE.ADD_3D]: handleAddPlaceholder,
     [MODE.ADD_2D]: handleAddPlaceholder,
   };
@@ -125,6 +135,24 @@ const Editor = ({ data }) => {
     threeRef.current.cameraControls.setEnable(mode === MODE.VIEW);
   }, [mode]);
 
+  const focusedMedia = media[focusedIndex];
+  const onFocusedMediaChange = useCallback(
+    (transformation) => {
+      setMedia((prev) => {
+        const oldMedia = [...prev];
+        oldMedia[focusedIndex].transformation = transformation;
+        return oldMedia;
+      });
+    },
+    [focusedIndex]
+  );
+  const deleteFocusedMedia = useCallback(() => {
+    setMedia((prev) => {
+      return prev.filter((_, index) => index !== focusedIndex);
+    });
+    setFocusedIndex(null);
+  }, [focusedIndex]);
+
   return (
     <>
       <ThreeCanvas dev={dev} ref={threeRef} {...eventHandlers}>
@@ -134,8 +162,29 @@ const Editor = ({ data }) => {
           readonly
         />
         <MeshIndexMap meshes={meshes} mouse={mouse} ref={mediaIndexMap} />
+        {focusedMedia && (
+          <TransformControls
+            mode={transformMode}
+            position={focusedMedia.transformation.position}
+            scale={focusedMedia.transformation.scale}
+            quaternion={focusedMedia.transformation.quaternion}
+            onChange={onFocusedMediaChange}
+            onDraggingChanged={setIsDragging}
+          />
+        )}
       </ThreeCanvas>
-      <ModeSwitch mode={mode} setMode={setMode} />
+      <ToolbarRnd>
+        <EditorModeSwitch mode={mode} setMode={setMode} />
+        {focusedMedia && (
+          <>
+            <TransformModeSwitch
+              mode={transformMode}
+              setMode={setTransformMode}
+            />
+            <Icons.trash onClick={deleteFocusedMedia} />
+          </>
+        )}
+      </ToolbarRnd>
     </>
   );
 };

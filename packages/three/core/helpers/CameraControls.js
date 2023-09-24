@@ -108,6 +108,7 @@ function CameraControls(camera, domElement) {
   };
 
   return {
+    domElement,
     getCamera: () => controls.object,
     setEnable: (data) => {
       controls.enabled = data;

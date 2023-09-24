@@ -1,34 +1,22 @@
-import hooks from "./hooks";
-import THREEPanoramaOutline from "./components/PanoramaOutline";
-import ProjectionMesh from "./components/PanoramaProjectionMesh";
-import TextureMesh from "./components/PanoramaTextureMesh";
-import Canvas from "./components/ThreeCanvas";
+export { default as Loaders } from "./hooks";
+export { default as PanoramaOutline } from "./components/PanoramaOutline";
+export { default as PanoramaProjectionMesh } from "./components/PanoramaProjectionMesh";
+export { default as PanoramaTextureMesh } from "./components/PanoramaTextureMesh";
+export { default as ThreeCanvas } from "./components/ThreeCanvas";
+import { getEmptyRoomGeometry, downloadMesh } from "./core/RoomGeometry";
+export { default as Css3DObject } from "./components/Css3DObject";
+export { default as TransformControls } from "./components/TransformControls";
+export { TRANSFORM_CONTROLS_MODE } from "./components/TransformControls";
+export { default as Placeholder } from "./components/Placeholder";
+export { default as MeshIndexMap } from "./components/MeshIndexMap";
+export * as Media from "./helpers/MediaLoader";
+
 import Math from "./core/helpers/Math";
 import {
   raycastGeometry,
   raycastMeshFromScreen,
 } from "./core/helpers/Raycaster";
-import { getEmptyRoomGeometry, downloadMesh } from "./core/RoomGeometry";
-import THREECss3DObject from "./components/Css3DObject";
-import THREEPlaceholder from "./components/Placeholder";
-import THREEMeshIndexMap from "./components/MeshIndexMap";
-import { getBoxMesh, getPlaneMesh } from "./helpers/MediaLoader";
 
-// React components
-export const ThreeCanvas = Canvas;
-export const Css3DObject = THREECss3DObject;
-export const Placeholder = THREEPlaceholder;
-export const MeshIndexMap = THREEMeshIndexMap;
-export const PanoramaOutline = THREEPanoramaOutline;
-export const PanoramaProjectionMesh = ProjectionMesh;
-export const PanoramaTextureMesh = TextureMesh;
-
-// React Hooks
-export const Loaders = hooks;
-
-export const Media = { getBoxMesh, getPlaneMesh };
-
-// THREE Algorithm
 export const Core = {
   Math,
   raycastGeometry,

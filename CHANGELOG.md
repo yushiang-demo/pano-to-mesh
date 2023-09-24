@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 ### Added
 
 - Raycaster to new media. (https://github.com/yushiang-demo/PanoToMesh/pull/38)
+- Add `TransformControls` to edit media in 3d space. (https://github.com/yushiang-demo/pano-to-mesh/pull/42)
 
 ### Changed
 
