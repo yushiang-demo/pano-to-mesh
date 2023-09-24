@@ -1,5 +1,4 @@
 import * as THREE from "three";
-import { v4 as uuidv4 } from "uuid";
 import CameraControls from "./helpers/CameraControls";
 
 function Three({ canvas, alpha = true, interactElement }) {
@@ -41,10 +40,10 @@ function Three({ canvas, alpha = true, interactElement }) {
   };
 
   const addBeforeRenderFunction = (func) => {
-    let id = uuidv4();
+    let id = THREE.MathUtils.generateUUID();
 
     while (customRender[id] !== undefined) {
-      id = uuidv4();
+      id = THREE.MathUtils.generateUUID();
     }
 
     customRender[id] = func;
