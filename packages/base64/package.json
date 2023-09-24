@@ -1,0 +1,8 @@
+{
+  "version": "1.0.0",
+  "name": "@pano-to-mesh/base64",
+  "dependencies": {
+    "js-base64": "^3.7.5",
+    "pako": "^2.1.0"
+  }
+}

@@ -12,7 +12,7 @@ import {
   ThreeCanvas,
   PanoramaProjectionMesh,
   MeshIndexMap,
-} from "../../../three";
+} from "@pano-to-mesh/three";
 import useClick2AddWalls from "../../../hooks/useClick2AddWalls";
 import useDragTransformation from "../../../hooks/useDragTransformation";
 import { useStoreDataToHash } from "../../../hooks/useHash";

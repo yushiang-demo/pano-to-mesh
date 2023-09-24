@@ -1,5 +1,5 @@
 import React from "react";
-import { Css3DObject, Placeholder } from "../../three";
+import { Css3DObject, Placeholder } from "@pano-to-mesh/three";
 
 import RawHTML from "./RawHTML";
 import { MEDIA } from "../../constant/media";

@@ -1,6 +1,10 @@
 import React, { useRef, useMemo } from "react";
 
-import { Loaders, ThreeCanvas, PanoramaProjectionMesh } from "../three";
+import {
+  Loaders,
+  ThreeCanvas,
+  PanoramaProjectionMesh,
+} from "@pano-to-mesh/three";
 import useClick2AddWalls from "../hooks/useClick2AddWalls";
 import MediaManager from "../components/MediaManager";
 
