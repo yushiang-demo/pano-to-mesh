@@ -11,6 +11,8 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 
 ### Changed
 
+- Use yarn workspace for `three`, `js-base64` and `pako` packages. (https://github.com/yushiang-demo/PanoToMesh/pull/41)
+
 ### Fixed
 
 - Avoid creating backface plane and bbox. (https://github.com/yushiang-demo/PanoToMesh/pull/39)

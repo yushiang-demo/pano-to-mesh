@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { encodeString, decodeString } from "../helpers/pako";
+import { encodeString, decodeString } from "@pano-to-mesh/base64";
 
 export const useStoreDataToHash = (data) => {
   const [hash, setHash] = useState("");

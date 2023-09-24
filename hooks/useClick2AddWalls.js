@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { Core } from "../three";
+import { Core } from "@pano-to-mesh/three";
 
 const pointSelector = (x, y, unitParser, threshold) => {
   return ([candidateX, candidateY]) => {

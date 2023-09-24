@@ -1,6 +1,11 @@
 import React, { useMemo, useRef, useState } from "react";
 import ToolbarRnd from "../../components/ToolbarRnd";
-import { Loaders, ThreeCanvas, PanoramaTextureMesh, Core } from "../../three";
+import {
+  Loaders,
+  ThreeCanvas,
+  PanoramaTextureMesh,
+  Core,
+} from "@pano-to-mesh/three";
 import useClick2AddWalls from "../../hooks/useClick2AddWalls";
 import Icons from "../../components/Icon";
 import Toolbar from "../../components/Toolbar";

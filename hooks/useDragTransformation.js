@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { Core } from "../three";
+import { Core } from "@pano-to-mesh/three";
 
 const useDrag2AddPlane = ({ camera, raycasterTarget, onEnd }) => {
   const [startPoint, setStartPoint] = useState(null);
