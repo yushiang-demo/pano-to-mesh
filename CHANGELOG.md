@@ -11,7 +11,7 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 
 ### Changed
 
-- Use yarn workspace to wraps `three`, `js-base64` and `pako` packages. (https://github.com/yushiang-demo/PanoToMesh/pull/41)
+- Use yarn workspace for `three`, `js-base64` and `pako` packages. (https://github.com/yushiang-demo/PanoToMesh/pull/41)
 
 ### Fixed
 
