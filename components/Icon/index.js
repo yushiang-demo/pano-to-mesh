@@ -27,9 +27,9 @@ export const Wrapper = styled.div`
   padding: 5px;
 `;
 
-const Icon = ({ src, ...props }) => {
+const Icon = ({ src, onClick, ...props }) => {
   return (
-    <Wrapper {...props}>
+    <Wrapper onClick={onClick} {...props}>
       <Image src={src} {...props} alt={src} />
     </Wrapper>
   );
@@ -49,6 +49,9 @@ const files = {
   placeholder: `${IconFolder}/placeholder.svg`,
   box: `${IconFolder}/box.svg`,
   axis: `${IconFolder}/axis.svg`,
+  scale: `${IconFolder}/scale.svg`,
+  rotate: `${IconFolder}/rotate.svg`,
+  trash: `${IconFolder}/trash.svg`,
 };
 
 const Icons = Object.keys(files).reduce((acc, key) => {

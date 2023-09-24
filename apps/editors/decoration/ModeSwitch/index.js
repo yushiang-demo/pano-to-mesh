@@ -1,38 +1,60 @@
 import { useEffect } from "react";
-import ToolbarRnd from "../../../../components/ToolbarRnd";
 import Toolbar from "../../../../components/Toolbar";
 import Icons from "../../../../components/Icon";
 
 import { MODE } from "../constant";
+import { TRANSFORM_CONTROLS_MODE } from "@pano-to-mesh/three";
 
-const ModeSwitch = ({ mode, setMode }) => {
+const ModeSwitch = ({ mode, setMode, data }) => {
   useEffect(() => {
     if (!mode) setMode(MODE.VIEW);
   }, [mode, setMode]);
 
   const changeMode = (mode) => () => setMode(mode);
   return (
-    <ToolbarRnd>
-      <Toolbar>
-        <Icons.cursor
-          $highlight={mode === MODE.VIEW}
-          onClick={changeMode(MODE.VIEW)}
+    <Toolbar>
+      {data.map(({ Component, targetMode }, index) => (
+        <Component
+          key={index}
+          $highlight={mode === targetMode}
+          onClick={changeMode(targetMode)}
         />
-        <Icons.placeholder
-          $highlight={mode === MODE.ADD_2D}
-          onClick={changeMode(MODE.ADD_2D)}
-        />
-        <Icons.box
-          $highlight={mode === MODE.ADD_3D}
-          onClick={changeMode(MODE.ADD_3D)}
-        />
-        <Icons.axis
-          $highlight={mode === MODE.TRANSFORM}
-          onClick={changeMode(MODE.TRANSFORM)}
-        />
-      </Toolbar>
-    </ToolbarRnd>
+      ))}
+    </Toolbar>
   );
 };
 
-export default ModeSwitch;
+export const EditorModeSwitch = (props) => {
+  const data = [
+    {
+      Component: Icons.cursor,
+      targetMode: MODE.VIEW,
+    },
+    {
+      Component: Icons.placeholder,
+      targetMode: MODE.ADD_2D,
+    },
+    {
+      Component: Icons.box,
+      targetMode: MODE.ADD_3D,
+    },
+  ];
+  return <ModeSwitch {...props} data={data} />;
+};
+export const TransformModeSwitch = (props) => {
+  const data = [
+    {
+      Component: Icons.axis,
+      targetMode: TRANSFORM_CONTROLS_MODE.TRANSLATE,
+    },
+    {
+      Component: Icons.scale,
+      targetMode: TRANSFORM_CONTROLS_MODE.SCALE,
+    },
+    {
+      Component: Icons.rotate,
+      targetMode: TRANSFORM_CONTROLS_MODE.ROTATE,
+    },
+  ];
+  return <ModeSwitch {...props} data={data} />;
+};

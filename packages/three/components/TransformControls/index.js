@@ -2,10 +2,24 @@ import { useEffect, useState } from "react";
 import * as THREE from "three";
 import { TransformControls as Controls } from "three/addons/controls/TransformControls.js";
 
+export const TRANSFORM_CONTROLS_MODE = {
+  TRANSLATE: "translate",
+  ROTATE: "rotate",
+  SCALE: "scale",
+};
+
 const TransformControls = (() => {
   const object = new THREE.Mesh();
 
-  return ({ three, position, scale, quaternion, onChange }) => {
+  return ({
+    three,
+    position,
+    scale,
+    quaternion,
+    onChange,
+    onDraggingChanged,
+    mode = TRANSFORM_CONTROLS_MODE.TRANSLATE,
+  }) => {
     const [transformControls, setTransformControls] = useState(null);
 
     useEffect(() => {
@@ -37,6 +51,7 @@ const TransformControls = (() => {
       const { onBeforeRender } = object;
       const draggingChanged = (event) => {
         const dragging = event.value;
+        onDraggingChanged(dragging);
         cameraControls.setEnable(!dragging);
         object.onBeforeRender = dragging
           ? () => {
@@ -56,7 +71,12 @@ const TransformControls = (() => {
           draggingChanged
         );
       };
-    }, [three, transformControls, onChange]);
+    }, [three, transformControls, onChange, onDraggingChanged]);
+
+    useEffect(() => {
+      if (!transformControls) return;
+      transformControls.setMode(mode);
+    }, [three, mode, transformControls]);
 
     useEffect(() => {
       if (position) object.position.fromArray(position);
