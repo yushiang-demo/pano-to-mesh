@@ -12,6 +12,7 @@ import {
   ThreeCanvas,
   PanoramaProjectionMesh,
   MeshIndexMap,
+  TransformControls,
 } from "@pano-to-mesh/three";
 import useClick2AddWalls from "../../../hooks/useClick2AddWalls";
 import useDragTransformation from "../../../hooks/useDragTransformation";
@@ -46,6 +47,7 @@ const Editor = ({ data }) => {
   const [mouse, setMouse] = useState([0, 0]);
   const [camera, setCamera] = useState(null);
   const [mode, setMode] = useState(null);
+  const [focusedIndex, setFocusedIndex] = useState(null);
   const [media, setMedia] = useState(data.media || []);
   const meshes = media.map(mapMediaToMesh);
   const geometryInfo = useMemo(
@@ -86,7 +88,10 @@ const Editor = ({ data }) => {
         normalizedX,
         1 - normalizedY
       );
-      console.log(index);
+      setFocusedIndex((prev) => {
+        if (!Number.isInteger(index)) return prev;
+        return prev === index ? null : index;
+      });
     };
 
     return {
@@ -125,6 +130,17 @@ const Editor = ({ data }) => {
     threeRef.current.cameraControls.setEnable(mode === MODE.VIEW);
   }, [mode]);
 
+  const focusedMedia = media[focusedIndex];
+  const onFocusedMediaChange = useCallback(
+    (transformation) => {
+      setMedia((prev) => {
+        const oldMedia = [...prev];
+        oldMedia[focusedIndex].transformation = transformation;
+        return oldMedia;
+      });
+    },
+    [focusedIndex]
+  );
   return (
     <>
       <ThreeCanvas dev={dev} ref={threeRef} {...eventHandlers}>
@@ -134,6 +150,14 @@ const Editor = ({ data }) => {
           readonly
         />
         <MeshIndexMap meshes={meshes} mouse={mouse} ref={mediaIndexMap} />
+        {focusedMedia && (
+          <TransformControls
+            position={focusedMedia.transformation.position}
+            scale={focusedMedia.transformation.scale}
+            quaternion={focusedMedia.transformation.quaternion}
+            onChange={onFocusedMediaChange}
+          />
+        )}
       </ThreeCanvas>
       <ModeSwitch mode={mode} setMode={setMode} />
     </>

@@ -10,6 +10,7 @@ import {
 } from "./core/helpers/Raycaster";
 import { getEmptyRoomGeometry, downloadMesh } from "./core/RoomGeometry";
 import THREECss3DObject from "./components/Css3DObject";
+import THREETransformControl from "./components/TransformControls"
 import THREEPlaceholder from "./components/Placeholder";
 import THREEMeshIndexMap from "./components/MeshIndexMap";
 import { getBoxMesh, getPlaneMesh } from "./helpers/MediaLoader";
@@ -17,6 +18,7 @@ import { getBoxMesh, getPlaneMesh } from "./helpers/MediaLoader";
 // React components
 export const ThreeCanvas = Canvas;
 export const Css3DObject = THREECss3DObject;
+export const TransformControls = THREETransformControl;
 export const Placeholder = THREEPlaceholder;
 export const MeshIndexMap = THREEMeshIndexMap;
 export const PanoramaOutline = THREEPanoramaOutline;
