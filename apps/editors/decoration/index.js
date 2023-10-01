@@ -19,20 +19,20 @@ import useClick2AddWalls from "../../../hooks/useClick2AddWalls";
 import useDragTransformation from "../../../hooks/useDragTransformation";
 import { useStoreDataToHash } from "../../../hooks/useHash";
 import MediaManager from "../../../components/MediaManager";
+import { MEDIA } from "../../../components/MediaManager/types";
 import { MODE } from "./constant";
 import { EditorModeSwitch, TransformModeSwitch } from "./ModeSwitch";
 import { getNewMedia } from "./media";
-import { MEDIA } from "../../../constant/media";
 import ToolbarRnd from "../../../components/ToolbarRnd";
 import Icons from "../../../components/Icon";
 
-const mapMediaToMesh = (media) => {
+const mapMediaToRaycasterMesh = (media) => {
   const { transformation, type } = media;
 
   const mesh = ((type) => {
-    if (type === MEDIA.BBOX) {
+    if (type === MEDIA.PLACEHOLDER_3D) {
       return Media.getBoxMesh();
-    } else if (type === MEDIA.HTML) {
+    } else if (type === MEDIA.PLACEHOLDER_2D) {
       return Media.getPlaneMesh();
     }
   })(type);
@@ -56,7 +56,8 @@ const Editor = ({ data }) => {
   const [focusedIndex, setFocusedIndex] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
   const [media, setMedia] = useState(data.media || []);
-  const meshes = media.map(mapMediaToMesh);
+
+  const raycasterMeshes = media.map(mapMediaToRaycasterMesh);
   const geometryInfo = useMemo(
     () => ({
       floorY: data.floorY,
@@ -72,12 +73,15 @@ const Editor = ({ data }) => {
   });
 
   const newMediaType = {
-    [MODE.ADD_3D]: MEDIA.BBOX,
-    [MODE.ADD_2D]: MEDIA.HTML,
+    [MODE.ADD_3D]: MEDIA.PLACEHOLDER_3D,
+    [MODE.ADD_2D]: MEDIA.PLACEHOLDER_2D,
   };
   const { transformation, eventHandlers: handleAddPlaceholder } =
     useDragTransformation({
-      raycasterTarget: [raycasterTarget, ...meshes.map(({ object }) => object)],
+      raycasterTarget: [
+        raycasterTarget,
+        ...raycasterMeshes.map(({ object }) => object),
+      ],
       camera,
       onEnd: (transformation) => {
         const newMedia = getNewMedia(newMediaType[mode], transformation);
@@ -161,7 +165,11 @@ const Editor = ({ data }) => {
           data={previewMedia ? [...media, previewMedia] : media}
           readonly
         />
-        <MeshIndexMap meshes={meshes} mouse={mouse} ref={mediaIndexMap} />
+        <MeshIndexMap
+          meshes={raycasterMeshes}
+          mouse={mouse}
+          ref={mediaIndexMap}
+        />
         {focusedMedia && (
           <TransformControls
             mode={transformMode}

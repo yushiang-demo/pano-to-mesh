@@ -1,4 +1,4 @@
-import { MEDIA } from "../../../constant/media";
+import { MEDIA } from "../../../components/MediaManager/types";
 
 export const getNewMedia = (type, transformation) => {
   if (!transformation) return null;
@@ -10,7 +10,7 @@ export const getNewMedia = (type, transformation) => {
     data: {},
   };
 
-  if (type === MEDIA.HTML) {
+  if (type === MEDIA.HTML_IFRAME) {
     return {
       ...baseProps,
       data: {
@@ -20,10 +20,13 @@ export const getNewMedia = (type, transformation) => {
     };
   }
 
-  if (type === MEDIA.BBOX) {
+  if (type === MEDIA.MODAL) {
     return {
       ...baseProps,
       data: {},
     };
   }
+
+  console.warn(`type ${type} not defined return empty media`);
+  return baseProps;
 };

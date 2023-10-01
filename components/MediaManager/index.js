@@ -2,7 +2,7 @@ import React from "react";
 import { Css3DObject, Placeholder } from "@pano-to-mesh/three";
 
 import RawHTML from "./RawHTML";
-import { MEDIA } from "../../constant/media";
+import { MEDIA } from "./types";
 
 const MediaManager = ({ three, data, readonly: globalReadonly }) => {
   const getMediaByType = ({
@@ -11,7 +11,7 @@ const MediaManager = ({ three, data, readonly: globalReadonly }) => {
     data,
     readonly: objectReadonly,
   }) => {
-    if (type === MEDIA.HTML) {
+    if (type === MEDIA.HTML_IFRAME) {
       return (
         <Css3DObject
           three={three}
@@ -24,8 +24,12 @@ const MediaManager = ({ three, data, readonly: globalReadonly }) => {
       );
     }
 
-    if (type === MEDIA.BBOX) {
-      return <Placeholder three={three} {...transformation} />;
+    if (type === MEDIA.PLACEHOLDER_3D) {
+      return <Placeholder.Modal three={three} {...transformation} />;
+    }
+
+    if (type === MEDIA.PLACEHOLDER_2D) {
+      return <Placeholder.Plane three={three} {...transformation} />;
     }
   };
 
