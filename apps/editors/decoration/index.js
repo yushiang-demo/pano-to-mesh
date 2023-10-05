@@ -25,6 +25,7 @@ import { EditorModeSwitch, TransformModeSwitch } from "./ModeSwitch";
 import { getNewMedia } from "./media";
 import ToolbarRnd from "../../../components/ToolbarRnd";
 import Icons from "../../../components/Icon";
+import PropertySetting from "../../../components/PropertySettings";
 
 const mapMediaToRaycasterMesh = (media) => {
   const { transformation, type } = media;
@@ -99,9 +100,11 @@ const Editor = ({ data }) => {
         normalizedX,
         1 - normalizedY
       );
-      setFocusedIndex((prev) => {
-        return prev === index ? null : index;
-      });
+      if (Number.isInteger(index)) {
+        setFocusedIndex((prev) => {
+          return prev === index ? null : index;
+        });
+      }
     };
 
     return {
@@ -111,7 +114,7 @@ const Editor = ({ data }) => {
   })();
 
   const eventDictionary = {
-    [MODE.VIEW]: isDragging ? null : objectSelectorEventHandlers,
+    [MODE.SELECT]: isDragging ? null : objectSelectorEventHandlers,
     [MODE.ADD_3D]: handleAddPlaceholder,
     [MODE.ADD_2D]: handleAddPlaceholder,
   };
@@ -136,7 +139,7 @@ const Editor = ({ data }) => {
   }, []);
 
   useEffect(() => {
-    threeRef.current.cameraControls.setEnable(mode === MODE.VIEW);
+    threeRef.current.cameraControls.setEnable(mode === MODE.SELECT);
   }, [mode]);
 
   const focusedMedia = media[focusedIndex];
@@ -156,6 +159,18 @@ const Editor = ({ data }) => {
     });
     setFocusedIndex(null);
   }, [focusedIndex]);
+
+  const changeFocusedMedia = useCallback(
+    (type, data) => {
+      setMedia((prev) => {
+        const prevMedia = [...prev];
+        prevMedia[index].type = type;
+        prevMedia[index].data = data;
+        return prevMedia;
+      });
+    },
+    [focusedIndex]
+  );
 
   return (
     <>
@@ -188,6 +203,11 @@ const Editor = ({ data }) => {
             <TransformModeSwitch
               mode={transformMode}
               setMode={setTransformMode}
+            />
+            <PropertySetting
+              type={focusedMedia.type}
+              data={focusedMedia.data}
+              onChange={changeFocusedMedia}
             />
             <Icons.trash onClick={deleteFocusedMedia} />
           </>

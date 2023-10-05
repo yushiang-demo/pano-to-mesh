@@ -1,10 +1,19 @@
+export const MEDIA_2D = {
+  TEXT: "Text",
+  HTML_IMAGE: "Image",
+  HTML_IFRAME: "Iframe",
+  HTML_VIDEO: "Video",
+  SHADER_IMAGE: "Shader Image",
+  SHADER_VIDEO: "Shader Video",
+  PLACEHOLDER_2D: "Placeholder 2D",
+};
+
+export const MEDIA_3D = {
+  MODAL: "Mesh",
+  PLACEHOLDER_3D: "Placeholder 3D",
+};
+
 export const MEDIA = {
-  HTML_IMAGE: "HTML_IMAGE",
-  HTML_IFRAME: "HTML_IFRAME",
-  HTML_VIDEO: "HTML_VIDEO",
-  PLANE_IMAGE: "PLANE_IMAGE",
-  PLANE_VIDEO: "PLANE_VIDEO",
-  MODAL: "MODAL",
-  PLACEHOLDER_2D: "PLACEHOLDER_2D",
-  PLACEHOLDER_3D: "PLACEHOLDER_3D",
+  ...MEDIA_2D,
+  ...MEDIA_3D,
 };

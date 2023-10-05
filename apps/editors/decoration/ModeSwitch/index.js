@@ -7,7 +7,7 @@ import { TRANSFORM_CONTROLS_MODE } from "@pano-to-mesh/three";
 
 const ModeSwitch = ({ mode, setMode, data }) => {
   useEffect(() => {
-    if (!mode) setMode(MODE.VIEW);
+    if (!mode) setMode(MODE.SELECT);
   }, [mode, setMode]);
 
   const changeMode = (mode) => () => setMode(mode);
@@ -28,7 +28,7 @@ export const EditorModeSwitch = (props) => {
   const data = [
     {
       Component: Icons.cursor,
-      targetMode: MODE.VIEW,
+      targetMode: MODE.SELECT,
     },
     {
       Component: Icons.placeholder,
