@@ -19,7 +19,7 @@ import useClick2AddWalls from "../../../hooks/useClick2AddWalls";
 import useDragTransformation from "../../../hooks/useDragTransformation";
 import { useStoreDataToHash } from "../../../hooks/useHash";
 import MediaManager from "../../../components/MediaManager";
-import { MEDIA } from "../../../components/MediaManager/types";
+import { MEDIA_2D, MEDIA_3D } from "../../../components/MediaManager/types";
 import { MODE } from "./constant";
 import { EditorModeSwitch, TransformModeSwitch } from "./ModeSwitch";
 import { getNewMedia } from "./media";
@@ -31,9 +31,9 @@ const mapMediaToRaycasterMesh = (media) => {
   const { transformation, type } = media;
 
   const mesh = ((type) => {
-    if (type === MEDIA.PLACEHOLDER_3D) {
+    if (Object.values(MEDIA_3D).includes(type)) {
       return Media.getBoxMesh();
-    } else if (type === MEDIA.PLACEHOLDER_2D) {
+    } else if (Object.values(MEDIA_2D).includes(type)) {
       return Media.getPlaneMesh();
     }
   })(type);
@@ -74,8 +74,8 @@ const Editor = ({ data }) => {
   });
 
   const newMediaType = {
-    [MODE.ADD_3D]: MEDIA.PLACEHOLDER_3D,
-    [MODE.ADD_2D]: MEDIA.PLACEHOLDER_2D,
+    [MODE.ADD_3D]: MEDIA_3D.PLACEHOLDER_3D,
+    [MODE.ADD_2D]: MEDIA_2D.PLACEHOLDER_2D,
   };
   const { transformation, eventHandlers: handleAddPlaceholder } =
     useDragTransformation({
@@ -164,8 +164,8 @@ const Editor = ({ data }) => {
     (type, data) => {
       setMedia((prev) => {
         const prevMedia = [...prev];
-        prevMedia[index].type = type;
-        prevMedia[index].data = data;
+        prevMedia[focusedIndex].type = type;
+        prevMedia[focusedIndex].data = data;
         return prevMedia;
       });
     },

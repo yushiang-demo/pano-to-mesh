@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { getBoxMesh, getPlaneMesh } from "../../helpers/MediaLoader";
+import { RENDER_ORDER } from "../../constant";
 
 const Placeholder = ({ three, position, scale, quaternion, getMesh }) => {
   useEffect(() => {
@@ -7,6 +8,7 @@ const Placeholder = ({ three, position, scale, quaternion, getMesh }) => {
 
     const mesh = getMesh();
     mesh.setTransform({ position, scale, quaternion });
+    mesh.object.renderOrder = RENDER_ORDER.MESH;
     scene.add(mesh.object);
 
     return () => {

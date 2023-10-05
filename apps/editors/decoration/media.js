@@ -1,4 +1,4 @@
-import { MEDIA } from "../../../components/MediaManager/types";
+import { DEFAULT_PROPS } from "../../../components/MediaManager/types";
 
 export const getNewMedia = (type, transformation) => {
   if (!transformation) return null;
@@ -7,26 +7,8 @@ export const getNewMedia = (type, transformation) => {
     transformation,
     type,
     readonly: false,
-    data: {},
+    data: DEFAULT_PROPS[type],
   };
 
-  if (type === MEDIA.HTML_IFRAME) {
-    return {
-      ...baseProps,
-      data: {
-        html: `<div style="background:gray; width:100%; height:100%"/>`,
-        resolution: [1, 1],
-      },
-    };
-  }
-
-  if (type === MEDIA.MODAL) {
-    return {
-      ...baseProps,
-      data: {},
-    };
-  }
-
-  console.warn(`type ${type} not defined return empty media`);
   return baseProps;
 };

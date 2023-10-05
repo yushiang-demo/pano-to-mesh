@@ -1,8 +1,9 @@
 import React from "react";
 import { Css3DObject, Placeholder } from "@pano-to-mesh/three";
-
-import RawHTML from "./RawHTML";
-import { MEDIA } from "./types";
+import { MEDIA_2D, MEDIA_3D } from "./types";
+import Image from "./Image";
+import Video from "./Video";
+import Iframe from "./Iframe";
 
 const MediaManager = ({ three, data, readonly: globalReadonly }) => {
   const getMediaByType = ({
@@ -11,7 +12,7 @@ const MediaManager = ({ three, data, readonly: globalReadonly }) => {
     data,
     readonly: objectReadonly,
   }) => {
-    if (type === MEDIA.HTML_IFRAME) {
+    if (type === MEDIA_2D.HTML_VIDEO) {
       return (
         <Css3DObject
           three={three}
@@ -19,16 +20,55 @@ const MediaManager = ({ three, data, readonly: globalReadonly }) => {
           resolution={data.resolution}
           readonly={globalReadonly || objectReadonly}
         >
-          <RawHTML content={data.html} />
+          <Video src={data.src} />
         </Css3DObject>
       );
     }
 
-    if (type === MEDIA.PLACEHOLDER_3D) {
+    if (type === MEDIA_2D.HTML_IMAGE) {
+      return (
+        <Css3DObject
+          three={three}
+          {...transformation}
+          resolution={data.resolution}
+          readonly={globalReadonly || objectReadonly}
+        >
+          <Image src={data.src} />
+        </Css3DObject>
+      );
+    }
+
+    if (type === MEDIA_2D.TEXT) {
+      return (
+        <Css3DObject
+          three={three}
+          {...transformation}
+          resolution={data.resolution}
+          readonly={globalReadonly || objectReadonly}
+        >
+          {JSON.stringify(data)}
+        </Css3DObject>
+      );
+    }
+
+    if (type === MEDIA_2D.HTML_IFRAME) {
+      return (
+        <Css3DObject
+          three={three}
+          {...transformation}
+          resolution={data.resolution}
+          readonly={globalReadonly || objectReadonly}
+        >
+          <Iframe src={data.src} />
+        </Css3DObject>
+      );
+    }
+
+    if (type === MEDIA_3D.PLACEHOLDER_3D) {
       return <Placeholder.Modal three={three} {...transformation} />;
     }
 
-    if (type === MEDIA.PLACEHOLDER_2D) {
+    if (type === MEDIA_2D.PLACEHOLDER_2D) {
       return <Placeholder.Plane three={three} {...transformation} />;
     }
   };

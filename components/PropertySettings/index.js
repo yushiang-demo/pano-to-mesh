@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { MEDIA_2D, MEDIA_3D } from "../MediaManager/types";
+import { DEFAULT_PROPS, MEDIA_2D, MEDIA_3D } from "../MediaManager/types";
 import Select from "../Select";
 
 const getCandidates = (type) => {
@@ -13,21 +12,15 @@ const getCandidates = (type) => {
 };
 
 const PropertySetting = ({ type, data, onChange }) => {
-  const [currentType, setCurrentType] = useState(type);
-
-  useEffect(() => {
-    setCurrentType(type);
-  }, [type]);
-
   const candidates = getCandidates(type);
+
+  const onTypeChange = (type) => {
+    onChange(type, DEFAULT_PROPS[type]);
+  };
 
   return (
     <>
-      <Select
-        candidates={candidates}
-        current={currentType}
-        onChange={setCurrentType}
-      />
+      <Select candidates={candidates} current={type} onChange={onTypeChange} />
     </>
   );
 };
