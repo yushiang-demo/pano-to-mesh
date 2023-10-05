@@ -1,7 +1,7 @@
 import React from "react";
 import { Css3DObject, Placeholder } from "@pano-to-mesh/three";
 import { MEDIA_2D, MEDIA_3D } from "./types";
-import Image from "./Image";
+import CssImage from "./CssImage";
 import Video from "./Video";
 import Iframe from "./Iframe";
 
@@ -33,7 +33,7 @@ const MediaManager = ({ three, data, readonly: globalReadonly }) => {
           resolution={data.resolution}
           readonly={globalReadonly || objectReadonly}
         >
-          <Image src={data.src} />
+          <CssImage src={data.src} />
         </Css3DObject>
       );
     }
