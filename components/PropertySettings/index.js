@@ -11,7 +11,7 @@ const getCandidates = (type) => {
   return Object.values(category);
 };
 
-const PropertySetting = ({ type, data, onChange }) => {
+const PropertySetting = ({ type, onChange }) => {
   const candidates = getCandidates(type);
 
   const onTypeChange = (type) => {

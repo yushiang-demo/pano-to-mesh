@@ -15,7 +15,7 @@ const Placeholder = ({ three, position, scale, quaternion, getMesh }) => {
       scene.remove(mesh.object);
       mesh.dispose();
     };
-  }, [three, position, scale, quaternion]);
+  }, [three, position, scale, getMesh, quaternion]);
 
   return null;
 };
