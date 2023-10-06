@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import * as THREE from "three";
 import { RENDER_ORDER } from "../../constant";
-import { getPlaneMesh } from "../../helpers/MediaLoader";
 
 const Css3DObject = ({
   three,
@@ -24,23 +23,28 @@ const Css3DObject = ({
 
     const { css3DControls, scene } = three;
     const { object3D, remove, element } = css3DControls.create3DElement(
-      resolution,
+      resolution || [480, 360],
       readonly
     );
     setContainer(element);
 
     object3D.applyMatrix4(matrix);
 
-    const mesh = getPlaneMesh();
-    mesh.object.renderOrder = RENDER_ORDER.CSS3D;
-    mesh.object.applyMatrix4(matrix);
+    const geometry = new THREE.PlaneGeometry(1, 1);
+    const material = new THREE.MeshBasicMaterial({
+      transparent: true,
+      opacity: 0,
+    });
+    const mesh = new THREE.Mesh(geometry, material);
+    mesh.renderOrder = RENDER_ORDER.CSS3D;
+    mesh.applyMatrix4(matrix);
 
-    mesh.object.onBeforeRender = (renderer, scene, camera) => {
+    mesh.onBeforeRender = (renderer, scene, camera) => {
       const cameraForward = new THREE.Vector3(0, 0, -1);
-      cameraForward.applyQuaternion(mesh.object.quaternion);
+      cameraForward.applyQuaternion(mesh.quaternion);
 
       const directionToMesh = new THREE.Vector3();
-      mesh.object.getWorldPosition(directionToMesh);
+      mesh.getWorldPosition(directionToMesh);
       directionToMesh.sub(camera.position);
 
       cameraForward.normalize();
@@ -51,11 +55,11 @@ const Css3DObject = ({
       element.style.opacity = angle < 0 ? 0 : 1;
     };
 
-    scene.add(mesh.object);
+    scene.add(mesh);
 
     return () => {
-      scene.remove(mesh.object);
-      mesh.dispose();
+      scene.remove(mesh);
+      geometry.dispose();
       remove();
     };
   }, [three, resolution, position, scale, quaternion, readonly]);

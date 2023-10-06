@@ -35,9 +35,10 @@ export const getBoxMesh = withTransform(() => {
 
 export const getPlaneMesh = withTransform(() => {
   const geometry = new THREE.PlaneGeometry(1, 1);
-  const material = new THREE.MeshBasicMaterial({
+  const material = new THREE.ShaderMaterial({
     transparent: true,
-    opacity: 0,
+    vertexShader: Shaders.vertexShaders.worldPosition,
+    fragmentShader: Shaders.fragmentShaders.textureBoundary,
   });
   const object = new THREE.Mesh(geometry, material);
 

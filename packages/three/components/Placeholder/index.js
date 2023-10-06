@@ -1,12 +1,12 @@
 import { useEffect } from "react";
+import { getBoxMesh, getPlaneMesh } from "../../helpers/MediaLoader";
 import { RENDER_ORDER } from "../../constant";
-import { getBoxMesh } from "../../helpers/MediaLoader";
 
-const Placeholder = ({ three, position, scale, quaternion }) => {
+const Placeholder = ({ three, position, scale, quaternion, getMesh }) => {
   useEffect(() => {
     const { scene } = three;
 
-    const mesh = getBoxMesh();
+    const mesh = getMesh();
     mesh.setTransform({ position, scale, quaternion });
     mesh.object.renderOrder = RENDER_ORDER.MESH;
     scene.add(mesh.object);
@@ -15,9 +15,14 @@ const Placeholder = ({ three, position, scale, quaternion }) => {
       scene.remove(mesh.object);
       mesh.dispose();
     };
-  }, [three, position, scale, quaternion]);
+  }, [three, position, scale, getMesh, quaternion]);
 
   return null;
 };
 
-export default Placeholder;
+export const Modal = (props) => {
+  return <Placeholder getMesh={getBoxMesh} {...props} />;
+};
+export const Plane = (props) => {
+  return <Placeholder getMesh={getPlaneMesh} {...props} />;
+};
