@@ -1,4 +1,5 @@
 export { default as Loaders } from "./hooks";
+export { default as BackgroundPanel } from "./components/BackgroundPanel";
 export { default as PanoramaOutline } from "./components/PanoramaOutline";
 export { default as PanoramaProjectionMesh } from "./components/PanoramaProjectionMesh";
 export { default as PanoramaTextureMesh } from "./components/PanoramaTextureMesh";
