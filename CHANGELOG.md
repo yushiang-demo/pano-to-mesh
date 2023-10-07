@@ -20,6 +20,7 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 
 - Avoid creating backface plane and bbox. (https://github.com/yushiang-demo/PanoToMesh/pull/39)
 - Hide Css3d elements when rendering back face and change placeholder style. (https://github.com/yushiang-demo/pano-to-mesh/pull/40)
+- Add background panel to block css3d layer flicker black block.(https://github.com/yushiang-demo/pano-to-mesh/pull/45)
 
 ### Removed
 
