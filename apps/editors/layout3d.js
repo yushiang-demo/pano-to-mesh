@@ -5,6 +5,7 @@ import {
   ThreeCanvas,
   PanoramaTextureMesh,
   Core,
+  BackgroundPanel,
 } from "@pano-to-mesh/three";
 import useClick2AddWalls from "../../hooks/useClick2AddWalls";
 import Icons from "../../components/Icon";
@@ -79,6 +80,7 @@ const Editor = ({ data }) => {
   return (
     <>
       <ThreeCanvas dev={dev} ref={canvas3DRef}>
+        <BackgroundPanel />
         <PanoramaTextureMesh
           {...props}
           ref={textureCanvasRef}

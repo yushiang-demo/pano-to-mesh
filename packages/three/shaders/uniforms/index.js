@@ -4,3 +4,4 @@ export { default as equirectangularProjection } from "./equirectangularProjectio
 export { default as textureBlending } from "./textureBlending";
 export { default as texture } from "./texture";
 export { default as hoverEffect } from "./hoverEffect";
+export { default as color } from "./color";

@@ -10,6 +10,7 @@ import {
   Media,
   Loaders,
   ThreeCanvas,
+  BackgroundPanel,
   PanoramaProjectionMesh,
   MeshIndexMap,
   TransformControls,
@@ -175,6 +176,7 @@ const Editor = ({ data }) => {
   return (
     <>
       <ThreeCanvas dev={dev} ref={threeRef} {...eventHandlers}>
+        <BackgroundPanel />
         <PanoramaProjectionMesh {...textureMeshProps} onLoad={onLoad} />
         <MediaManager
           data={previewMedia ? [...media, previewMedia] : media}
