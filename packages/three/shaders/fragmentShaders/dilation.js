@@ -1,10 +1,3 @@
-export const setUniforms = (material, { kernel }) => {
-  if (!material.uniforms.kernel) {
-    material.uniforms.kernel = {};
-  }
-  material.uniforms.kernel.value = kernel;
-};
-
 const shader = `
 uniform sampler2D texture0;
 uniform int kernel;
