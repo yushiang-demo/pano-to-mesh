@@ -1,14 +1,3 @@
-import * as THREE from "three";
-
-export const setUniforms = (material, { map, mouse }) => {
-  if (!material.uniforms.map) {
-    material.uniforms.map = {};
-    material.uniforms.mouse = new THREE.Vector2();
-  }
-  material.uniforms.map.value = map;
-  material.uniforms.mouse.value = mouse;
-};
-
 const shader = `
 uniform sampler2D map;
 uniform vec2 mouse;

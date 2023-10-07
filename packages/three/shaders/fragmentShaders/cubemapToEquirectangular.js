@@ -1,10 +1,3 @@
-export const setUniforms = (material, { cubeTexture }) => {
-  if (!material.uniforms.cubeTexture) {
-    material.uniforms.cubeTexture = {};
-  }
-  material.uniforms.cubeTexture.value = cubeTexture;
-};
-
 const shader = `
 precision mediump float;
 uniform samplerCube cubeTexture;
