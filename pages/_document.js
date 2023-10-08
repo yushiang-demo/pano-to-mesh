@@ -41,6 +41,7 @@ export default class MyDocument extends Document {
               height: 100%;
               margin: 0;
               padding: 0;
+              overflow:hidden;
             }
           `}
           </style>
