@@ -79,7 +79,7 @@ const PanoramaTextureMesh = (
       map: dilatedTexture,
     });
     const mesh = new THREE.Mesh(geometry, material);
-    mesh.renderOrder = RENDER_ORDER.MESH;
+    mesh.renderOrder = RENDER_ORDER.BASE_MESH;
     scene.add(mesh);
 
     onLoad(mesh);

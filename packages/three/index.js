@@ -8,6 +8,7 @@ export { default as Css3DObject } from "./components/Css3DObject";
 export { default as TransformControls } from "./components/TransformControls";
 export { TRANSFORM_CONTROLS_MODE } from "./components/TransformControls";
 export { default as MeshIndexMap } from "./components/MeshIndexMap";
+export * as ChromaKeyPanel from "./components/ChromaKeyPanel";
 
 export * as Placeholder from "./components/Placeholder";
 export * as Media from "./helpers/MediaLoader";

@@ -30,7 +30,7 @@ const PanoramaProjectionMesh = ({
     });
 
     const room = new THREE.Mesh(geometry, material);
-    room.renderOrder = RENDER_ORDER.MESH;
+    room.renderOrder = RENDER_ORDER.BASE_MESH;
     scene.add(room);
 
     onLoad(room);
