@@ -1,8 +1,15 @@
 import React from "react";
-import { Css3DObject, Placeholder } from "../../three";
+import { Css3DObject, Placeholder, ChromaKeyPanel } from "@pano-to-mesh/three";
+import { MEDIA_2D, MEDIA_3D } from "./types";
+import CssImage from "./CssImage";
+import Video from "./Video";
+import Iframe from "./Iframe";
 
-import RawHTML from "./RawHTML";
-import { MEDIA } from "../../constant/media";
+const CSS3D_MEDIA = {
+  [MEDIA_2D.HTML_IFRAME]: Iframe,
+  [MEDIA_2D.HTML_VIDEO]: Video,
+  [MEDIA_2D.HTML_IMAGE]: CssImage,
+};
 
 const MediaManager = ({ three, data, readonly: globalReadonly }) => {
   const getMediaByType = ({
@@ -11,7 +18,8 @@ const MediaManager = ({ three, data, readonly: globalReadonly }) => {
     data,
     readonly: objectReadonly,
   }) => {
-    if (type === MEDIA.HTML) {
+    if (type in CSS3D_MEDIA) {
+      const Component = CSS3D_MEDIA[type];
       return (
         <Css3DObject
           three={three}
@@ -19,13 +27,35 @@ const MediaManager = ({ three, data, readonly: globalReadonly }) => {
           resolution={data.resolution}
           readonly={globalReadonly || objectReadonly}
         >
-          <RawHTML content={data.html} />
+          <Component src={data.src} />
         </Css3DObject>
       );
     }
 
-    if (type === MEDIA.BBOX) {
-      return <Placeholder three={three} {...transformation} />;
+    if (type === MEDIA_2D.TEXT) {
+      return (
+        <ChromaKeyPanel.Text three={three} {...transformation} data={data} />
+      );
+    }
+
+    if (type === MEDIA_2D.SHADER_IMAGE) {
+      return (
+        <ChromaKeyPanel.Image three={three} {...transformation} data={data} />
+      );
+    }
+
+    if (type === MEDIA_2D.SHADER_VIDEO) {
+      return (
+        <ChromaKeyPanel.Video three={three} {...transformation} data={data} />
+      );
+    }
+
+    if (type === MEDIA_3D.PLACEHOLDER_3D) {
+      return <Placeholder.Modal three={three} {...transformation} />;
+    }
+
+    if (type === MEDIA_2D.PLACEHOLDER_2D) {
+      return <Placeholder.Plane three={three} {...transformation} />;
     }
   };
 

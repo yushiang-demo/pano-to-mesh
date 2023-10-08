@@ -10,33 +10,38 @@ import {
   Media,
   Loaders,
   ThreeCanvas,
+  BackgroundPanel,
   PanoramaProjectionMesh,
   MeshIndexMap,
-} from "../../../three";
+  TransformControls,
+  TRANSFORM_CONTROLS_MODE,
+} from "@pano-to-mesh/three";
 import useClick2AddWalls from "../../../hooks/useClick2AddWalls";
 import useDragTransformation from "../../../hooks/useDragTransformation";
 import { useStoreDataToHash } from "../../../hooks/useHash";
 import MediaManager from "../../../components/MediaManager";
+import { MEDIA_2D, MEDIA_3D } from "../../../components/MediaManager/types";
 import { MODE } from "./constant";
-import ModeSwitch from "./ModeSwitch";
+import { EditorModeSwitch, TransformModeSwitch } from "./ModeSwitch";
 import { getNewMedia } from "./media";
-import { MEDIA } from "../../../constant/media";
+import ToolbarRnd from "../../../components/ToolbarRnd";
+import Icons from "../../../components/Icon";
+import PropertySetting from "../../../components/PropertySettings";
 
-const mapMediaToMesh = (media) => {
+const mapMediaToRaycasterMesh = (media) => {
   const { transformation, type } = media;
 
   const mesh = ((type) => {
-    if (type === MEDIA.BBOX) {
+    if (Object.values(MEDIA_3D).includes(type)) {
       return Media.getBoxMesh();
-    } else if (type === MEDIA.HTML) {
+    } else if (Object.values(MEDIA_2D).includes(type)) {
       return Media.getPlaneMesh();
     }
   })(type);
 
-  return {
-    transformation,
-    mesh,
-  };
+  mesh.setTransform(transformation);
+
+  return mesh;
 };
 
 const dev = process.env.NODE_ENV === "development";
@@ -46,9 +51,15 @@ const Editor = ({ data }) => {
   const [raycasterTarget, setRaycasterTarget] = useState(null);
   const [mouse, setMouse] = useState([0, 0]);
   const [camera, setCamera] = useState(null);
+  const [transformMode, setTransformMode] = useState(
+    TRANSFORM_CONTROLS_MODE.TRANSLATE
+  );
   const [mode, setMode] = useState(null);
+  const [focusedIndex, setFocusedIndex] = useState(null);
+  const [isDragging, setIsDragging] = useState(false);
   const [media, setMedia] = useState(data.media || []);
 
+  const raycasterMeshes = media.map(mapMediaToRaycasterMesh);
   const geometryInfo = useMemo(
     () => ({
       floorY: data.floorY,
@@ -64,12 +75,15 @@ const Editor = ({ data }) => {
   });
 
   const newMediaType = {
-    [MODE.ADD_3D]: MEDIA.BBOX,
-    [MODE.ADD_2D]: MEDIA.HTML,
+    [MODE.ADD_3D]: MEDIA_3D.PLACEHOLDER_3D,
+    [MODE.ADD_2D]: MEDIA_2D.PLACEHOLDER_2D,
   };
   const { transformation, eventHandlers: handleAddPlaceholder } =
     useDragTransformation({
-      raycasterTarget: [raycasterTarget],
+      raycasterTarget: [
+        raycasterTarget,
+        ...raycasterMeshes.map(({ object }) => object),
+      ],
       camera,
       onEnd: (transformation) => {
         const newMedia = getNewMedia(newMediaType[mode], transformation);
@@ -82,23 +96,26 @@ const Editor = ({ data }) => {
       setMouse([normalizedX, 1 - normalizedY]);
     };
 
-    const onMouseUp = ({ normalizedX, normalizedY }) => {
+    const onMouseDown = ({ normalizedX, normalizedY }) => {
       const index = mediaIndexMap.current.getIndex(
         normalizedX,
         1 - normalizedY
       );
-      console.log(index);
+      if (Number.isInteger(index)) {
+        setFocusedIndex((prev) => {
+          return prev === index ? null : index;
+        });
+      }
     };
 
     return {
       onMouseMove,
-      onMouseUp,
+      onMouseDown,
     };
   })();
 
   const eventDictionary = {
-    [MODE.VIEW]: objectSelectorEventHandlers,
-    [MODE.TRANSFORM]: null,
+    [MODE.SELECT]: isDragging ? null : objectSelectorEventHandlers,
     [MODE.ADD_3D]: handleAddPlaceholder,
     [MODE.ADD_2D]: handleAddPlaceholder,
   };
@@ -123,24 +140,81 @@ const Editor = ({ data }) => {
   }, []);
 
   useEffect(() => {
-    threeRef.current.cameraControls.setEnable(mode === MODE.VIEW);
+    threeRef.current.cameraControls.setEnable(mode === MODE.SELECT);
   }, [mode]);
+
+  const focusedMedia = media[focusedIndex];
+  const onFocusedMediaChange = useCallback(
+    (transformation) => {
+      setMedia((prev) => {
+        const oldMedia = [...prev];
+        oldMedia[focusedIndex].transformation = transformation;
+        return oldMedia;
+      });
+    },
+    [focusedIndex]
+  );
+  const deleteFocusedMedia = useCallback(() => {
+    setMedia((prev) => {
+      return prev.filter((_, index) => index !== focusedIndex);
+    });
+    setFocusedIndex(null);
+  }, [focusedIndex]);
+
+  const changeFocusedMedia = useCallback(
+    (type, data) => {
+      setMedia((prev) => {
+        const prevMedia = [...prev];
+        prevMedia[focusedIndex].type = type;
+        prevMedia[focusedIndex].data = data;
+        return prevMedia;
+      });
+    },
+    [focusedIndex]
+  );
 
   return (
     <>
       <ThreeCanvas dev={dev} ref={threeRef} {...eventHandlers}>
+        <BackgroundPanel />
         <PanoramaProjectionMesh {...textureMeshProps} onLoad={onLoad} />
         <MediaManager
           data={previewMedia ? [...media, previewMedia] : media}
           readonly
         />
         <MeshIndexMap
-          meshes={media.map(mapMediaToMesh)}
+          meshes={raycasterMeshes}
           mouse={mouse}
           ref={mediaIndexMap}
         />
+        {focusedMedia && (
+          <TransformControls
+            mode={transformMode}
+            position={focusedMedia.transformation.position}
+            scale={focusedMedia.transformation.scale}
+            quaternion={focusedMedia.transformation.quaternion}
+            onChange={onFocusedMediaChange}
+            onDraggingChanged={setIsDragging}
+          />
+        )}
       </ThreeCanvas>
-      <ModeSwitch mode={mode} setMode={setMode} />
+      <ToolbarRnd>
+        <EditorModeSwitch mode={mode} setMode={setMode} />
+        {focusedMedia && (
+          <>
+            <TransformModeSwitch
+              mode={transformMode}
+              setMode={setTransformMode}
+            />
+            <PropertySetting
+              type={focusedMedia.type}
+              data={focusedMedia.data}
+              onChange={changeFocusedMedia}
+            />
+            <Icons.trash onClick={deleteFocusedMedia} />
+          </>
+        )}
+      </ToolbarRnd>
     </>
   );
 };

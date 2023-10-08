@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
 
-import { Loaders, PanoramaOutline, ThreeCanvas } from "../../three";
+import { Loaders, PanoramaOutline, ThreeCanvas } from "@pano-to-mesh/three";
 import useClick2AddWalls from "../../hooks/useClick2AddWalls";
 import PageContainer from "../../components/PageContainer";
 import Input from "../../components/Input";

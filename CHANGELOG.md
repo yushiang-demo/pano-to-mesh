@@ -13,6 +13,30 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 
 ### Removed
 
+## [1.3.0] - 2023-10-08
+
+### Added
+
+- Raycaster to new media. (https://github.com/yushiang-demo/PanoToMesh/pull/38)
+- Add `TransformControls` to edit media in 3d space. (https://github.com/yushiang-demo/pano-to-mesh/pull/42)
+- Add media property menu and default data. (https://github.com/yushiang-demo/pano-to-mesh/pull/43)
+- Add media data inputs UI and chromaKey media. (https://github.com/yushiang-demo/pano-to-mesh/pull/46)
+- Add github ci to check changelog and docker build. (https://github.com/yushiang-demo/pano-to-mesh/pull/48)
+
+### Changed
+
+- Use yarn workspace for `three`, `js-base64` and `pako` packages. (https://github.com/yushiang-demo/PanoToMesh/pull/41)
+- Refactor shader folder structure. (https://github.com/yushiang-demo/pano-to-mesh/pull/44)
+- Refactor three/core export route structure. (https://github.com/yushiang-demo/pano-to-mesh/pull/47)
+
+### Fixed
+
+- Avoid creating backface plane and bbox. (https://github.com/yushiang-demo/PanoToMesh/pull/39)
+- Hide Css3d elements when rendering back face and change placeholder style. (https://github.com/yushiang-demo/pano-to-mesh/pull/40)
+- Add background panel to block css3d layer flicker black block.(https://github.com/yushiang-demo/pano-to-mesh/pull/45)
+
+### Removed
+
 ## [1.2.0] - 2023-09-04
 
 ### Added
@@ -107,8 +131,9 @@ Codes without pull requests won't be recorded.
 
 ### Removed
 
-[unreleased]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.2.0...HEAD
-[1.1.1]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.1.1...v1.2.0
+[unreleased]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.2.0...v1.3.0
+[1.2.0]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.1.1...v1.2.0
 [1.1.1]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/yushiang-demo/PanoToMesh/compare/v0.0.0...v1.0.0
