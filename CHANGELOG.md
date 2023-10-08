@@ -7,6 +7,16 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 
 ### Added
 
+### Changed
+
+### Fixed
+
+### Removed
+
+## [1.3.0] - 2023-10-08
+
+### Added
+
 - Raycaster to new media. (https://github.com/yushiang-demo/PanoToMesh/pull/38)
 - Add `TransformControls` to edit media in 3d space. (https://github.com/yushiang-demo/pano-to-mesh/pull/42)
 - Add media property menu and default data. (https://github.com/yushiang-demo/pano-to-mesh/pull/43)
@@ -121,7 +131,8 @@ Codes without pull requests won't be recorded.
 
 ### Removed
 
-[unreleased]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.2.0...HEAD
+[unreleased]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.1.1...v1.2.0
 [1.1.1]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.0.0...v1.1.0
