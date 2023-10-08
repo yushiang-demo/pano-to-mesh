@@ -52,7 +52,7 @@ const ChromaKeyPanel = ({
     if (!materialRef.current) return;
 
     Shaders.setUniforms.chromaKeyColor(materialRef.current, {
-      color: new THREE.Color(color || 0xffffff),
+      color: new THREE.Color(color),
     });
 
     Shaders.setUniforms.texture(materialRef.current, {

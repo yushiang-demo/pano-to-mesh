@@ -5,11 +5,10 @@ import { useState, useEffect, useRef } from "react";
 const Video = ({ data, ...props }) => {
   const videoRef = useRef(null);
   const [texture, setTexture] = useState(null);
-
   useEffect(() => {
     const texture = new THREE.VideoTexture(videoRef.current);
     setTexture(texture);
-
+    videoRef.current.load();
     return () => {
       texture.dispose();
     };
