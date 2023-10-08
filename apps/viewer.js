@@ -8,6 +8,7 @@ import {
 } from "@pano-to-mesh/three";
 import useClick2AddWalls from "../hooks/useClick2AddWalls";
 import MediaManager from "../components/MediaManager";
+import { MEDIA_2D, MEDIA_3D } from "../components/MediaManager/types";
 
 const dev = process.env.NODE_ENV === "development";
 const Viewer = ({ data }) => {
@@ -37,11 +38,16 @@ const Viewer = ({ data }) => {
     threeRef.current.cameraControls.focus(mesh);
   };
 
+  const media = (data.media || []).filter(
+    (data) =>
+      ![MEDIA_3D.PLACEHOLDER_3D, MEDIA_2D.PLACEHOLDER_2D].includes(data.type)
+  );
+
   return (
     <ThreeCanvas dev={dev} ref={threeRef}>
       <BackgroundPanel />
       <PanoramaProjectionMesh {...textureMeshProps} onLoad={onLoad} />
-      <MediaManager data={data.media} />
+      <MediaManager data={media} />
     </ThreeCanvas>
   );
 };
