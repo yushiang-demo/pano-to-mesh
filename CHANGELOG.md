@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 - Raycaster to new media. (https://github.com/yushiang-demo/PanoToMesh/pull/38)
 - Add `TransformControls` to edit media in 3d space. (https://github.com/yushiang-demo/pano-to-mesh/pull/42)
 - Add media property menu and default data. (https://github.com/yushiang-demo/pano-to-mesh/pull/43)
+- Add media data inputs UI and chromaKey media. (https://github.com/yushiang-demo/pano-to-mesh/pull/46)
 
 ### Changed
 
