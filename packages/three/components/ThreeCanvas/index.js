@@ -1,7 +1,6 @@
 import React, { forwardRef, useEffect, useRef, useState } from "react";
 
-import Css3D from "../../core/Css3D";
-import Three from "../../core";
+import { Css3D, Three } from "../../core";
 
 const monitorStyle = {
   position: "absolute",

@@ -1,10 +1,8 @@
 import { forwardRef, useEffect, useState } from "react";
 import * as THREE from "three";
 
-import { create3DRoom } from "../../core/RoomGeometry";
+import { create3DRoom, TexturePostEffect, exportTexture } from "../../core";
 import Shaders from "../../shaders";
-import TexturePostEffect from "../../core/TexturePostEffect";
-import { exportTexture } from "../../core/helpers/Texture";
 import { RENDER_ORDER } from "../../constant";
 
 const TEXTURE_SIZE = 4096;
