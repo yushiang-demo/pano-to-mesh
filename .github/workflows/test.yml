@@ -3,21 +3,38 @@ name: Test
 on:
   pull_request:
     branches:
-      - main
       - dev
 
-jobs:
-  build:
-    name: eslint
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [16]
+env:
+  GITHUB_PR_NUMBER: ${{github.event.pull_request.number}}
+  GITHUB_REPO: ${{github.repository}}
 
+jobs:
+  changelog:
+    name: changelog
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - name: run test
+      - uses: actions/checkout@v4
+      - name: Search PR link in Changelog
+        run: |
+          grep -rni "${GITHUB_REPO}/pull/${GITHUB_PR_NUMBER}" ./CHANGELOG.md || exit 1
+
+  lint:
+    name: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run next lint
         run: |
           node --version
           yarn install
           yarn lint
+
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run docker build
+        run: |
+          docker build -t pano-to-mesh . --no-cache
