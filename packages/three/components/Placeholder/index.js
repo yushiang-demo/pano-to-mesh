@@ -8,7 +8,7 @@ const Placeholder = ({ three, position, scale, quaternion, getMesh }) => {
 
     const mesh = getMesh();
     mesh.setTransform({ position, scale, quaternion });
-    mesh.object.renderOrder = RENDER_ORDER.PLACEHOLDER;
+    mesh.object.renderOrder = RENDER_ORDER.MESH;
     scene.add(mesh.object);
 
     return () => {
