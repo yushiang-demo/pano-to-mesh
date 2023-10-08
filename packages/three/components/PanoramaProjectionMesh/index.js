@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import * as THREE from "three";
 
-import { create3DRoom } from "../../core/RoomGeometry";
+import { create3DRoom } from "../../core";
 import Shaders from "../../shaders";
 import { RENDER_ORDER } from "../../constant";
 
