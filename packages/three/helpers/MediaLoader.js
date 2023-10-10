@@ -6,8 +6,8 @@ THREE.Cache.enabled = true;
 
 const loadGLB = (() => {
   const loader = new GLTFLoader();
-  return async (src) => {
-    return new Promise(async (resolve) => {
+  return (src) => {
+    return new Promise((resolve) => {
       loader.load(src, (mesh) => {
         resolve(mesh);
       });

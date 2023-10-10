@@ -12,7 +12,6 @@ const GLBModal = ({ three, position, scale, quaternion, data }) => {
 
     const { scene } = three;
     scene.add(mesh.object);
-    mesh.setTransform({ position, scale, quaternion });
 
     return () => {
       scene.remove(mesh.object);

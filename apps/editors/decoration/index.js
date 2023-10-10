@@ -30,7 +30,7 @@ import Icons from "../../../components/Icon";
 import PropertySetting from "../../../components/PropertySettings";
 
 const mapMediaToRaycasterMesh = async (media) => {
-  const { transformation, type, data } = media;
+  const { transformation, type } = media;
 
   const getMesh = async (type) => {
     if (type === MEDIA_3D.PLACEHOLDER_3D) {

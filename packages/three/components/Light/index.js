@@ -1,7 +1,6 @@
 import * as THREE from "three";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 const Light = ({ three }) => {
-  const meshRef = useRef(null);
   useEffect(() => {
     const { scene } = three;
 
