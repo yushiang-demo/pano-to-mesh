@@ -11,6 +11,7 @@ const PropertyInputs = {
   [MEDIA_2D.HTML_IFRAME]: URLInput,
   [MEDIA_2D.SHADER_IMAGE]: ChromaKeyInput,
   [MEDIA_2D.SHADER_VIDEO]: ChromaKeyInput,
+  [MEDIA_3D.MODAL]: URLInput,
 };
 
 const getCandidates = (type) => {

@@ -15,6 +15,7 @@ import {
   MeshIndexMap,
   TransformControls,
   TRANSFORM_CONTROLS_MODE,
+  Light,
 } from "@pano-to-mesh/three";
 import useClick2AddWalls from "../../../hooks/useClick2AddWalls";
 import useDragTransformation from "../../../hooks/useDragTransformation";
@@ -28,17 +29,21 @@ import ToolbarRnd from "../../../components/ToolbarRnd";
 import Icons from "../../../components/Icon";
 import PropertySetting from "../../../components/PropertySettings";
 
-const mapMediaToRaycasterMesh = (media) => {
-  const { transformation, type } = media;
+const mapMediaToRaycasterMesh = async (media) => {
+  const { transformation, type, data } = media;
 
-  const mesh = ((type) => {
-    if (Object.values(MEDIA_3D).includes(type)) {
+  const getMesh = async (type) => {
+    if (type === MEDIA_3D.PLACEHOLDER_3D) {
       return Media.getBoxMesh();
+    } else if (type === MEDIA_3D.MODAL) {
+      return Media.getBoxMesh();
+      // return await Media.getModal(data.src);
     } else if (Object.values(MEDIA_2D).includes(type)) {
       return Media.getPlaneMesh();
     }
-  })(type);
+  };
 
+  const mesh = await getMesh(type);
   mesh.setTransform(transformation);
 
   return mesh;
@@ -58,8 +63,12 @@ const Editor = ({ data }) => {
   const [focusedIndex, setFocusedIndex] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
   const [media, setMedia] = useState(data.media || []);
+  const [raycasterMeshes, setRaycasterMeshes] = useState([]);
 
-  const raycasterMeshes = media.map(mapMediaToRaycasterMesh);
+  useEffect(() => {
+    Promise.all(media.map(mapMediaToRaycasterMesh)).then(setRaycasterMeshes);
+  }, [media]);
+
   const geometryInfo = useMemo(
     () => ({
       floorY: data.floorY,
@@ -176,6 +185,7 @@ const Editor = ({ data }) => {
   return (
     <>
       <ThreeCanvas dev={dev} ref={threeRef} {...eventHandlers}>
+        <Light />
         <BackgroundPanel />
         <PanoramaProjectionMesh {...textureMeshProps} onLoad={onLoad} />
         <MediaManager
