@@ -7,12 +7,10 @@ import React, {
 } from "react";
 
 import {
-  Media,
   Loaders,
   ThreeCanvas,
   BackgroundPanel,
   PanoramaProjectionMesh,
-  MeshIndexMap,
   TransformControls,
   TRANSFORM_CONTROLS_MODE,
   Light,
@@ -28,32 +26,13 @@ import { getNewMedia } from "./media";
 import ToolbarRnd from "../../../components/ToolbarRnd";
 import Icons from "../../../components/Icon";
 import PropertySetting from "../../../components/PropertySettings";
-
-const mapMediaToRaycasterMesh = async (media) => {
-  const { transformation, type } = media;
-
-  const getMesh = async (type) => {
-    if (type === MEDIA_3D.PLACEHOLDER_3D) {
-      return Media.getBoxMesh();
-    } else if (type === MEDIA_3D.MODAL) {
-      return Media.getBoxMesh();
-      // return await Media.getModal(data.src);
-    } else if (Object.values(MEDIA_2D).includes(type)) {
-      return Media.getPlaneMesh();
-    }
-  };
-
-  const mesh = await getMesh(type);
-  mesh.setTransform(transformation);
-
-  return mesh;
-};
+import ObjectSelector from "../../../components/ObjectSelector";
 
 const dev = process.env.NODE_ENV === "development";
 const Editor = ({ data }) => {
   const threeRef = useRef(null);
   const mediaIndexMap = useRef(null);
-  const [raycasterTarget, setRaycasterTarget] = useState(null);
+  const [baseMesh, setBaseMesh] = useState(null);
   const [mouse, setMouse] = useState([0, 0]);
   const [camera, setCamera] = useState(null);
   const [transformMode, setTransformMode] = useState(
@@ -63,12 +42,6 @@ const Editor = ({ data }) => {
   const [focusedIndex, setFocusedIndex] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
   const [media, setMedia] = useState(data.media || []);
-  const [raycasterMeshes, setRaycasterMeshes] = useState([]);
-
-  useEffect(() => {
-    Promise.all(media.map(mapMediaToRaycasterMesh)).then(setRaycasterMeshes);
-  }, [media]);
-
   const geometryInfo = useMemo(
     () => ({
       floorY: data.floorY,
@@ -89,10 +62,7 @@ const Editor = ({ data }) => {
   };
   const { transformation, eventHandlers: handleAddPlaceholder } =
     useDragTransformation({
-      raycasterTarget: [
-        raycasterTarget,
-        ...raycasterMeshes.map(({ object }) => object),
-      ],
+      raycasterTarget: [baseMesh],
       camera,
       onEnd: (transformation) => {
         const newMedia = getNewMedia(newMediaType[mode], transformation);
@@ -144,7 +114,7 @@ const Editor = ({ data }) => {
 
   const onLoad = useCallback((mesh) => {
     threeRef.current.cameraControls.focus(mesh, false, false, false);
-    setRaycasterTarget(mesh);
+    setBaseMesh(mesh);
     setCamera(threeRef.current.cameraControls.getCamera());
   }, []);
 
@@ -192,11 +162,7 @@ const Editor = ({ data }) => {
           data={previewMedia ? [...media, previewMedia] : media}
           readonly
         />
-        <MeshIndexMap
-          meshes={raycasterMeshes}
-          mouse={mouse}
-          ref={mediaIndexMap}
-        />
+        <ObjectSelector media={media} mouse={mouse} ref={mediaIndexMap} />
         {focusedMedia && (
           <TransformControls
             mode={transformMode}
