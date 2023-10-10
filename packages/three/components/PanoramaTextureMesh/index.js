@@ -21,7 +21,7 @@ const PanoramaTextureMesh = (
   }, [frameBuffer]);
 
   useEffect(() => {
-    const { scene, addBeforeRenderFunction, renderer } = three;
+    const { scene, addBeforeRenderEvent, renderer } = three;
 
     const geometry = create3DRoom(layout2D, ceilingY, floorY);
 
@@ -47,7 +47,7 @@ const PanoramaTextureMesh = (
         renderer.setRenderTarget(null);
       };
 
-      const stopRenderTexture = addBeforeRenderFunction(render);
+      const stopRenderTexture = addBeforeRenderEvent(render);
 
       const dispose = () => {
         stopRenderTexture();
@@ -65,7 +65,7 @@ const PanoramaTextureMesh = (
       dispose: disposeTexturePostEffect,
       material: dilationMaterial,
     } = TexturePostEffect(texture, Shaders.fragmentShaders.dilation);
-    const stopTexturePostEffect = addBeforeRenderFunction(renderDilatedTexture);
+    const stopTexturePostEffect = addBeforeRenderEvent(renderDilatedTexture);
     Shaders.setUniforms.dilation(dilationMaterial, {
       kernel: 5,
     });
