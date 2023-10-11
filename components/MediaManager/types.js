@@ -21,6 +21,6 @@ export const DEFAULT_PROPS = {
   [MEDIA_2D.SHADER_IMAGE]: { src: "/resources/media.png", color: 0xffffff },
   [MEDIA_2D.SHADER_VIDEO]: { src: "/resources/media.mp4", color: 0xffffff },
   [MEDIA_2D.PLACEHOLDER_2D]: {},
-  [MEDIA_3D.MODAL]: { src: "/resources/Xbot.glb" },
+  [MEDIA_3D.MODAL]: { src: "/resources/Xbot.glb", clip: "idle" },
   [MEDIA_3D.PLACEHOLDER_3D]: {},
 };

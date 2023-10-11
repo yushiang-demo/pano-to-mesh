@@ -4,7 +4,7 @@ import { getModal } from "../../helpers/MediaLoader";
 const GLBModal = ({ three, position, scale, quaternion, data }) => {
   const [mesh, setMesh] = useState(null);
   useEffect(() => {
-    getModal(data.src).then(setMesh);
+    getModal(data).then(setMesh);
   }, [data]);
 
   useEffect(() => {

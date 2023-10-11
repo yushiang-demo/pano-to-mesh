@@ -55,13 +55,41 @@ export const getPlaneMesh = () => {
   return { object, setTransform: getTransformSetter(object), dispose };
 };
 
-export const getModal = async (src) => {
-  const modal = await loadGLB(src);
+const loadAnimations = (gltf) => {
+  const model = gltf.scene;
+  const animations = gltf.animations;
+  const mixer = new THREE.AnimationMixer(model);
+
+  const actions = animations.map((clip) => {
+    const { name, duration } = clip;
+    const action = mixer.clipAction(clip);
+    const play = (time) => {
+      action.enabled = true;
+      action.setEffectiveTimeScale(1);
+      action.setEffectiveWeight(1);
+      action.play();
+      mixer.setTime(time);
+    };
+
+    return { name, duration, play };
+  });
+
+  return actions;
+};
+
+export const getModal = async ({ src, clip }) => {
+  const gltf = await loadGLB(src);
+  const animations = loadAnimations(gltf);
+
+  const targetAnimation = animations.find(({ name }) => name === clip);
+  if (targetAnimation) {
+    targetAnimation.play();
+  }
 
   const normalizeGroup = new THREE.Group();
   normalizeGroup.rotateX(Math.PI / 2);
 
-  const mesh = modal.scene;
+  const mesh = gltf.scene;
   normalizeGroup.add(mesh);
 
   const boundingBox = new THREE.Box3();
@@ -103,6 +131,7 @@ export const getModal = async (src) => {
   return {
     object,
     setTransform,
+    animations,
     dispose,
   };
 };
