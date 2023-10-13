@@ -3,7 +3,7 @@ import { useState, useEffect, forwardRef, useMemo } from "react";
 import { Media, MeshIndexMap } from "@pano-to-mesh/three";
 import { MEDIA_2D, MEDIA_3D } from "../MediaManager/types";
 
-const Mesh = ({ type, data, transformation, onLoad }) => {
+const Mesh = ({ type, data, transformation, updateRaycasterMesh }) => {
   const [mesh, setMesh] = useState(null);
   useEffect(() => {
     const getMesh = async (type) => {
@@ -22,8 +22,12 @@ const Mesh = ({ type, data, transformation, onLoad }) => {
   useEffect(() => {
     if (!mesh) return;
     mesh.setTransform(transformation);
-    onLoad(mesh);
-  }, [mesh, transformation, onLoad]);
+    updateRaycasterMesh(mesh);
+
+    return () => {
+      updateRaycasterMesh(null);
+    };
+  }, [mesh, transformation, updateRaycasterMesh]);
 
   return null;
 };
@@ -31,7 +35,7 @@ const Mesh = ({ type, data, transformation, onLoad }) => {
 const ObjectSelector = ({ media, mouse, ...props }, ref) => {
   const [raycasterMeshes, setRaycasterMeshes] = useState([]);
 
-  const onLoad = useMemo(
+  const updateRaycasterMesh = useMemo(
     () =>
       media.map((_, idx) => {
         return (mesh) => {
@@ -53,7 +57,7 @@ const ObjectSelector = ({ media, mouse, ...props }, ref) => {
           type={data.type}
           data={data.data}
           transformation={data.transformation}
-          onLoad={onLoad[index]}
+          updateRaycasterMesh={updateRaycasterMesh[index]}
         />
       ))}
       <MeshIndexMap
