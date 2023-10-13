@@ -23,7 +23,11 @@ const URLInput = ({ data, onChange }) => {
 
   return (
     <Wrapper>
-      <Input value={url} onChange={onType} />
+      <Input
+        value={url}
+        onChange={onType}
+        onMouseDown={(e) => e.stopPropagation()}
+      />
       <RowWrapper>
         <Button onClick={onCancel}> Cancel</Button>
         <Button onClick={onSave}> Save</Button>
