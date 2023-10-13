@@ -3,6 +3,7 @@ import Select from "../Select";
 import TextInput from "./TextInput";
 import URLInput from "./URLInput";
 import ChromaKeyInput from "./ChromaKeyInput";
+import ModelSettings from "./ModelSettings";
 
 const PropertyInputs = {
   [MEDIA_2D.TEXT]: TextInput,
@@ -11,7 +12,7 @@ const PropertyInputs = {
   [MEDIA_2D.HTML_IFRAME]: URLInput,
   [MEDIA_2D.SHADER_IMAGE]: ChromaKeyInput,
   [MEDIA_2D.SHADER_VIDEO]: ChromaKeyInput,
-  [MEDIA_3D.MODAL]: URLInput,
+  [MEDIA_3D.MODEL]: ModelSettings,
 };
 
 const getCandidates = (type) => {

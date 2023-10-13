@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
 import { getModal } from "../../helpers/MediaLoader";
+import { useUpdateModel } from "../../hooks";
 
-const GLBModal = ({ three, position, scale, quaternion, data }) => {
+const GLBModel = ({ three, position, scale, quaternion, data }) => {
   const [mesh, setMesh] = useState(null);
+
   useEffect(() => {
-    getModal(data).then(setMesh);
-  }, [data]);
+    const { src } = data;
+    getModal({ src }).then(setMesh);
+  }, [data.src]);
+  useUpdateModel(mesh, data);
 
   useEffect(() => {
     if (!mesh) return;
@@ -28,4 +32,4 @@ const GLBModal = ({ three, position, scale, quaternion, data }) => {
   return null;
 };
 
-export default GLBModal;
+export default GLBModel;

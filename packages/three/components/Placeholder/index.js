@@ -20,7 +20,7 @@ const Placeholder = ({ three, position, scale, quaternion, getMesh }) => {
   return null;
 };
 
-export const Modal = (props) => {
+export const Model = (props) => {
   return <Placeholder getMesh={getBoxMesh} {...props} />;
 };
 export const Plane = (props) => {

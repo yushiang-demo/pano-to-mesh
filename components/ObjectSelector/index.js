@@ -1,34 +1,18 @@
-import { useState, useEffect, forwardRef, useMemo } from "react";
+import { useState, forwardRef, useMemo } from "react";
 
-import { Media, MeshIndexMap } from "@pano-to-mesh/three";
-import { MEDIA_2D, MEDIA_3D } from "../MediaManager/types";
+import { MeshIndexMap } from "@pano-to-mesh/three";
+import useMesh from "./useMesh";
+import { MEDIA_3D } from "../MediaManager/types";
+import { useUpdateModel } from "@pano-to-mesh/three/hooks";
 
-const Mesh = ({ type, data, transformation, updateRaycasterMesh }) => {
-  const [mesh, setMesh] = useState(null);
-  useEffect(() => {
-    const getMesh = async (type) => {
-      if (type === MEDIA_3D.PLACEHOLDER_3D) {
-        return Media.getBoxMesh();
-      } else if (type === MEDIA_3D.MODAL) {
-        return await Media.getModal(data);
-      } else if (Object.values(MEDIA_2D).includes(type)) {
-        return Media.getPlaneMesh();
-      }
-    };
+const Basic = (props) => {
+  useMesh(props);
+  return null;
+};
 
-    getMesh(type).then(setMesh);
-  }, [type, data]);
-
-  useEffect(() => {
-    if (!mesh) return;
-    mesh.setTransform(transformation);
-    updateRaycasterMesh(mesh);
-
-    return () => {
-      updateRaycasterMesh(null);
-    };
-  }, [mesh, transformation, updateRaycasterMesh]);
-
+const Model = (props) => {
+  const mesh = useMesh(props);
+  useUpdateModel(mesh, props.data);
   return null;
 };
 
@@ -51,15 +35,18 @@ const ObjectSelector = ({ media, mouse, ...props }, ref) => {
 
   return (
     <>
-      {media.map((data, index) => (
-        <Mesh
-          key={index}
-          type={data.type}
-          data={data.data}
-          transformation={data.transformation}
-          updateRaycasterMesh={updateRaycasterMesh[index]}
-        />
-      ))}
+      {media.map((data, index) => {
+        const Component = data.type === MEDIA_3D.MODEL ? Model : Basic;
+        return (
+          <Component
+            key={index}
+            type={data.type}
+            data={data.data}
+            transformation={data.transformation}
+            updateRaycasterMesh={updateRaycasterMesh[index]}
+          />
+        );
+      })}
       <MeshIndexMap
         meshes={raycasterMeshes}
         mouse={mouse}

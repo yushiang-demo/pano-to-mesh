@@ -63,28 +63,38 @@ const loadAnimations = (gltf) => {
   const actions = animations.map((clip) => {
     const { name, duration } = clip;
     const action = mixer.clipAction(clip);
-    const play = (time) => {
-      action.enabled = true;
-      action.setEffectiveTimeScale(1);
-      action.setEffectiveWeight(1);
-      action.play();
-      mixer.setTime(time);
-    };
+    action.enabled = true;
+    action.setEffectiveTimeScale(1);
 
-    return { name, duration, play };
+    return { name, duration, action };
   });
 
-  return actions;
+  let current = null;
+  const play = (clip) => {
+    if (current) {
+      current.action.setEffectiveWeight(0);
+      current.action.reset();
+    }
+
+    current = actions.find(({ name }) => name === clip);
+    if (current) {
+      current.action.setEffectiveWeight(1);
+      current.action.play();
+      mixer.update();
+    }
+  };
+
+  const setTime = (normalizedTime) => {
+    const time = current.duration * normalizedTime;
+    mixer.setTime(time);
+  };
+
+  return { play, setTime };
 };
 
 export const getModal = async ({ src, clip }) => {
   const gltf = await loadGLB(src);
-  const animations = loadAnimations(gltf);
-
-  const targetAnimation = animations.find(({ name }) => name === clip);
-  if (targetAnimation) {
-    targetAnimation.play();
-  }
+  const animation = loadAnimations(gltf);
 
   const normalizeGroup = new THREE.Group();
   normalizeGroup.rotateX(Math.PI / 2);
@@ -98,6 +108,7 @@ export const getModal = async ({ src, clip }) => {
     if (object.isMesh) {
       boundingBox.expandByObject(object);
       object.frustumCulled = false;
+      object.castShadow = true;
     }
   });
 
@@ -131,7 +142,7 @@ export const getModal = async ({ src, clip }) => {
   return {
     object,
     setTransform,
-    animations,
+    animation,
     dispose,
   };
 };
