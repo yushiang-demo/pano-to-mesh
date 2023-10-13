@@ -6,8 +6,7 @@ const GLBModel = ({ three, position, scale, quaternion, data }) => {
   const [mesh, setMesh] = useState(null);
 
   useEffect(() => {
-    const { src } = data;
-    getModal({ src }).then(setMesh);
+    getModal({ src: data.src }).then(setMesh);
   }, [data.src]);
   useUpdateModel(mesh, data);
 

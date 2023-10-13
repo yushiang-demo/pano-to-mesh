@@ -22,14 +22,12 @@ export const useGLTFAnimationNames = ({ src }) => {
 export const useUpdateModel = (mesh, data) => {
   useEffect(() => {
     if (!mesh) return;
-    const { clip, time } = data;
-    mesh.animation.play(clip);
-    mesh.animation.setTime(time);
+    mesh.animation.play(data.clip);
+    mesh.animation.setTime(data.time);
   }, [mesh, data.clip, data.time]);
 
   useEffect(() => {
     if (!mesh) return;
-    const { time } = data;
-    mesh.animation.setTime(time);
+    mesh.animation.setTime(data.time);
   }, [mesh, data.time]);
 };

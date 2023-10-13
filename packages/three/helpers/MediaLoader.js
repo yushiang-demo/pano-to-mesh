@@ -92,7 +92,7 @@ const loadAnimations = (gltf) => {
   return { play, setTime };
 };
 
-export const getModal = async ({ src, clip }) => {
+export const getModal = async ({ src }) => {
   const gltf = await loadGLB(src);
   const animation = loadAnimations(gltf);
 
