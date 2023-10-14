@@ -39,24 +39,28 @@ function Three({ canvas, alpha = true, interactElement }) {
     renderer.setSize(width, height);
   };
 
-  const addBeforeRenderFunction = (func) => {
-    let id = THREE.MathUtils.generateUUID();
+  const getEventRegister = (funcs) => {
+    return (func) => {
+      let id = THREE.MathUtils.generateUUID();
 
-    while (customRender[id] !== undefined) {
-      id = THREE.MathUtils.generateUUID();
-    }
+      while (funcs[id] !== undefined) {
+        id = THREE.MathUtils.generateUUID();
+      }
 
-    customRender[id] = func;
-    return () => {
-      delete customRender[id];
+      funcs[id] = func;
+      return () => {
+        delete funcs[id];
+      };
     };
   };
+
+  const addBeforeRenderEvent = getEventRegister(customRender);
 
   return {
     destroy,
     setCanvasSize,
     scene,
-    addBeforeRenderFunction,
+    addBeforeRenderEvent,
     renderer,
     cameraControls,
   };

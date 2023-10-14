@@ -1,65 +1,58 @@
-import { useEffect, useState, forwardRef } from "react";
+import { useEffect, useRef, forwardRef } from "react";
 import * as THREE from "three";
 import Shaders from "../../shaders";
 import { RENDER_ORDER } from "../../constant";
 
 const TEXTURE_SIZE = 4096;
 const MeshIndexMap = ({ three, meshes, mouse }, ref) => {
-  const [frameBuffer] = useState(
-    new THREE.WebGLRenderTarget(TEXTURE_SIZE, TEXTURE_SIZE)
+  const materialRef = useRef(
+    new THREE.ShaderMaterial({
+      transparent: true,
+      vertexShader: Shaders.vertexShaders.screenPosition,
+      fragmentShader: Shaders.fragmentShaders.hoverEffect,
+    })
   );
-
-  useEffect(() => {
-    return () => {
-      frameBuffer.dispose();
-    };
-  }, [frameBuffer]);
-
   useEffect(() => {
     const colors = meshes.map((_, index) =>
       Math.trunc((index / meshes.length) * 0xffffff)
     );
-    const coloredMesh = meshes.map((mesh, index) => {
-      mesh.object.traverse((child) => {
-        if (child.material) {
-          child.material.dispose();
-          child.material = new THREE.MeshBasicMaterial({
-            color: colors[index],
-          });
-        }
+    const coloredMesh = meshes
+      .filter((mesh) => !!mesh)
+      .map((mesh, index) => {
+        mesh.object.traverse((child) => {
+          if (child.material) {
+            child.material.dispose();
+            child.material = new THREE.MeshBasicMaterial({
+              color: colors[index],
+            });
+          }
+        });
+        return mesh;
       });
-      return mesh;
-    });
 
     const {
-      addBeforeRenderFunction,
+      addBeforeRenderEvent,
       cameraControls,
       scene: globalScene,
       renderer,
     } = three;
 
     const scene = new THREE.Scene();
-
-    const render = (renderer) => {
+    const frameBuffer = new THREE.WebGLRenderTarget(TEXTURE_SIZE, TEXTURE_SIZE);
+    const render = () => {
       renderer.setRenderTarget(frameBuffer);
       renderer.render(scene, cameraControls.getCamera());
       renderer.setRenderTarget(null);
     };
 
-    const stopRenderTexture = addBeforeRenderFunction(render);
+    const stopRenderTexture = addBeforeRenderEvent(render);
 
     coloredMesh.forEach((mesh) => scene.add(mesh.object));
 
     const geometry = new THREE.PlaneGeometry(1, 1);
-    const material = new THREE.ShaderMaterial({
-      transparent: true,
-      vertexShader: Shaders.vertexShaders.screenPosition,
-      fragmentShader: Shaders.fragmentShaders.hoverEffect,
-    });
-    const [mouseX, mouseY] = mouse;
+    const material = materialRef.current;
     Shaders.setUniforms.hoverEffect(material, {
       map: frameBuffer.texture,
-      mouse: new THREE.Vector2(mouseX, mouseY),
     });
     const mesh = new THREE.Mesh(geometry, material);
     mesh.renderOrder = RENDER_ORDER.HOVER_PANEL;
@@ -94,6 +87,7 @@ const MeshIndexMap = ({ three, meshes, mouse }, ref) => {
       };
     }
 
+    render();
     return () => {
       coloredMesh.forEach((mesh) => scene.remove(mesh.object));
       coloredMesh.forEach((mesh) => mesh.dispose());
@@ -101,8 +95,20 @@ const MeshIndexMap = ({ three, meshes, mouse }, ref) => {
       geometry.dispose();
       globalScene.remove(mesh);
       stopRenderTexture();
+
+      frameBuffer.dispose();
+      frameBuffer.texture.dispose();
     };
-  }, [three, meshes, mouse, frameBuffer, ref]);
+  }, [three, meshes, ref]);
+
+  useEffect(() => {
+    if (!materialRef.current) return;
+    const material = materialRef.current;
+    const [mouseX, mouseY] = mouse || [-1, -1];
+    Shaders.setUniforms.hoverEffect(material, {
+      mouse: new THREE.Vector2(mouseX, mouseY),
+    });
+  }, [mouse]);
 
   return null;
 };

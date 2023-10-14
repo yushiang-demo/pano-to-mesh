@@ -7,11 +7,19 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 
 ### Added
 
+- Add media mesh loads from `.glb` and includes animations. (https://github.com/yushiang-demo/pano-to-mesh/pull/51)
+
 ### Changed
 
 ### Fixed
 
+- Fix `MeshIndexMap` update single mesh make everything re-render. (https://github.com/yushiang-demo/pano-to-mesh/pull/52) (https://github.com/yushiang-demo/pano-to-mesh/pull/53)
+
+- Fix textbox in floating menu with `react-rnd` can't select whole text. (https://github.com/yushiang-demo/pano-to-mesh/pull/54)
+
 ### Removed
+
+- Rename `addBeforeRenderFunction` to `addBeforeRenderEvent`. (https://github.com/yushiang-demo/pano-to-mesh/pull/52)
 
 ## [1.3.0] - 2023-10-08
 

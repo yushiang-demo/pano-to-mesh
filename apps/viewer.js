@@ -5,6 +5,7 @@ import {
   ThreeCanvas,
   PanoramaProjectionMesh,
   BackgroundPanel,
+  Light,
 } from "@pano-to-mesh/three";
 import useClick2AddWalls from "../hooks/useClick2AddWalls";
 import MediaManager from "../components/MediaManager";
@@ -46,6 +47,7 @@ const Viewer = ({ data }) => {
   return (
     <ThreeCanvas dev={dev} ref={threeRef}>
       <BackgroundPanel />
+      <Light />
       <PanoramaProjectionMesh {...textureMeshProps} onLoad={onLoad} />
       <MediaManager data={media} />
     </ThreeCanvas>

@@ -7,14 +7,13 @@ import React, {
 } from "react";
 
 import {
-  Media,
   Loaders,
   ThreeCanvas,
   BackgroundPanel,
   PanoramaProjectionMesh,
-  MeshIndexMap,
   TransformControls,
   TRANSFORM_CONTROLS_MODE,
+  Light,
 } from "@pano-to-mesh/three";
 import useClick2AddWalls from "../../../hooks/useClick2AddWalls";
 import useDragTransformation from "../../../hooks/useDragTransformation";
@@ -27,28 +26,13 @@ import { getNewMedia } from "./media";
 import ToolbarRnd from "../../../components/ToolbarRnd";
 import Icons from "../../../components/Icon";
 import PropertySetting from "../../../components/PropertySettings";
-
-const mapMediaToRaycasterMesh = (media) => {
-  const { transformation, type } = media;
-
-  const mesh = ((type) => {
-    if (Object.values(MEDIA_3D).includes(type)) {
-      return Media.getBoxMesh();
-    } else if (Object.values(MEDIA_2D).includes(type)) {
-      return Media.getPlaneMesh();
-    }
-  })(type);
-
-  mesh.setTransform(transformation);
-
-  return mesh;
-};
+import ObjectSelector from "../../../components/ObjectSelector";
 
 const dev = process.env.NODE_ENV === "development";
 const Editor = ({ data }) => {
   const threeRef = useRef(null);
   const mediaIndexMap = useRef(null);
-  const [raycasterTarget, setRaycasterTarget] = useState(null);
+  const [baseMesh, setBaseMesh] = useState(null);
   const [mouse, setMouse] = useState([0, 0]);
   const [camera, setCamera] = useState(null);
   const [transformMode, setTransformMode] = useState(
@@ -58,8 +42,6 @@ const Editor = ({ data }) => {
   const [focusedIndex, setFocusedIndex] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
   const [media, setMedia] = useState(data.media || []);
-
-  const raycasterMeshes = media.map(mapMediaToRaycasterMesh);
   const geometryInfo = useMemo(
     () => ({
       floorY: data.floorY,
@@ -80,10 +62,7 @@ const Editor = ({ data }) => {
   };
   const { transformation, eventHandlers: handleAddPlaceholder } =
     useDragTransformation({
-      raycasterTarget: [
-        raycasterTarget,
-        ...raycasterMeshes.map(({ object }) => object),
-      ],
+      raycasterTarget: [baseMesh],
       camera,
       onEnd: (transformation) => {
         const newMedia = getNewMedia(newMediaType[mode], transformation);
@@ -135,7 +114,7 @@ const Editor = ({ data }) => {
 
   const onLoad = useCallback((mesh) => {
     threeRef.current.cameraControls.focus(mesh, false, false, false);
-    setRaycasterTarget(mesh);
+    setBaseMesh(mesh);
     setCamera(threeRef.current.cameraControls.getCamera());
   }, []);
 
@@ -176,17 +155,14 @@ const Editor = ({ data }) => {
   return (
     <>
       <ThreeCanvas dev={dev} ref={threeRef} {...eventHandlers}>
+        <Light />
         <BackgroundPanel />
         <PanoramaProjectionMesh {...textureMeshProps} onLoad={onLoad} />
         <MediaManager
           data={previewMedia ? [...media, previewMedia] : media}
           readonly
         />
-        <MeshIndexMap
-          meshes={raycasterMeshes}
-          mouse={mouse}
-          ref={mediaIndexMap}
-        />
+        <ObjectSelector media={media} mouse={mouse} ref={mediaIndexMap} />
         {focusedMedia && (
           <TransformControls
             mode={transformMode}
