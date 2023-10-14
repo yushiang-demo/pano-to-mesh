@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 
 ### Added
 
+- Add media mesh loads from `.glb` and includes animations. (https://github.com/yushiang-demo/pano-to-mesh/pull/51)
+
 ### Changed
 
 ### Fixed
