@@ -31,6 +31,7 @@ const Editor = ({ data }) => {
   });
 
   const props = {
+    ...data,
     floorY,
     ceilingY,
     layout2D,
