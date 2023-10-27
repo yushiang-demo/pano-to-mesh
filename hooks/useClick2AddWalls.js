@@ -59,24 +59,9 @@ const useClick2AddWalls = ({
     setPreviewImageCoord(null);
     setDragging(false);
   };
-  const onMouseMove = ({ normalizedX, normalizedY, width, height }) => {
+  const onMouseMove = ({ normalizedX, normalizedY }) => {
     if (dragging && parseMousePointTo3D([normalizedX, normalizedY]))
       setPreviewImageCoord([normalizedX, normalizedY]);
-    else {
-      const point = imageCoord.find(
-        pointSelector(
-          normalizedX,
-          normalizedY,
-          ({ x, y }) => ({
-            x: x * width,
-            y: y * height,
-          }),
-          selectThresholdPixel
-        )
-      );
-      if (point) document.body.style.cursor = "move";
-      else document.body.style.cursor = "copy";
-    }
   };
 
   const onMouseUp = ({ normalizedX, normalizedY }) => {

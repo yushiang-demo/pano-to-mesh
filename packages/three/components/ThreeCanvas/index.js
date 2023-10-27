@@ -136,9 +136,9 @@ const ThreeCanvas = (
     <div
       ref={WrapperRef}
       style={WrapperStyle}
-      onMouseDown={handleMouseEvents(onMouseDown)}
-      onMouseMove={handleMouseEvents(onMouseMove)}
-      onMouseUp={handleMouseEvents(onMouseUp)}
+      onPointerDown={handleMouseEvents(onMouseDown)}
+      onPointerMove={handleMouseEvents(onMouseMove)}
+      onPointerUp={handleMouseEvents(onMouseUp)}
     >
       {dev && <pre style={monitorStyle}>{monitor}</pre>}
       <div ref={css3DWrapperRef} style={Css3DContainerStyle} />

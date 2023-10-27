@@ -24,7 +24,6 @@ const ModelSettings = ({ data, onChange }) => {
         step={1e-3}
         value={data.time}
         onChange={onChangeTime}
-        onMouseDown={(e) => e.stopPropagation()}
       />
     </>
   );
