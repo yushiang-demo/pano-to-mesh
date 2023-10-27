@@ -17,9 +17,13 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 
 - Fix textbox in floating menu with `react-rnd` can't select whole text. (https://github.com/yushiang-demo/pano-to-mesh/pull/54)
 
+- Fix textbox in floating menu with `react-rnd` can't select whole text. (https://github.com/yushiang-demo/pano-to-mesh/pull/54)
+- Fix editor supports touch events on mobile devices. (https://github.com/yushiang-demo/pano-to-mesh/pull/59)
+
 ### Removed
 
 - Rename `addBeforeRenderFunction` to `addBeforeRenderEvent`. (https://github.com/yushiang-demo/pano-to-mesh/pull/52)
+- Remove `react-rnd` package for floating tool box. (https://github.com/yushiang-demo/pano-to-mesh/pull/59)
 
 ## [1.3.0] - 2023-10-08
 
