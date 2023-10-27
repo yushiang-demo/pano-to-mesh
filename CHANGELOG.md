@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 ### Added
 
 - Add media mesh loads from `.glb` and includes animations. (https://github.com/yushiang-demo/pano-to-mesh/pull/51)
+- Add navigation menu to preview between editors. (https://github.com/yushiang-demo/pano-to-mesh/pull/58)
 
 ### Changed
 
@@ -16,6 +17,8 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 - Fix `MeshIndexMap` update single mesh make everything re-render. (https://github.com/yushiang-demo/pano-to-mesh/pull/52) (https://github.com/yushiang-demo/pano-to-mesh/pull/53)
 
 - Fix textbox in floating menu with `react-rnd` can't select whole text. (https://github.com/yushiang-demo/pano-to-mesh/pull/54)
+
+- Fix layout editor removes media data. (https://github.com/yushiang-demo/pano-to-mesh/pull/58)
 
 ### Removed
 
