@@ -18,6 +18,7 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 - Fix textbox in floating menu with `react-rnd` can't select whole text. (https://github.com/yushiang-demo/pano-to-mesh/pull/54)
 - Fix editor supports touch events on mobile devices. (https://github.com/yushiang-demo/pano-to-mesh/pull/59)
 - Fix layout editor removes media data. (https://github.com/yushiang-demo/pano-to-mesh/pull/58)
+- Fix unable to delete 2d layout points. (https://github.com/yushiang-demo/pano-to-mesh/pull/60)
 
 ### Removed
 
