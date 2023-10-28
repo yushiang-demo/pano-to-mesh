@@ -2,6 +2,10 @@ import { useCallback, useEffect, useState } from "react";
 
 import { Core } from "@pano-to-mesh/three";
 
+const outOfRange = (value) => {
+  return value > 1.0 || value < 0.0;
+};
+
 const pointSelector = (x, y, unitParser, threshold) => {
   return ([candidateX, candidateY]) => {
     const normalizedVector = {
@@ -41,6 +45,9 @@ const useClick2AddWalls = ({
 
   const parseMousePointTo3D = useCallback(
     ([normalizedX, normalizedY]) => {
+      if (outOfRange(normalizedX) || outOfRange(normalizedY)) {
+        return null;
+      }
       const { longitude, latitude } =
         Core.Math.coordinates.normalizedXY2Spherical(normalizedX, normalizedY);
       const { x, y, z } = Core.Math.coordinates.spherical2CartesianDirection(
@@ -55,22 +62,22 @@ const useClick2AddWalls = ({
     [panoramaOrigin, geometryInfo]
   );
 
-  const onMouseLeave = () => {
-    setPreviewImageCoord(null);
-    setDragging(false);
-  };
   const onMouseMove = ({ normalizedX, normalizedY }) => {
-    if (dragging && parseMousePointTo3D([normalizedX, normalizedY]))
+    if (dragging && parseMousePointTo3D([normalizedX, normalizedY])) {
       setPreviewImageCoord([normalizedX, normalizedY]);
+    } else {
+      setPreviewImageCoord(null);
+    }
   };
 
   const onMouseUp = ({ normalizedX, normalizedY }) => {
     if (dragging) {
-      if (parseMousePointTo3D([normalizedX, normalizedY]))
+      if (parseMousePointTo3D([normalizedX, normalizedY])) {
         setImageCoord([
           ...imageCoord,
           parser2DCeilingCoordToFloorCoord([normalizedX, normalizedY]),
         ]);
+      }
       setPreviewImageCoord(null);
       setDragging(false);
     }
@@ -119,7 +126,6 @@ const useClick2AddWalls = ({
       onMouseDown,
       onMouseUp,
       onMouseMove,
-      onMouseLeave,
     },
   };
 };
