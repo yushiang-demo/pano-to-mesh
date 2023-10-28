@@ -1,5 +1,10 @@
 import React from "react";
-import { Css3DObject, Placeholder, ChromaKeyPanel } from "@pano-to-mesh/three";
+import {
+  Css3DObject,
+  Placeholder,
+  ChromaKeyPanel,
+  GLBModel,
+} from "@pano-to-mesh/three";
 import { MEDIA_2D, MEDIA_3D } from "./types";
 import CssImage from "./CssImage";
 import Video from "./Video";
@@ -50,8 +55,12 @@ const MediaManager = ({ three, data, readonly: globalReadonly }) => {
       );
     }
 
+    if (type === MEDIA_3D.MODEL) {
+      return <GLBModel three={three} {...transformation} data={data} />;
+    }
+
     if (type === MEDIA_3D.PLACEHOLDER_3D) {
-      return <Placeholder.Modal three={three} {...transformation} />;
+      return <Placeholder.Model three={three} {...transformation} />;
     }
 
     if (type === MEDIA_2D.PLACEHOLDER_2D) {

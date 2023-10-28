@@ -13,6 +13,30 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 
 ### Removed
 
+## [1.4.0] - 2023-10-28
+
+### Added
+
+- Add media mesh loads from `.glb` and includes animations. (https://github.com/yushiang-demo/pano-to-mesh/pull/51)
+- Add navigation menu to preview between editors. (https://github.com/yushiang-demo/pano-to-mesh/pull/58)
+
+### Changed
+
+- Change recommended panorama in layout 2d to our resource. (https://github.com/yushiang-demo/pano-to-mesh/pull/61)
+
+### Fixed
+
+- Fix `MeshIndexMap` update single mesh make everything re-render. (https://github.com/yushiang-demo/pano-to-mesh/pull/52) (https://github.com/yushiang-demo/pano-to-mesh/pull/53)
+- Fix textbox in floating menu with `react-rnd` can't select whole text. (https://github.com/yushiang-demo/pano-to-mesh/pull/54)
+- Fix editor supports touch events on mobile devices. (https://github.com/yushiang-demo/pano-to-mesh/pull/59)
+- Fix layout editor removes media data. (https://github.com/yushiang-demo/pano-to-mesh/pull/58)
+- Fix unable to delete 2d layout points. (https://github.com/yushiang-demo/pano-to-mesh/pull/60)
+
+### Removed
+
+- Rename `addBeforeRenderFunction` to `addBeforeRenderEvent`. (https://github.com/yushiang-demo/pano-to-mesh/pull/52)
+- Remove `react-rnd` package for floating tool box. (https://github.com/yushiang-demo/pano-to-mesh/pull/59)
+
 ## [1.3.0] - 2023-10-08
 
 ### Added
@@ -131,7 +155,8 @@ Codes without pull requests won't be recorded.
 
 ### Removed
 
-[unreleased]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.3.0...HEAD
+[unreleased]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.4.0...HEAD
+[1.4.0]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.1.1...v1.2.0
 [1.1.1]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.1.0...v1.1.1

@@ -42,7 +42,7 @@ const ThreeCanvas = (
       destroy,
       setCanvasSize,
       scene,
-      addBeforeRenderFunction,
+      addBeforeRenderEvent,
       renderer,
       cameraControls,
     } = new Three({
@@ -55,13 +55,13 @@ const ThreeCanvas = (
       camera: cameraControls.getCamera(),
     });
 
-    const stopRenderCss3D = addBeforeRenderFunction(() => {
+    const stopRenderCss3D = addBeforeRenderEvent(() => {
       css3DControls.render();
     });
 
     const publicProps = {
       scene,
-      addBeforeRenderFunction,
+      addBeforeRenderEvent,
       renderer,
       cameraControls,
       css3DControls,
@@ -69,14 +69,14 @@ const ThreeCanvas = (
 
     setThree(publicProps);
 
-    const cancelResizeListener = addBeforeRenderFunction(() => {
+    const cancelResizeListener = addBeforeRenderEvent(() => {
       const { clientWidth: width, clientHeight: height } = WrapperRef.current;
       setCanvasSize(width, height);
       css3DControls.setSize(width, height);
     });
 
     const stopMonitorMemory = dev
-      ? addBeforeRenderFunction((renderer) => {
+      ? addBeforeRenderEvent((renderer) => {
           const displayObject = renderer.info.memory;
           const jsonText = JSON.stringify(displayObject, null, 4);
 
@@ -136,9 +136,9 @@ const ThreeCanvas = (
     <div
       ref={WrapperRef}
       style={WrapperStyle}
-      onMouseDown={handleMouseEvents(onMouseDown)}
-      onMouseMove={handleMouseEvents(onMouseMove)}
-      onMouseUp={handleMouseEvents(onMouseUp)}
+      onPointerDown={handleMouseEvents(onMouseDown)}
+      onPointerMove={handleMouseEvents(onMouseMove)}
+      onPointerUp={handleMouseEvents(onMouseUp)}
     >
       {dev && <pre style={monitorStyle}>{monitor}</pre>}
       <div ref={css3DWrapperRef} style={Css3DContainerStyle} />

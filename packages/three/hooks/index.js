@@ -1,5 +1,2 @@
-import { useTexture } from "./texture";
-
-const hooks = { useTexture };
-
-export default hooks;
+export { useTexture } from "./texture";
+export { useGLTFAnimationNames, useUpdateModel } from "./gltf";

@@ -52,6 +52,8 @@ const files = {
   scale: `${IconFolder}/scale.svg`,
   rotate: `${IconFolder}/rotate.svg`,
   trash: `${IconFolder}/trash.svg`,
+  arrange: `${IconFolder}/arrange.svg`,
+  preview: `${IconFolder}/preview.svg`,
 };
 
 const Icons = Object.keys(files).reduce((acc, key) => {
