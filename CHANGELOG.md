@@ -7,6 +7,16 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 
 ### Added
 
+### Changed
+
+### Fixed
+
+### Removed
+
+## [1.4.0] - 2023-10-28
+
+### Added
+
 - Add media mesh loads from `.glb` and includes animations. (https://github.com/yushiang-demo/pano-to-mesh/pull/51)
 - Add navigation menu to preview between editors. (https://github.com/yushiang-demo/pano-to-mesh/pull/58)
 
@@ -145,7 +155,8 @@ Codes without pull requests won't be recorded.
 
 ### Removed
 
-[unreleased]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.3.0...HEAD
+[unreleased]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.4.0...HEAD
+[1.4.0]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.1.1...v1.2.0
 [1.1.1]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.1.0...v1.1.1
