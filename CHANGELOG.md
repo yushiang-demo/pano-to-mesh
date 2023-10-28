@@ -12,6 +12,8 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 
 ### Changed
 
+- Change recommended panorama in layout 2d to our resource. (https://github.com/yushiang-demo/pano-to-mesh/pull/61)
+
 ### Fixed
 
 - Fix `MeshIndexMap` update single mesh make everything re-render. (https://github.com/yushiang-demo/pano-to-mesh/pull/52) (https://github.com/yushiang-demo/pano-to-mesh/pull/53)
