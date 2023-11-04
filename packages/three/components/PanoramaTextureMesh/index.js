@@ -65,7 +65,20 @@ const PanoramaTextureMesh = (
       dispose: disposeTexturePostEffect,
       material: dilationMaterial,
     } = TexturePostEffect(texture, Shaders.fragmentShaders.dilation);
-    const stopTexturePostEffect = addBeforeRenderEvent(renderDilatedTexture);
+
+    const renderOnce = (render) => {
+      let rendered = false;
+      return (props) => {
+        if (rendered) return;
+
+        rendered = true;
+        return render(props);
+      };
+    };
+
+    const stopTexturePostEffect = addBeforeRenderEvent(
+      renderOnce(renderDilatedTexture)
+    );
     Shaders.setUniforms.dilation(dilationMaterial, {
       kernel: 5,
     });
