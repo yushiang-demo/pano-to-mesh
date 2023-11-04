@@ -9,6 +9,8 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 
 ### Changed
 
+- Enhance performance of `PanoramaTextureMesh`. (https://github.com/yushiang-demo/pano-to-mesh/pull/62)
+
 ### Fixed
 
 ### Removed
