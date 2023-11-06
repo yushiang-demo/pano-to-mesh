@@ -1,3 +1,4 @@
+import { v4 as uuid } from "uuid";
 import { useState, forwardRef, useMemo } from "react";
 
 import { MeshIndexMap } from "@pano-to-mesh/three";
@@ -39,7 +40,7 @@ const ObjectSelector = ({ media, mouse, ...props }, ref) => {
         const Component = data.type === MEDIA_3D.MODEL ? Model : Basic;
         return (
           <Component
-            key={index}
+            key={uuid()}
             type={data.type}
             data={data.data}
             transformation={data.transformation}
