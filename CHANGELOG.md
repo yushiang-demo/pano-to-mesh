@@ -13,6 +13,8 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 
 ### Fixed
 
+- Fix size error and animation not found issue when changing mesh. (https://github.com/yushiang-demo/pano-to-mesh/pull/63)
+
 ### Removed
 
 ## [1.4.0] - 2023-10-28
