@@ -85,6 +85,7 @@ const loadAnimations = (gltf) => {
   };
 
   const setTime = (normalizedTime) => {
+    if (!current) return;
     const time = current.duration * normalizedTime;
     mixer.setTime(time);
   };
@@ -105,8 +106,9 @@ export const getModal = async ({ src }) => {
   const boundingBox = new THREE.Box3();
 
   mesh.traverse((object) => {
+    boundingBox.expandByObject(object);
+
     if (object.isMesh) {
-      boundingBox.expandByObject(object);
       object.frustumCulled = false;
       object.castShadow = true;
     }
