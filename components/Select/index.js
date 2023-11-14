@@ -1,4 +1,3 @@
-import { v4 as uuid } from "uuid";
 import { Wrapper, Current, Menu, MenuItem, HighlightMenuItem } from "./styled";
 
 const Select = ({ candidates, current, onChange }) => {
@@ -11,7 +10,7 @@ const Select = ({ candidates, current, onChange }) => {
             candidate === current ? HighlightMenuItem : MenuItem;
           return (
             <Component
-              key={uuid()}
+              key={candidate}
               onClick={() => {
                 onChange(candidate);
               }}

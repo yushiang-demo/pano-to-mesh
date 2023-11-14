@@ -1,4 +1,3 @@
-import { v4 as uuid } from "uuid";
 import React from "react";
 import {
   Css3DObject,
@@ -70,7 +69,7 @@ const MediaManager = ({ three, data, readonly: globalReadonly }) => {
   };
 
   return data.map((prop) => (
-    <React.Fragment key={uuid()}>{getMediaByType(prop)}</React.Fragment>
+    <React.Fragment key={prop.id}>{getMediaByType(prop)}</React.Fragment>
   ));
 };
 

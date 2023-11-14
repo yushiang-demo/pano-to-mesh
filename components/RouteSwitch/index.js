@@ -1,4 +1,3 @@
-import { v4 as uuid } from "uuid";
 import { useRouter } from "next/router";
 import Icons from "../Icon";
 import { FloatDiv, Item } from "./styled";
@@ -26,7 +25,7 @@ const RouterSwitch = ({ data }) => {
   return (
     <FloatDiv>
       {data.map(({ link, Icon }) => (
-        <Item key={uuid()} onClick={redirectTo(link)}>
+        <Item key={link} onClick={redirectTo(link)}>
           <Icon $highlight={needsHighlight(link)} />
         </Item>
       ))}
