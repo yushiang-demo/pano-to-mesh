@@ -9,6 +9,16 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 
 ### Changed
 
+### Fixed
+
+### Removed
+
+## [1.4.1] - 2023-11-14
+
+### Added
+
+### Changed
+
 - Enhance performance of `PanoramaTextureMesh`. (https://github.com/yushiang-demo/pano-to-mesh/pull/62)
 
 ### Fixed
@@ -161,7 +171,8 @@ Codes without pull requests won't be recorded.
 
 ### Removed
 
-[unreleased]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.4.0...HEAD
+[unreleased]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.4.1...HEAD
+[1.4.1]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.4.0...v1.4.1
 [1.4.0]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.1.1...v1.2.0
