@@ -4,10 +4,10 @@ const Light = ({ three }) => {
   useEffect(() => {
     const { scene } = three;
 
-    const light = new THREE.AmbientLight(0x404040); // soft white light
+    const light = new THREE.AmbientLight(0xffffff, 0.5); // soft white light
     scene.add(light);
 
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+    const directionalLight = new THREE.DirectionalLight(0xffffff);
     scene.add(directionalLight);
 
     return () => {

@@ -101,12 +101,9 @@ export const getModal = async ({ src }) => {
   normalizeGroup.rotateX(Math.PI / 2);
 
   const mesh = gltf.scene;
-  normalizeGroup.add(mesh);
-
-  const boundingBox = new THREE.Box3();
 
   mesh.traverse((object) => {
-    boundingBox.expandByObject(object);
+    object.updateMatrixWorld(true);
 
     if (object.isMesh) {
       object.frustumCulled = false;
@@ -114,12 +111,15 @@ export const getModal = async ({ src }) => {
     }
   });
 
+  const boundingBox = new THREE.Box3();
+  boundingBox.setFromObject(mesh, true);
   const size = new THREE.Vector3();
   boundingBox.getSize(size);
   const normalizeScale = Math.min(1 / size.x, 1 / size.y, 1 / size.z);
-  normalizeGroup.scale.set(normalizeScale, normalizeScale, normalizeScale);
+  normalizeGroup.scale.setScalar(normalizeScale);
 
   const object = new THREE.Group();
+  normalizeGroup.add(mesh);
   object.add(normalizeGroup);
 
   const dispose = () => {

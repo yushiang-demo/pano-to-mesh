@@ -23,7 +23,10 @@ const MeshIndexMap = ({ three, meshes, mouse }, ref) => {
           if (child.material) {
             child.material.dispose();
             child.material = new THREE.MeshBasicMaterial({
-              color: colors[index],
+              color: new THREE.Color().setHex(
+                colors[index],
+                THREE.LinearSRGBColorSpace
+              ),
             });
           }
         });
