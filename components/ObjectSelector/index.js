@@ -39,7 +39,7 @@ const ObjectSelector = ({ media, mouse, ...props }, ref) => {
         const Component = data.type === MEDIA_3D.MODEL ? Model : Basic;
         return (
           <Component
-            key={index}
+            key={data.id}
             type={data.type}
             data={data.data}
             transformation={data.transformation}

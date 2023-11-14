@@ -5,12 +5,12 @@ const Select = ({ candidates, current, onChange }) => {
     <Wrapper>
       <Current tabIndex={0}>{current}</Current>
       <Menu tabIndex={1}>
-        {candidates.map((candidate,index) => {
+        {candidates.map((candidate) => {
           const Component =
             candidate === current ? HighlightMenuItem : MenuItem;
           return (
             <Component
-              key={index}
+              key={candidate}
               onClick={() => {
                 onChange(candidate);
               }}

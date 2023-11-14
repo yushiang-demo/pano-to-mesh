@@ -1,5 +1,7 @@
+FROM node:18-alpine AS base
+
 # Stage 1: Build the application
-FROM node:18-alpine as builder
+FROM base AS builder
 
 # Set the working directory
 WORKDIR /app
@@ -8,13 +10,13 @@ WORKDIR /app
 ENV NODE_ENV production
 
 # Copy source code
-COPY ./ ./
+COPY . .
 
 # Install and build
 RUN yarn && yarn build
 
 # Stage 2: Create the final image
-FROM node:18-alpine
+FROM base AS runner
 
 # Set the working directory
 WORKDIR /app

@@ -24,8 +24,8 @@ const RouterSwitch = ({ data }) => {
 
   return (
     <FloatDiv>
-      {data.map(({ link, Icon }, index) => (
-        <Item key={index} onClick={redirectTo(link)}>
+      {data.map(({ link, Icon }) => (
+        <Item key={link} onClick={redirectTo(link)}>
           <Icon $highlight={needsHighlight(link)} />
         </Item>
       ))}

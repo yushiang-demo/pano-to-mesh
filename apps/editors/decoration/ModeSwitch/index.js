@@ -13,9 +13,9 @@ const ModeSwitch = ({ mode, setMode, data }) => {
   const changeMode = (mode) => () => setMode(mode);
   return (
     <Toolbar>
-      {data.map(({ Component, targetMode }, index) => (
+      {data.map(({ Component, targetMode }) => (
         <Component
-          key={index}
+          key={targetMode}
           $highlight={mode === targetMode}
           onClick={changeMode(targetMode)}
         />

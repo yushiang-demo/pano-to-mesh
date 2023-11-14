@@ -11,6 +11,73 @@ export const TRANSFORM_CONTROLS_MODE = {
 const TransformControls = (() => {
   const object = new THREE.Mesh();
 
+  const initControls = ({ three, setTransformControls }) => {
+    const { scene, cameraControls } = three;
+
+    const control = new Controls(
+      cameraControls.getCamera(),
+      cameraControls.domElement
+    );
+    setTransformControls(control);
+    control.setSpace("local");
+    object.frustumCulled = false;
+    scene.add(object);
+
+    control.attach(object);
+    scene.add(control);
+
+    return () => {
+      scene.remove(object);
+      scene.remove(control);
+      control.dispose();
+    };
+  };
+
+  const bindChangedEvents = ({
+    three,
+    transformControls,
+    onChange,
+    onDraggingChanged,
+  }) => {
+    if (!transformControls) return;
+
+    const { cameraControls } = three;
+    const { onBeforeRender } = object;
+    const draggingChanged = (event) => {
+      const dragging = event.value;
+      onDraggingChanged(dragging);
+      cameraControls.setEnable(!dragging);
+      object.onBeforeRender = dragging
+        ? () => {
+            onChange({
+              position: object.position.toArray(),
+              scale: object.scale.toArray(),
+              quaternion: object.quaternion.toArray(),
+            });
+          }
+        : onBeforeRender;
+    };
+    transformControls.addEventListener("dragging-changed", draggingChanged);
+
+    return () => {
+      transformControls.removeEventListener(
+        "dragging-changed",
+        draggingChanged
+      );
+    };
+  };
+
+  const changeControlsMode = ({ mode, transformControls }) => {
+    if (!transformControls) return;
+    transformControls.setMode(mode);
+  };
+
+  const setControlsTransform = ({ position, scale, quaternion }) => {
+    if (position) object.position.fromArray(position);
+    if (quaternion) object.quaternion.fromArray(quaternion);
+    if (scale) object.scale.fromArray(scale);
+  };
+
   return ({
     three,
     position,
@@ -23,65 +90,24 @@ const TransformControls = (() => {
     const [transformControls, setTransformControls] = useState(null);
 
     useEffect(() => {
-      const { scene, cameraControls } = three;
-
-      const control = new Controls(
-        cameraControls.getCamera(),
-        cameraControls.domElement
-      );
-      setTransformControls(control);
-      control.setSpace("local");
-      object.frustumCulled = false;
-      scene.add(object);
-
-      control.attach(object);
-      scene.add(control);
-
-      return () => {
-        scene.remove(object);
-        scene.remove(control);
-        control.dispose();
-      };
+      return initControls({ three, setTransformControls });
     }, [three]);
 
     useEffect(() => {
-      if (!transformControls) return;
-
-      const { cameraControls } = three;
-      const { onBeforeRender } = object;
-      const draggingChanged = (event) => {
-        const dragging = event.value;
-        onDraggingChanged(dragging);
-        cameraControls.setEnable(!dragging);
-        object.onBeforeRender = dragging
-          ? () => {
-              onChange({
-                position: object.position.toArray(),
-                scale: object.scale.toArray(),
-                quaternion: object.quaternion.toArray(),
-              });
-            }
-          : onBeforeRender;
-      };
-      transformControls.addEventListener("dragging-changed", draggingChanged);
-
-      return () => {
-        transformControls.removeEventListener(
-          "dragging-changed",
-          draggingChanged
-        );
-      };
+      return bindChangedEvents({
+        three,
+        transformControls,
+        onChange,
+        onDraggingChanged,
+      });
     }, [three, transformControls, onChange, onDraggingChanged]);
 
     useEffect(() => {
-      if (!transformControls) return;
-      transformControls.setMode(mode);
-    }, [three, mode, transformControls]);
+      changeControlsMode({ mode, transformControls });
+    }, [mode, transformControls]);
 
     useEffect(() => {
-      if (position) object.position.fromArray(position);
-      if (quaternion) object.quaternion.fromArray(quaternion);
-      if (scale) object.scale.fromArray(scale);
+      setControlsTransform({ position, scale, quaternion });
     }, [position, scale, quaternion]);
 
     return null;

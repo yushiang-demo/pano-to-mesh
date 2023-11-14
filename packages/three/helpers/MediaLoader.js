@@ -85,6 +85,7 @@ const loadAnimations = (gltf) => {
   };
 
   const setTime = (normalizedTime) => {
+    if (!current) return;
     const time = current.duration * normalizedTime;
     mixer.setTime(time);
   };
@@ -100,24 +101,25 @@ export const getModal = async ({ src }) => {
   normalizeGroup.rotateX(Math.PI / 2);
 
   const mesh = gltf.scene;
-  normalizeGroup.add(mesh);
-
-  const boundingBox = new THREE.Box3();
 
   mesh.traverse((object) => {
+    object.updateMatrixWorld(true);
+
     if (object.isMesh) {
-      boundingBox.expandByObject(object);
       object.frustumCulled = false;
       object.castShadow = true;
     }
   });
 
+  const boundingBox = new THREE.Box3();
+  boundingBox.setFromObject(mesh, true);
   const size = new THREE.Vector3();
   boundingBox.getSize(size);
   const normalizeScale = Math.min(1 / size.x, 1 / size.y, 1 / size.z);
-  normalizeGroup.scale.set(normalizeScale, normalizeScale, normalizeScale);
+  normalizeGroup.scale.setScalar(normalizeScale);
 
   const object = new THREE.Group();
+  normalizeGroup.add(mesh);
   object.add(normalizeGroup);
 
   const dispose = () => {
