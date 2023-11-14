@@ -1,4 +1,3 @@
-import { v4 as uuid } from "uuid";
 import { useEffect } from "react";
 import Toolbar from "../../../../components/Toolbar";
 import Icons from "../../../../components/Icon";
@@ -16,7 +15,7 @@ const ModeSwitch = ({ mode, setMode, data }) => {
     <Toolbar>
       {data.map(({ Component, targetMode }) => (
         <Component
-          key={uuid()}
+          key={targetMode}
           $highlight={mode === targetMode}
           onClick={changeMode(targetMode)}
         />
