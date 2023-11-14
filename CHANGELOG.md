@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 
 ### Fixed
 
+- Fix sonarqube bug and code smells. (https://github.com/yushiang-demo/pano-to-mesh/pull/65)
 - Fix model normalization and upgrade to `three^0.158`. (https://github.com/yushiang-demo/pano-to-mesh/pull/64)
 - Fix size error and animation not found issue when changing mesh. (https://github.com/yushiang-demo/pano-to-mesh/pull/63)
 
