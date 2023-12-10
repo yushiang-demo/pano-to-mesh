@@ -1,0 +1,7 @@
+{
+  "version": "1.0.0",
+  "name": "@pano-to-mesh/anime",
+  "dependencies": {
+    "animejs": "^3.2.2"
+  }
+}

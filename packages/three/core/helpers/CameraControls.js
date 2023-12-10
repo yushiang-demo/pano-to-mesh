@@ -1,8 +1,43 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
+const MODE = {
+  FIRST_PERSON_VIEW: "FIRST_PERSON_VIEW",
+  TOP_VIEW: "TOP_VIEW",
+};
+
 function CameraControls(camera, domElement) {
   const controls = new OrbitControls(camera, domElement);
+
+  const setEnable = (data) => {
+    controls.enabled = data;
+  };
+
+  let viewport = MODE.TOP_VIEW;
+  const setMode = (mode) => {
+    viewport = mode;
+    if (mode === MODE.FIRST_PERSON_VIEW) {
+      const viewDirection = new THREE.Vector3()
+        .subVectors(controls.target, camera.position)
+        .setLength(1e-6);
+      controls.target.addVectors(camera.position, viewDirection);
+      controls.maxDistance = 1e-6;
+      controls.minDistance = 1e-6;
+      controls.maxPolarAngle = Math.PI;
+      controls.minPolarAngle = 0;
+      controls.update();
+    }
+  };
+
+  const move = (target) => {
+    const viewDirection = new THREE.Vector3().subVectors(
+      controls.target,
+      camera.position
+    );
+    camera.position.copy(target);
+    controls.target.addVectors(camera.position, viewDirection);
+    controls.update();
+  };
 
   const setTarget = (target) => {
     const delta = new THREE.Vector3().subVectors(
@@ -72,6 +107,7 @@ function CameraControls(camera, domElement) {
 
     if (constraintPan) {
       const checkTarget = () => {
+        if (viewport !== MODE.TOP_VIEW) return;
         if (
           boundingBox.min.length() === Infinity ||
           boundingBox.max.length() === Infinity
@@ -107,15 +143,29 @@ function CameraControls(camera, domElement) {
     }
   };
 
+  const moveFromTop = (target) => {
+    const start = camera.position;
+    const end = new THREE.Vector3().fromArray(target);
+    const update = (progress) => {
+      const position = new THREE.Vector3().lerpVectors(start, end, progress);
+      move(position);
+    };
+    const begin = () => setMode(MODE.FIRST_PERSON_VIEW);
+    const complete = () => move(end);
+
+    return { begin, update, complete };
+  };
+
   return {
     domElement,
     getCamera: () => controls.object,
-    setEnable: (data) => {
-      controls.enabled = data;
-    },
+    setEnable,
     lookAt,
     focus,
     destroy,
+    animations: {
+      moveFromTop,
+    },
   };
 }
 
