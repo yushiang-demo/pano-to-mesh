@@ -13,6 +13,20 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 
 ### Removed
 
+## [2.0.0] - 2023-12-16
+
+### Added
+
+- Add camera animation for viewer with `animejs`. (https://github.com/yushiang-demo/pano-to-mesh/pull/68)
+
+### Changed
+
+- Change README.md demo links and snapshots. (https://github.com/yushiang-demo/pano-to-mesh/pull/50)
+
+### Fixed
+
+### Removed
+
 ## [1.4.1] - 2023-11-14
 
 ### Added
@@ -171,7 +185,8 @@ Codes without pull requests won't be recorded.
 
 ### Removed
 
-[unreleased]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.4.1...HEAD
+[unreleased]: https://github.com/yushiang-demo/PanoToMesh/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.4.1...v2.0.0
 [1.4.1]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.4.0...v1.4.1
 [1.4.0]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.2.0...v1.3.0

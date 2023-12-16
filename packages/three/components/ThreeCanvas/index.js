@@ -70,6 +70,7 @@ const ThreeCanvas = (
     setThree(publicProps);
 
     const cancelResizeListener = addBeforeRenderEvent(() => {
+      if (!WrapperRef.current) return;
       const { clientWidth: width, clientHeight: height } = WrapperRef.current;
       setCanvasSize(width, height);
       css3DControls.setSize(width, height);

@@ -26,7 +26,10 @@ export const raycastMeshFromScreen = (
   const raycaster = new THREE.Raycaster();
   const pointer = new THREE.Vector2(normalizedX * 2 - 1, -normalizedY * 2 + 1);
   raycaster.setFromCamera(pointer, camera);
-  const intersects = raycaster.intersectObjects(mesh, true);
+  const intersects = raycaster.intersectObjects(
+    Array.isArray(mesh) ? mesh : [mesh],
+    true
+  );
 
   const applyWorldMatrix = (normal, object) => {
     const position = new THREE.Vector3();
