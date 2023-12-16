@@ -11,6 +11,8 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 
 ### Changed
 
+- Change README.md demo links and snapshots. (https://github.com/yushiang-demo/pano-to-mesh/pull/50)
+
 ### Fixed
 
 ### Removed
