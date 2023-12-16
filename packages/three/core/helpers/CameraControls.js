@@ -29,7 +29,7 @@ function CameraControls(camera, domElement) {
     }
   };
 
-  const move = (target) => {
+  const setPosition = (target) => {
     const viewDirection = new THREE.Vector3().subVectors(
       controls.target,
       camera.position
@@ -143,15 +143,27 @@ function CameraControls(camera, domElement) {
     }
   };
 
+  const moveTo = (target) => {
+    const start = camera.position;
+    const end = new THREE.Vector3().fromArray(target);
+    const update = (progress) => {
+      const position = new THREE.Vector3().lerpVectors(start, end, progress);
+      setPosition(position);
+    };
+    const complete = () => setPosition(end);
+
+    return { update, complete };
+  };
+
   const moveFromTop = (target) => {
     const start = camera.position;
     const end = new THREE.Vector3().fromArray(target);
     const update = (progress) => {
       const position = new THREE.Vector3().lerpVectors(start, end, progress);
-      move(position);
+      setPosition(position);
     };
     const begin = () => setMode(MODE.FIRST_PERSON_VIEW);
-    const complete = () => move(end);
+    const complete = () => setPosition(end);
 
     return { begin, update, complete };
   };
@@ -165,6 +177,7 @@ function CameraControls(camera, domElement) {
     destroy,
     animations: {
       moveFromTop,
+      moveTo,
     },
   };
 }
