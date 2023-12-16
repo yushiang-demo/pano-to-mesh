@@ -52,20 +52,16 @@ const Viewer = ({ data }) => {
       ![MEDIA_3D.PLACEHOLDER_3D, MEDIA_2D.PLACEHOLDER_2D].includes(data.type)
   );
 
-  const runAnimation = (animation) => {
+  const runAnimation = (clips, onfinish) => {
     if (isCameraMoving) return;
 
-    const clip = {
-      ...animation,
-      complete: () => {
-        setIsCameraMoving(false);
-        animation.complete();
-      },
-    };
-
     const timeline = Animator.createTimeline();
-    timeline.addClip(clip);
+    clips.forEach(timeline.addClip);
     timeline.play();
+    timeline.finished.then(() => {
+      setIsCameraMoving(false);
+      if (onfinish) onfinish();
+    });
     setIsCameraMoving(true);
   };
 
@@ -76,13 +72,7 @@ const Viewer = ({ data }) => {
     const { animations } = cameraControls;
     const clip = animations.moveToTop(baseMesh);
 
-    runAnimation({
-      ...clip,
-      complete: () => {
-        clip.complete();
-        setIsTopView(true);
-      },
-    });
+    runAnimation(clip, () => setIsTopView(true));
   };
 
   const goDown = () => {
@@ -92,13 +82,7 @@ const Viewer = ({ data }) => {
     const { animations } = cameraControls;
     const clip = animations.moveFromTop(data.panoramaOrigin);
 
-    runAnimation({
-      ...clip,
-      complete: () => {
-        clip.complete();
-        setIsTopView(false);
-      },
-    });
+    runAnimation(clip, () => setIsTopView(false));
   };
 
   const eventsHandlers = useMouseSkipDrag(({ normalizedX, normalizedY }) => {
@@ -123,19 +107,10 @@ const Viewer = ({ data }) => {
       point[2] + faceNormal[2] * cameraHeight,
     ];
 
-    const animation = (() => {
-      if (!isTopView) return animations.moveTo(target);
-
-      const clip = animations.moveFromTop(target);
-      return {
-        ...clip,
-        complete: () => {
-          clip.complete();
-          setIsTopView(false);
-        },
-      };
-    })();
-    runAnimation(animation);
+    runAnimation(
+      (isTopView ? animations.moveFromTop : animations.moveTo)(target),
+      () => setIsTopView(false)
+    );
   });
 
   return (
@@ -146,15 +121,17 @@ const Viewer = ({ data }) => {
         <PanoramaProjectionMesh {...textureMeshProps} onLoad={onLoad} />
         <MediaManager data={media} />
       </ThreeCanvas>
-      <ToolbarRnd>
-        <Toolbar>
-          {isTopView ? (
-            <Icons.arrowToDown onClick={goDown} />
-          ) : (
-            <Icons.arrowToTop onClick={goTop} />
-          )}
-        </Toolbar>
-      </ToolbarRnd>
+      {!isCameraMoving && (
+        <ToolbarRnd>
+          <Toolbar>
+            {isTopView ? (
+              <Icons.arrowToDown onClick={goDown} />
+            ) : (
+              <Icons.arrowToTop onClick={goTop} />
+            )}
+          </Toolbar>
+        </ToolbarRnd>
+      )}
     </>
   );
 };

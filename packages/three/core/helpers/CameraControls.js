@@ -8,6 +8,10 @@ const MODE = {
 
 const FOCUS_VIEW_SCALE = 0.8;
 
+const lerp = (start, end, progress) => {
+  return start * (1 - progress) + end * progress;
+};
+
 function CameraControls(camera, domElement) {
   const controls = new OrbitControls(camera, domElement);
 
@@ -148,31 +152,44 @@ function CameraControls(camera, domElement) {
     const startDistance = controls.getDistance();
     const endDistance = distance;
 
+    const distanceClip = {
+      update: (progress) => {
+        const targetDistance = lerp(startDistance, endDistance, progress);
+        controls.maxDistance = targetDistance;
+        controls.minDistance = targetDistance;
+        controls.update();
+      },
+    };
+
     const startPolarAngle = controls.getPolarAngle();
     const endPolarAngle = Math.min(startPolarAngle, Math.PI / 4);
 
-    const update = (progress) => {
-      const lerp = (start, end, progress) => {
-        return start * (1 - progress) + end * progress;
-      };
-      const targetDistance = lerp(startDistance, endDistance, progress);
-      const targetPolarAngle = lerp(startPolarAngle, endPolarAngle, progress);
+    const polarAngleClip = {
+      update: (progress) => {
+        const targetPolarAngle = lerp(startPolarAngle, endPolarAngle, progress);
+        controls.maxPolarAngle = targetPolarAngle;
+        controls.minPolarAngle = targetPolarAngle;
+        controls.update();
+      },
+      duration: 500,
+      timeOffset: 0,
+    };
 
-      controls.maxDistance = targetDistance;
-      controls.minDistance = targetDistance;
-      controls.maxPolarAngle = targetPolarAngle;
-      controls.minPolarAngle = targetPolarAngle;
-      controls.update();
+    const completeClip = {
+      update: () => {},
+      complete: () => {
+        controls.maxDistance = endDistance;
+        controls.minDistance = endDistance;
+        controls.maxPolarAngle = endPolarAngle;
+        controls.minPolarAngle = endPolarAngle;
+        controls.update();
+        setMode(MODE.TOP_VIEW, object);
+      },
     };
-    const complete = () => {
-      controls.maxDistance = endDistance;
-      controls.minDistance = endDistance;
-      controls.maxPolarAngle = endPolarAngle;
-      controls.minPolarAngle = endPolarAngle;
-      controls.update();
-      setMode(MODE.TOP_VIEW, object);
-    };
-    return { update, complete };
+
+    const clips = [distanceClip, polarAngleClip, completeClip];
+
+    return clips;
   };
 
   const moveTo = (target) => {
@@ -184,7 +201,9 @@ function CameraControls(camera, domElement) {
     };
     const complete = () => setPosition(end);
 
-    return { update, complete };
+    const clips = [{ update, complete }];
+
+    return clips;
   };
 
   const moveFromTop = (target) => {
@@ -197,7 +216,8 @@ function CameraControls(camera, domElement) {
     const begin = () => setMode(MODE.FIRST_PERSON_VIEW);
     const complete = () => setPosition(end);
 
-    return { begin, update, complete };
+    const clips = [{ begin, update, complete }];
+    return clips;
   };
 
   return {

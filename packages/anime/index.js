@@ -6,16 +6,26 @@ const Animator = (() => {
       autoplay: false,
     });
 
-    const addClip = ({ begin, update, complete, duration, easing }) => {
-      animation.add({
-        duration: duration || 1e3,
-        easing: easing || "linear",
-        update: (anim) => {
-          update(anim.progress / 1e2);
+    const addClip = ({
+      begin,
+      update,
+      complete,
+      duration,
+      easing,
+      timeOffset,
+    }) => {
+      animation.add(
+        {
+          duration: duration || 1e3,
+          easing: easing || "linear",
+          update: (anim) => {
+            update(anim.progress / 1e2);
+          },
+          begin: begin,
+          complete: complete,
         },
-        begin: begin,
-        complete: complete,
-      });
+        timeOffset
+      );
     };
 
     const play = () => {
@@ -23,6 +33,7 @@ const Animator = (() => {
     };
 
     return {
+      finished: animation.finished,
       addClip,
       play,
     };
