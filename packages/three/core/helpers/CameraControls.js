@@ -6,6 +6,8 @@ const MODE = {
   TOP_VIEW: "TOP_VIEW",
 };
 
+const FOCUS_VIEW_SCALE = 0.8;
+
 function CameraControls(camera, domElement) {
   const controls = new OrbitControls(camera, domElement);
 
@@ -14,7 +16,7 @@ function CameraControls(camera, domElement) {
   };
 
   let viewport = MODE.TOP_VIEW;
-  const setMode = (mode) => {
+  const setMode = (mode, object) => {
     viewport = mode;
     if (mode === MODE.FIRST_PERSON_VIEW) {
       const viewDirection = new THREE.Vector3()
@@ -25,6 +27,18 @@ function CameraControls(camera, domElement) {
       controls.minDistance = 1e-6;
       controls.maxPolarAngle = Math.PI;
       controls.minPolarAngle = 0;
+      controls.update();
+    }
+
+    if (mode === MODE.TOP_VIEW && object) {
+      const { distance: minDistance } = getFocusSettings(object, 1.0);
+      const { distance: maxDistance } = getFocusSettings(object, 0.5);
+      controls.maxDistance = maxDistance;
+      controls.minDistance = minDistance;
+      controls.maxPolarAngle = Math.PI / 2;
+      controls.minPolarAngle = 0;
+      controls.maxAzimuthAngle = Infinity;
+      controls.minAzimuthAngle = -Infinity;
       controls.update();
     }
   };
@@ -73,14 +87,12 @@ function CameraControls(camera, domElement) {
   };
 
   let constraintPanEvent = null;
-  const focus = (
-    object,
-    constraintZoom = true,
-    constraintPan = true,
-    constraintRotate = true
-  ) => {
+  const focus = (object, constraintPan = true) => {
     if (!object) return;
-    const { origin, distance, boundingBox } = getFocusSettings(object, 0.8);
+    const { origin, distance, boundingBox } = getFocusSettings(
+      object,
+      FOCUS_VIEW_SCALE
+    );
     lookAt(...origin.toArray());
 
     controls.maxDistance = distance;
@@ -88,22 +100,9 @@ function CameraControls(camera, domElement) {
     controls.update();
     controls.maxDistance = Infinity;
     controls.minDistance = 0;
+    controls.update();
 
-    if (constraintZoom) {
-      const { distance: minDistance } = getFocusSettings(object, 1.0);
-      const { distance: maxDistance } = getFocusSettings(object, 0.5);
-      controls.maxDistance = maxDistance;
-      controls.minDistance = minDistance;
-      controls.update();
-    }
-
-    if (constraintRotate) {
-      controls.maxPolarAngle = Math.PI / 2;
-      controls.minPolarAngle = 0;
-      controls.maxAzimuthAngle = Infinity;
-      controls.minAzimuthAngle = -Infinity;
-      controls.update();
-    }
+    setMode(MODE.TOP_VIEW, object);
 
     if (constraintPan) {
       const checkTarget = () => {
@@ -143,6 +142,39 @@ function CameraControls(camera, domElement) {
     }
   };
 
+  const moveToTop = (object) => {
+    const { distance } = getFocusSettings(object, FOCUS_VIEW_SCALE);
+
+    const startDistance = controls.getDistance();
+    const endDistance = distance;
+
+    const startPolarAngle = controls.getPolarAngle();
+    const endPolarAngle = Math.min(startPolarAngle, Math.PI / 4);
+
+    const update = (progress) => {
+      const lerp = (start, end, progress) => {
+        return start * (1 - progress) + end * progress;
+      };
+      const targetDistance = lerp(startDistance, endDistance, progress);
+      const targetPolarAngle = lerp(startPolarAngle, endPolarAngle, progress);
+
+      controls.maxDistance = targetDistance;
+      controls.minDistance = targetDistance;
+      controls.maxPolarAngle = targetPolarAngle;
+      controls.minPolarAngle = targetPolarAngle;
+      controls.update();
+    };
+    const complete = () => {
+      controls.maxDistance = endDistance;
+      controls.minDistance = endDistance;
+      controls.maxPolarAngle = endPolarAngle;
+      controls.minPolarAngle = endPolarAngle;
+      controls.update();
+      setMode(MODE.TOP_VIEW, object);
+    };
+    return { update, complete };
+  };
+
   const moveTo = (target) => {
     const start = camera.position;
     const end = new THREE.Vector3().fromArray(target);
@@ -178,6 +210,7 @@ function CameraControls(camera, domElement) {
     animations: {
       moveFromTop,
       moveTo,
+      moveToTop,
     },
   };
 }

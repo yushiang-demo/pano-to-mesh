@@ -38,6 +38,8 @@ const Icon = ({ src, onClick, ...props }) => {
 // all svg resources is download from https://www.svgrepo.com/vectors/cursor/
 const IconFolder = `/icons`;
 const files = {
+  arrowToDown: `${IconFolder}/arrowToDown.svg`,
+  arrowToTop: `${IconFolder}/arrowToTop.svg`,
   download: `${IconFolder}/download.svg`,
   panorama: `${IconFolder}/panorama.svg`,
   camera: `${IconFolder}/camera.svg`,

@@ -12,6 +12,9 @@ import useClick2AddWalls from "../hooks/useClick2AddWalls";
 import MediaManager from "../components/MediaManager";
 import { MEDIA_2D, MEDIA_3D } from "../components/MediaManager/types";
 import useMouseSkipDrag from "../hooks/useMouseSkipDrag";
+import ToolbarRnd from "../components/ToolbarRnd";
+import Toolbar from "../components/Toolbar";
+import Icons from "../components/Icon";
 
 const dev = process.env.NODE_ENV === "development";
 const Viewer = ({ data }) => {
@@ -49,9 +52,56 @@ const Viewer = ({ data }) => {
       ![MEDIA_3D.PLACEHOLDER_3D, MEDIA_2D.PLACEHOLDER_2D].includes(data.type)
   );
 
-  const eventsHandlers = useMouseSkipDrag(({ normalizedX, normalizedY }) => {
+  const runAnimation = (animation) => {
     if (isCameraMoving) return;
 
+    const clip = {
+      ...animation,
+      complete: () => {
+        setIsCameraMoving(false);
+        animation.complete();
+      },
+    };
+
+    const timeline = Animator.createTimeline();
+    timeline.addClip(clip);
+    timeline.play();
+    setIsCameraMoving(true);
+  };
+
+  const goTop = () => {
+    if (isCameraMoving) return;
+
+    const { cameraControls } = threeRef.current;
+    const { animations } = cameraControls;
+    const clip = animations.moveToTop(baseMesh);
+
+    runAnimation({
+      ...clip,
+      complete: () => {
+        clip.complete();
+        setIsTopView(true);
+      },
+    });
+  };
+
+  const goDown = () => {
+    if (isCameraMoving) return;
+
+    const { cameraControls } = threeRef.current;
+    const { animations } = cameraControls;
+    const clip = animations.moveFromTop(data.panoramaOrigin);
+
+    runAnimation({
+      ...clip,
+      complete: () => {
+        clip.complete();
+        setIsTopView(false);
+      },
+    });
+  };
+
+  const eventsHandlers = useMouseSkipDrag(({ normalizedX, normalizedY }) => {
     const { cameraControls } = threeRef.current;
     const { animations } = cameraControls;
 
@@ -73,42 +123,39 @@ const Viewer = ({ data }) => {
       point[2] + faceNormal[2] * cameraHeight,
     ];
 
-    const clip = (() => {
-      const animation = (() => {
-        if (!isTopView) return animations.moveTo(target);
+    const animation = (() => {
+      if (!isTopView) return animations.moveTo(target);
 
-        const clip = animations.moveFromTop(target);
-        return {
-          ...clip,
-          complete: () => {
-            clip.complete();
-            setIsTopView(false);
-          },
-        };
-      })();
-
+      const clip = animations.moveFromTop(target);
       return {
-        ...animation,
+        ...clip,
         complete: () => {
-          setIsCameraMoving(false);
-          animation.complete();
+          clip.complete();
+          setIsTopView(false);
         },
       };
     })();
-
-    const timeline = Animator.createTimeline();
-    timeline.addClip(clip);
-    timeline.play();
-    setIsCameraMoving(true);
+    runAnimation(animation);
   });
 
   return (
-    <ThreeCanvas dev={dev} ref={threeRef} {...eventsHandlers}>
-      <BackgroundPanel />
-      <Light />
-      <PanoramaProjectionMesh {...textureMeshProps} onLoad={onLoad} />
-      <MediaManager data={media} />
-    </ThreeCanvas>
+    <>
+      <ThreeCanvas dev={dev} ref={threeRef} {...eventsHandlers}>
+        <BackgroundPanel />
+        <Light />
+        <PanoramaProjectionMesh {...textureMeshProps} onLoad={onLoad} />
+        <MediaManager data={media} />
+      </ThreeCanvas>
+      <ToolbarRnd>
+        <Toolbar>
+          {isTopView ? (
+            <Icons.arrowToDown onClick={goDown} />
+          ) : (
+            <Icons.arrowToTop onClick={goTop} />
+          )}
+        </Toolbar>
+      </ToolbarRnd>
+    </>
   );
 };
 
