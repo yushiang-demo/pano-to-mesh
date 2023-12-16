@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 
 ### Added
 
+- Add camera animation for viewer with `animejs`. (https://github.com/yushiang-demo/pano-to-mesh/pull/68)
+
 ### Changed
 
 ### Fixed
