@@ -11,6 +11,16 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 
 ### Fixed
 
+### Removed
+
+## [2.0.1] - 2023-12-17
+
+### Added
+
+### Changed
+
+### Fixed
+
 - Fix don't camera rotation and zooming in editors. (https://github.com/yushiang-demo/pano-to-mesh/pull/71)
 
 ### Removed
@@ -187,7 +197,8 @@ Codes without pull requests won't be recorded.
 
 ### Removed
 
-[unreleased]: https://github.com/yushiang-demo/PanoToMesh/compare/v2.0.0...HEAD
+[unreleased]: https://github.com/yushiang-demo/PanoToMesh/compare/v2.0.1...HEAD
+[2.0.1]: https://github.com/yushiang-demo/PanoToMesh/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.4.1...v2.0.0
 [1.4.1]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.4.0...v1.4.1
 [1.4.0]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.3.0...v1.4.0
