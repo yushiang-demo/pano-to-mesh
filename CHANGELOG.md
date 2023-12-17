@@ -11,6 +11,8 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 
 ### Fixed
 
+- Fix don't camera rotation and zooming in editors. (https://github.com/yushiang-demo/pano-to-mesh/pull/71)
+
 ### Removed
 
 ## [2.0.0] - 2023-12-16
