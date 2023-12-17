@@ -91,7 +91,12 @@ function CameraControls(camera, domElement) {
   };
 
   let constraintPanEvent = null;
-  const focus = (object, constraintPan = true) => {
+  const focus = (
+    object,
+    constraintZoom = true,
+    constraintPan = true,
+    constraintRotate = true
+  ) => {
     if (!object) return;
     const { origin, distance, boundingBox } = getFocusSettings(
       object,
@@ -106,7 +111,21 @@ function CameraControls(camera, domElement) {
     controls.minDistance = 0;
     controls.update();
 
-    setMode(MODE.TOP_VIEW, object);
+    if (constraintZoom) {
+      const { distance: minDistance } = getFocusSettings(object, 1.0);
+      const { distance: maxDistance } = getFocusSettings(object, 0.5);
+      controls.maxDistance = maxDistance;
+      controls.minDistance = minDistance;
+      controls.update();
+    }
+
+    if (constraintRotate) {
+      controls.maxPolarAngle = Math.PI / 2;
+      controls.minPolarAngle = 0;
+      controls.maxAzimuthAngle = Infinity;
+      controls.minAzimuthAngle = -Infinity;
+      controls.update();
+    }
 
     if (constraintPan) {
       const checkTarget = () => {
