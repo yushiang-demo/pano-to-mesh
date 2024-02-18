@@ -3,7 +3,7 @@ export default function App({ Component, pageProps }) {
   return (
     <>
       <RouterSwitch />
-      <Component {...pageProps} />;
+      <Component {...pageProps} />
     </>
   );
 }
