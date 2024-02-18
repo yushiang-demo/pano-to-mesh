@@ -7,7 +7,11 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 
 ### Added
 
+- Dula-net demo page. (https://github.com/yushiang-demo/pano-to-mesh/pull/73)
+
 ### Changed
+
+- Remove 2d layout coords sorting to support occluded wall. (https://github.com/yushiang-demo/pano-to-mesh/pull/73)
 
 ### Fixed
 
