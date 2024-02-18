@@ -13,6 +13,8 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 
 ### Removed
 
+- Remove MIT license. (https://github.com/yushiang-demo/pano-to-mesh/pull/74)
+
 ## [2.0.1] - 2023-12-17
 
 ### Added
