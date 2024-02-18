@@ -13,6 +13,22 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 
 ### Removed
 
+## [2.1.0] - 2024-02-18
+
+### Added
+
+- Dula-net demo page. (https://github.com/yushiang-demo/pano-to-mesh/pull/73)
+
+### Changed
+
+- Remove 2d layout coords sorting to support occluded wall. (https://github.com/yushiang-demo/pano-to-mesh/pull/73)
+
+### Fixed
+
+### Removed
+
+- Remove MIT license. (https://github.com/yushiang-demo/pano-to-mesh/pull/74)
+
 ## [2.0.1] - 2023-12-17
 
 ### Added
@@ -197,7 +213,8 @@ Codes without pull requests won't be recorded.
 
 ### Removed
 
-[unreleased]: https://github.com/yushiang-demo/PanoToMesh/compare/v2.0.1...HEAD
+[unreleased]: https://github.com/yushiang-demo/PanoToMesh/compare/v2.1.0...HEAD
+[2.1.0]: https://github.com/yushiang-demo/PanoToMesh/compare/v2.0.1...v2.1.0
 [2.0.1]: https://github.com/yushiang-demo/PanoToMesh/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.4.1...v2.0.0
 [1.4.1]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.4.0...v1.4.1
