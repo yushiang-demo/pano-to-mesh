@@ -38,6 +38,7 @@ const Icon = ({ src, onClick, ...props }) => {
 // all svg resources is download from https://www.svgrepo.com/vectors/cursor/
 const IconFolder = `/icons`;
 const files = {
+  add: `${IconFolder}/add.svg`,
   arrowToDown: `${IconFolder}/arrowToDown.svg`,
   arrowToTop: `${IconFolder}/arrowToTop.svg`,
   download: `${IconFolder}/download.svg`,
@@ -56,6 +57,8 @@ const files = {
   trash: `${IconFolder}/trash.svg`,
   arrange: `${IconFolder}/arrange.svg`,
   preview: `${IconFolder}/preview.svg`,
+  github: `${IconFolder}/github-mark.svg`,
+  user: `${IconFolder}/user.svg`,
 };
 
 const Icons = Object.keys(files).reduce((acc, key) => {

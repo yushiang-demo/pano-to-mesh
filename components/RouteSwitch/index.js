@@ -39,6 +39,14 @@ const DataWrapper = () => {
   useEffect(() => {
     setData([
       {
+        link: "https://github.com/yushiang-demo/pano-to-mesh",
+        Icon: Icons.github,
+      },
+      {
+        link: "/admin",
+        Icon: Icons.user,
+      },
+      {
         link: "/editors/layout2d",
         Icon: Icons.panorama,
       },

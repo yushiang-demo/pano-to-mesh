@@ -26,6 +26,7 @@ const useClick2AddWalls = ({
 }) => {
   const [dragging, setDragging] = useState(false);
   const [previewImageCoord, setPreviewImageCoord] = useState(null);
+  const [previewCoordIndex, setPreviewCoordIndex] = useState(null);
   const [imageCoord, setImageCoord] = useState(defaultData || []);
   const [layout2D, setLayout2D] = useState([]);
 
@@ -67,48 +68,99 @@ const useClick2AddWalls = ({
       setPreviewImageCoord([normalizedX, normalizedY]);
     } else {
       setPreviewImageCoord(null);
+      setPreviewCoordIndex(null);
     }
   };
 
   const onMouseUp = ({ normalizedX, normalizedY }) => {
     if (dragging) {
       if (parseMousePointTo3D([normalizedX, normalizedY])) {
-        setImageCoord([
-          ...imageCoord,
-          parser2DCeilingCoordToFloorCoord([normalizedX, normalizedY]),
-        ]);
+        const newCoord = [...imageCoord];
+        newCoord.splice(
+          previewCoordIndex,
+          0,
+          parser2DCeilingCoordToFloorCoord([normalizedX, normalizedY])
+        );
+
+        setImageCoord(newCoord);
       }
       setPreviewImageCoord(null);
+      setPreviewCoordIndex(null);
       setDragging(false);
     }
   };
 
   const onMouseDown = ({ width, height, normalizedX, normalizedY }) => {
-    const points = imageCoord.filter(
-      ([x, y]) =>
-        !pointSelector(
-          normalizedX,
-          normalizedY,
-          ({ x, y }) => ({
-            x: x * width,
-            y: y * height,
-          }),
-          selectThresholdPixel
-        )([x, y])
+    const selectedIndex = imageCoord.findIndex(([x, y]) =>
+      pointSelector(
+        normalizedX,
+        normalizedY,
+        ({ x, y }) => ({
+          x: x * width,
+          y: y * height,
+        }),
+        selectThresholdPixel
+      )([x, y])
     );
+    const points = imageCoord.filter((_, index) => index !== selectedIndex);
     if (points.length) setImageCoord(points);
     else
       setImageCoord([
         parser2DCeilingCoordToFloorCoord([normalizedX, normalizedY]),
       ]);
     setDragging(true);
-    setPreviewImageCoord([normalizedX, normalizedY]);
+    const targetCoord = [normalizedX, normalizedY];
+
+    const index = (() => {
+      if (selectedIndex > -1) return selectedIndex;
+      let index = null;
+      let boundaryIndex = null;
+      let targetWidth = 1; // max coord distance is 1;
+
+      const isEqual = (x, y) => x - y < 1e-3;
+
+      const xArray = imageCoord.map(([x]) => x);
+      const minX = Math.min(...xArray);
+      const maxX = Math.max(...xArray);
+
+      for (let i = 0; i < imageCoord.length; i++) {
+        const start = imageCoord[i][0];
+        const end = imageCoord[(i + 1) % imageCoord.length][0];
+
+        if (
+          ((isEqual(start, minX) && isEqual(end, maxX)) ||
+            (isEqual(end, minX) && isEqual(start, maxX))) &&
+          !boundaryIndex
+        ) {
+          boundaryIndex = i;
+        }
+
+        const newX = targetCoord[0];
+
+        const isInRange = isEqual(
+          Math.abs(newX - start) + Math.abs(newX - end) - Math.abs(start - end),
+          0
+        );
+
+        const wallWidth = Math.abs(start - end);
+
+        if (isInRange && wallWidth < targetWidth) {
+          index = i;
+          targetWidth = wallWidth;
+        }
+      }
+
+      return (index !== null ? index : boundaryIndex) + 1;
+    })();
+    setPreviewImageCoord(targetCoord);
+    setPreviewCoordIndex(index);
   };
 
   useEffect(() => {
     const coord2d = [...imageCoord];
-    if (previewImageCoord) coord2d.push(previewImageCoord);
-    coord2d.sort(([x1], [x2]) => x1 - x2);
+    if (previewImageCoord) {
+      coord2d.splice(previewCoordIndex, 0, previewImageCoord);
+    }
 
     const pointsXZ = coord2d
       .map((coord) => {
@@ -117,7 +169,7 @@ const useClick2AddWalls = ({
       })
       .filter((value) => value);
     setLayout2D(pointsXZ);
-  }, [imageCoord, previewImageCoord, parseMousePointTo3D]);
+  }, [imageCoord, previewImageCoord, previewCoordIndex, parseMousePointTo3D]);
 
   return {
     imageCoord,
