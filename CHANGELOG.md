@@ -11,6 +11,16 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 
 ### Fixed
 
+### Removed
+
+## [2.1.2] - 2024-03-05
+
+### Added
+
+### Changed
+
+### Fixed
+
 - Fix `decoration`, `viewer` pages runtime error. (https://github.com/yushiang-demo/pano-to-mesh/pull/78)
 
 ### Removed
@@ -227,8 +237,9 @@ Codes without pull requests won't be recorded.
 
 ### Removed
 
-[unreleased]: https://github.com/yushiang-demo/PanoToMesh/compare/v2.1.1...HEAD
-[2.1.1]: https://github.com/yushiang-demo/PanoToMesh/compare/v2.0.0...v2.1.0
+[unreleased]: https://github.com/yushiang-demo/PanoToMesh/compare/v2.1.2...HEAD
+[2.1.2]: https://github.com/yushiang-demo/PanoToMesh/compare/v2.1.1...v2.1.2
+[2.1.1]: https://github.com/yushiang-demo/PanoToMesh/compare/v2.1.0...v2.1.1
 [2.1.0]: https://github.com/yushiang-demo/PanoToMesh/compare/v2.0.1...v2.1.0
 [2.0.1]: https://github.com/yushiang-demo/PanoToMesh/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.4.1...v2.0.0
