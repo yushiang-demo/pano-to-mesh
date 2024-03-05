@@ -120,7 +120,7 @@ const Editor = ({ data }) => {
   }, []);
 
   useEffect(() => {
-    threeRef.current.cameraControls.setEnable(mode === MODE.SELECT);
+    threeRef.current?.cameraControls.setEnable(mode === MODE.SELECT);
   }, [mode]);
 
   const focusedMedia = media[focusedIndex];
