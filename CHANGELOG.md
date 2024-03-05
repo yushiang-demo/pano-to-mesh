@@ -11,6 +11,8 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 
 ### Fixed
 
+- Fix texture not load. (https://github.com/yushiang-demo/pano-to-mesh/pull/76)
+
 ### Removed
 
 ## [2.1.0] - 2024-02-18

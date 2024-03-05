@@ -20,6 +20,7 @@ const dev = process.env.NODE_ENV === "development";
 const Viewer = ({ data }) => {
   const threeRef = useRef(null);
   const [isTopView, setIsTopView] = useState(true);
+  const panorama = Loaders.useTexture({ src: data.panorama });
   const [isCameraMoving, setIsCameraMoving] = useState(false);
   const [baseMesh, setBaseMesh] = useState(null);
   const geometryInfo = useMemo(
@@ -39,7 +40,7 @@ const Viewer = ({ data }) => {
   const textureMeshProps = {
     ...data,
     layout2D,
-    panorama: Loaders.useTexture({ src: data.panorama }),
+    panorama,
   };
 
   const onLoad = useCallback((mesh) => {
