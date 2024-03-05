@@ -88,9 +88,11 @@ const Editor = ({ data }) => {
         )}
       </Toolbar>
       <RatioLockedDiv>
-        <ThreeCanvas {...eventHandlers} dev={dev}>
-          <PanoramaOutline {...props} />
-        </ThreeCanvas>
+        {panorama && (
+          <ThreeCanvas {...eventHandlers} dev={dev}>
+            <PanoramaOutline {...props} />
+          </ThreeCanvas>
+        )}
       </RatioLockedDiv>
     </PageContainer>
   );

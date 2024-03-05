@@ -7,7 +7,7 @@ export const useTexture = ({ src }) => {
   const [texture, setTexture] = useState(null);
 
   useEffect(() => {
-    setTexture(loader.load(src));
+    loader.load(src, setTexture);
   }, [src]);
 
   return texture;

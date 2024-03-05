@@ -13,6 +13,18 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 
 ### Removed
 
+## [2.1.1] - 2024-03-05
+
+### Added
+
+### Changed
+
+### Fixed
+
+- Fix texture not load. (https://github.com/yushiang-demo/pano-to-mesh/pull/76)
+
+### Removed
+
 ## [2.1.0] - 2024-02-18
 
 ### Added
@@ -213,7 +225,8 @@ Codes without pull requests won't be recorded.
 
 ### Removed
 
-[unreleased]: https://github.com/yushiang-demo/PanoToMesh/compare/v2.1.0...HEAD
+[unreleased]: https://github.com/yushiang-demo/PanoToMesh/compare/v2.1.1...HEAD
+[2.1.1]: https://github.com/yushiang-demo/PanoToMesh/compare/v2.0.0...v2.1.0
 [2.1.0]: https://github.com/yushiang-demo/PanoToMesh/compare/v2.0.1...v2.1.0
 [2.0.1]: https://github.com/yushiang-demo/PanoToMesh/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/yushiang-demo/PanoToMesh/compare/v1.4.1...v2.0.0

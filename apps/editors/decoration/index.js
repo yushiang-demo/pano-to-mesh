@@ -32,6 +32,7 @@ const dev = process.env.NODE_ENV === "development";
 const Editor = ({ data }) => {
   const threeRef = useRef(null);
   const mediaIndexMap = useRef(null);
+  const panorama = Loaders.useTexture({ src: data.panorama });
   const [baseMesh, setBaseMesh] = useState(null);
   const [mouse, setMouse] = useState([0, 0]);
   const [camera, setCamera] = useState(null);
@@ -109,7 +110,7 @@ const Editor = ({ data }) => {
   const textureMeshProps = {
     ...data,
     layout2D,
-    panorama: Loaders.useTexture({ src: data.panorama }),
+    panorama,
   };
 
   const onLoad = useCallback((mesh) => {

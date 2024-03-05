@@ -36,6 +36,7 @@ const dev = process.env.NODE_ENV === "development";
 const Editor = ({ data }) => {
   const canvas3DRef = useRef(null);
   const textureCanvasRef = useRef(null);
+  const panorama = Loaders.useTexture({ src: data.panorama });
   const [panoramaOrigin, setPanoramaOrigin] = useState(data.panoramaOrigin);
   const [floorY] = useState(data.floorY);
   const [ceilingY, setCeilingY] = useState(data.ceilingY);
@@ -58,7 +59,7 @@ const Editor = ({ data }) => {
     floorY,
     ceilingY,
     layout2D,
-    panorama: Loaders.useTexture({ src: data.panorama }),
+    panorama,
     panoramaOrigin,
   };
 
@@ -77,6 +78,8 @@ const Editor = ({ data }) => {
   const onLoad = (mesh) => {
     canvas3DRef.current.cameraControls.focus(mesh, false, false, false);
   };
+
+  if (!panorama) return null;
 
   return (
     <>
