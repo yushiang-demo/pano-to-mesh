@@ -153,6 +153,8 @@ const Editor = ({ data }) => {
     [focusedIndex]
   );
 
+  if (!panorama) return null;
+
   return (
     <>
       <ThreeCanvas dev={dev} ref={threeRef} {...eventHandlers}>
