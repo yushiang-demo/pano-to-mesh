@@ -11,7 +11,7 @@ The format is based on [Keep a Changelog](https://github.com/olivierlacan/keep-a
 
 ### Fixed
 
-- Fix `decoration`, `viewer` pages runtime error. (https://github.com/yushiang-demo/pano-to-mesh/pull/77)
+- Fix `decoration`, `viewer` pages runtime error. (https://github.com/yushiang-demo/pano-to-mesh/pull/78)
 
 ### Removed
 
