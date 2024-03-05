@@ -114,6 +114,8 @@ const Viewer = ({ data }) => {
     );
   });
 
+  if (!panorama) return null;
+
   return (
     <>
       <ThreeCanvas dev={dev} ref={threeRef} {...eventsHandlers}>
